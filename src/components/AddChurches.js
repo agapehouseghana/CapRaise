@@ -18,13 +18,11 @@ import { orange } from '@mui/material/colors'
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useStateContext } from "../contexts/ContextProvider";
 
 
 
 const AddChurches = () => {
-  const { setAuthUser } =
-  useStateContext();
+
   const [showPassword, setShowPassword] = useState(false);
   // const [passwordError, setPasswordError] = useState(false);
   const [open, setOpen] = React.useState(false);
