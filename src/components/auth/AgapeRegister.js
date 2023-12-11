@@ -4,6 +4,7 @@ import { auth, db } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { churchList } from "../../utils/dummys";
+import fund from "../../utils/images/fund.jpeg"
 
 const AgapeRegister = () => {
   const [fullName, setFullName] = useState("");
@@ -18,7 +19,6 @@ const AgapeRegister = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [churchError, setChurchError] = useState(false);
-
 
   const navigate = useNavigate();
 
@@ -83,8 +83,10 @@ const AgapeRegister = () => {
   };
   return (
     <div className="md:flex-row flex-col  flex h-screen relative">
-      <div className="hidden md:flex md:flex-1 bg-green-200 h-full">Agape</div>
-      <div className="bg-green-200 h-full">
+      <div className="hidden md:flex md:flex-1 bg-green-200 h-full">
+      <img src={fund} alt="fundraiser" className="object-fit"/>
+      </div>
+      <div className="h-full"  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="flex md:flex-1 md:justify-center md:h-full bg-white m-10 md:m-0 rounded-md">
           <form
             onSubmit={signUp}
