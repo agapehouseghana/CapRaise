@@ -182,16 +182,19 @@ export const fundraiser = [
 ];
 export const churches = [
   {
+    adminId:"3H3Jc3ZTQTOmSYNpedgGIPwyUlF3",
     churchName: "Light House Church ",
     address: "Tema",
     contactInfo: "david@gmail.com",
   },
   {
+    adminId:"3H3Jc3ZTQTOmSYNpedgGIPwyUlF5",
     churchName: "Pentecost Church",
     address: "Accra",
     contactInfo: "Pent@gmail.com",
   },
   {
+    adminId:"3H3Jc3ZTQTOmSYNpedgGIPwyUlF6",
     churchName: "Living Word Church",
     address: "North",
     contactInfo: "word@gmail.com",

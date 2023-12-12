@@ -57,25 +57,27 @@ const AgapeRegister = () => {
 
     if (email && password && fullName && phoneNumber && church) {
       createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const userId = userCredential.user.uid;
-          const userData = {
-            fullName: fullName,
-            email: userCredential.user.email,
-            phoneNumber: phoneNumber,
-            church: church,
-            role: role,
-          };
-          navigate("/");
-          const usersCollectionRef = doc(db, "users", userId);
-          return setDoc(usersCollectionRef, { ...userData, userId });
-        })
-        .then(() => {
-          console.log("User registered successfully!");
-        })
-        .catch((error) => {
-          console.error("Error registering user:", error);
-        });
+      .then((userCredential) => {
+        const userId = userCredential.user.uid;
+        const userData = {
+          fullName: fullName,
+          email: userCredential.user.email,
+          phoneNumber: phoneNumber,
+          church: church,
+          role: role,
+          adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7"
+        };
+        navigate("/");
+        const usersCollectionRef = doc(db, "users", userId);
+        return setDoc(usersCollectionRef, { ...userData, userId });
+      })
+      .then(() => {
+        console.log("User registered successfully!");
+      })
+      .catch((error) => {
+        console.error("Error registering user:", error);
+      });
+    
     }
   };
   const redirectToSignIn = () => {
@@ -142,7 +144,7 @@ const AgapeRegister = () => {
               }
               disabled={true}
             >
-              <option value="Agape">Agape</option>
+              <option value="3H3Jc3ZTQTOmSYNpedgGIPwyUlF7">Agape</option>
               {churchList.map((church) => (
                 <option key={church.id} value={church.name}>
                   {church.name}

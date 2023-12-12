@@ -8,16 +8,20 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import React, { useState } from "react";
-import { churches } from "../utils/dummys";
+import React, { useEffect, useState } from "react";
+import { collection, getDocs } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import AddChurches from "../components/AddChurches";
+import { db } from "../firebase/firebase";
 
 const Churches = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [churches,setChurches]=useState([]);
+
   const columns = [
     {
       id: "churchName",
@@ -26,18 +30,38 @@ const Churches = () => {
       align: "left",
     },
     {
-      id: "address",
-      label: "Address",
+      id: "churchEmail",
+      label: "Church Email",
       minWidth: 170,
       align: "left",
     },
     {
-      id: "contactInfo",
-      label: "Contact Info",
+      id: "churchPhoneNumber",
+      label: "Church PhoneNumber",
       minWidth: 170,
       align: "left",
     },
   ];
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      const adminsCollectionRef = collection(db, 'admins');
+      try {
+        const querySnapshot = await getDocs(adminsCollectionRef);
+        const adminsData = querySnapshot.docs.map((doc) => ({
+          adminId: doc.id,
+          ...doc.data()
+        }));
+      
+        setChurches(adminsData);
+      } catch (error) {
+        console.error('Error fetching admins: ', error);
+      }
+    };
+
+    fetchAdmins(); 
+  }, []);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

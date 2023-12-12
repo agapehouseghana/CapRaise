@@ -1,17 +1,18 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { auth, db } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
-import { churchList } from "../../utils/dummys";
-import fund from "../../utils/images/R.jpeg"
+import { collection, getDocs } from "firebase/firestore";
+import fund from "../../utils/images/R.jpeg";
 
 const Register = () => {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [church, setChurch] = useState("");
+  const [churchId, setChurchId] = useState("");
+  const [churchName, setChurchName] = useState("");
   const role = "member";
 
   const [fullNameError, setFullNameError] = useState("");
@@ -20,7 +21,27 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [churchError, setChurchError] = useState(false);
 
+  const [churches,setChurches]=useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAdmins = async () => {
+      const adminsCollectionRef = collection(db, 'admins');
+      try {
+        const querySnapshot = await getDocs(adminsCollectionRef);
+        const adminsData = querySnapshot.docs.map((doc) => ({
+          adminId: doc.id,
+          ...doc.data()
+        }));
+      
+        setChurches(adminsData);
+      } catch (error) {
+        console.error('Error fetching admins: ', error);
+      }
+    };
+
+    fetchAdmins(); 
+  }, []);
 
   const signUp = (e) => {
     e.preventDefault();
@@ -49,13 +70,13 @@ const Register = () => {
       setPhoneNumberError(false);
     }
 
-    if (church === "") {
+    if (churchId === "") {
       setChurchError(true);
     } else {
       setChurchError(false);
     }
 
-    if (email && password && fullName && phoneNumber && church) {
+    if (email && password && fullName && phoneNumber && churchId) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const userId = userCredential.user.uid;
@@ -63,8 +84,9 @@ const Register = () => {
             fullName: fullName,
             email: userCredential.user.email,
             phoneNumber: phoneNumber,
-            church: church,
+            church: churchName,
             role: role,
+            adminId: churchId
           };
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
@@ -85,9 +107,16 @@ const Register = () => {
   return (
     <div className="md:flex-row flex-col  flex h-screen relative">
       <div className="hidden md:flex md:flex-1 bg-green-200 h-full">
-      <img src={fund} alt="fundraiser" className="object-fit"/>
+        <img src={fund} alt="fundraiser" className="object-fit" />
       </div>
-      <div className="h-full " style={{ backgroundImage: `url(${fund})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div
+        className="h-full "
+        style={{
+          backgroundImage: `url(${fund})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="flex md:flex-1 justify-center md:h-full bg-white m-10 md:m-0 rounded-md">
           <form
             onSubmit={signUp}
@@ -135,17 +164,24 @@ const Register = () => {
               }
             ></input>
             <select
-              value={church}
-              onChange={(e) => setChurch(e.target.value)}
+              value={churchId}
+              onChange={(e) => {
+                setChurchId(e.target.value);
+                const selectedRisk = churches?.find(
+                  (item) => item.adminId === e.target.value
+                );
+            
+                setChurchName(selectedRisk?.churchName);
+              }}
               className={
                 "border-1 px-3 py-4 rounded-md mb-5 " +
                 (churchError ? "border-red-500" : "")
               }
             >
               <option value="">Select your church</option>
-              {churchList.map((church) => (
-                <option key={church.id} value={church.key}>
-                  {church.name}
+              {churches?.map((church,index) => (
+                <option key={index} value={church.adminId}>
+                  {church.churchName}
                 </option>
               ))}
             </select>
