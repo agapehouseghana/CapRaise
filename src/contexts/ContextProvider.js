@@ -22,13 +22,16 @@ export const ContextProvider = ({ children }) => {
 
   const [authUser, setAuthUser] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false); 
+  const [loading, setLoading] = useState(false);
+
+  const [adminData, setAdminData] = useState("");
+
+  const adminId = authUser?.uid;
 
 
   useEffect(() => {
     const listen = onAuthStateChanged(auth, (user) => {
-
-      setLoading(true)
+      setLoading(true);
       if (user) {
         setAuthUser(user);
       } else {
@@ -43,20 +46,38 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (adminId) {
+      const adminDocRef = doc(db, "admins", adminId);
+      getDoc(adminDocRef)
+        .then((docSnapshot) => {
+          if (docSnapshot.exists()) {
+            const adminData = docSnapshot.data();
+            setAdminData(adminData);
+          } else {
+            console.log("Admin does not exist");
+          }
+        })
+        .catch((error) => {
+          console.error("Error getting admin data:", error);
+        });
+    }
+  }, [adminId]);
+
+  useEffect(() => {
     const fetchUserData = async () => {
       if (authUser) {
         setLoading(true);
         try {
           const userDocRef = doc(db, "users", authUser.uid);
           const userDocSnap = await getDoc(userDocRef);
-  
+
           if (userDocSnap.exists()) {
             setUserData(userDocSnap.data());
           } else {
             try {
               const adminDocRef = doc(db, "admins", authUser.uid);
               const adminDocSnap = await getDoc(adminDocRef);
-      
+
               if (adminDocSnap.exists()) {
                 setUserData(adminDocSnap.data());
               } else {
@@ -72,11 +93,10 @@ export const ContextProvider = ({ children }) => {
         setLoading(false);
       }
     };
-  
+
     fetchUserData();
   }, [authUser]);
-  
-  
+
   const setMode = (e) => {
     setCurrentMode(e.target.value);
     localStorage.setItem("themeMode", e.target.value);
@@ -113,7 +133,8 @@ export const ContextProvider = ({ children }) => {
         authUser,
         userData,
         loading,
-        setAuthUser
+        setAuthUser,
+        adminData,
       }}
     >
       {children}

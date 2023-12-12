@@ -8,25 +8,26 @@ import {
   TablePagination,
   TableRow,
 } from "@mui/material";
-import React, { useState } from "react";
-import { fundraiser } from "../utils/dummys";
+import React, { useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
+import { useStateContext } from "../contexts/ContextProvider";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
 const Fundraisers = () => {
+  const { adminData } =
+  useStateContext();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState(""); 
+  const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
+  console.log(usersLinkedToAdmin,"adminData")
+  const adminId = adminData?.adminId;
   const columns = [
     {
-      id: "firstName",
-      label: "First Name",
-      minWidth: 170,
-      align: "left",
-    },
-    {
-      id: "lastName",
-      label: "Last Name",
+      id: "fullName",
+      label: "Full Name",
       minWidth: 170,
       align: "left",
     },
@@ -37,17 +38,11 @@ const Fundraisers = () => {
       align: "left",
     },
     {
-      id: "mobileNumber",
-      label: "Mobile Number",
+      id: "phoneNumber",
+      label: "Phone Number",
       minWidth: 170,
       align: "left",
-    },
-    {
-      id: "referralCode",
-      label: "Referral Code",
-      minWidth: 170,
-      align: "left",
-    },
+    }
   ];
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,7 +53,7 @@ const Fundraisers = () => {
     setPage(0);
   };
 
-  const fundraisers = fundraiser.filter((item) =>
+  const fundraisers = usersLinkedToAdmin.filter((item) =>
   Object.values(item).some(
     (value) =>
       value &&
@@ -69,6 +64,26 @@ const Fundraisers = () => {
 const handleSearch = (event) => {
   setSearchQuery(event.target.value);
 };
+useEffect(() => {
+  const fetchUsersLinkedToAdmin = async () => {
+    const usersCollectionRef = collection(db, "users");
+    const q = query(usersCollectionRef, where("adminId", "==", adminId));
+
+    try {
+      const querySnapshot = await getDocs(q);
+      const users = [];
+      querySnapshot.forEach((doc) => {
+        const userData = doc.data();
+        users.push(userData);
+      });
+      setUsersLinkedToAdmin(users);
+    } catch (error) {
+      console.error("Error fetching users linked to admin:", error);
+    }
+  };
+
+  fetchUsersLinkedToAdmin();
+}, [adminId]);
   return (
     <div className="p-10">
         <h1 className="text-4xl text-gray-600 mb-10 font-bold">Fundraisers</h1>
