@@ -30,7 +30,6 @@ const SignIn = () => {
     if (email && password) {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          console.log(userCredential);
           toast.success("Sign In Successful");
         })
         .catch((error) => {

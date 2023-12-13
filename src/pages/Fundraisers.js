@@ -22,7 +22,7 @@ const Fundraisers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState(""); 
   const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
-  console.log(usersLinkedToAdmin,"adminData")
+  
   const adminId = adminData?.adminId;
   const columns = [
     {
