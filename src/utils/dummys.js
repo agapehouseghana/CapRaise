@@ -72,7 +72,7 @@ export const statData = [
     ),
     title: "Total Raised",
     currency: "GHS",
-    value: "34.8K",
+    value: "34,800",
   },
   {
     icon: (
@@ -113,7 +113,7 @@ export const memberStatData = [
     ),
     title: "Total Raised",
     currency: "GHS",
-    value: "34.8K",
+    value: "34,000",
   },
   {
     icon: <GroupsOutlinedIcon fontSize="large" className="text-slate-500" />,
@@ -137,7 +137,7 @@ export const dashTopFundraisers = [
   {
     name: "David King",
     currency: "GHS",
-    value: "34,00",
+    value: "400",
     doners:"49",
     campaign:"Help the Orphan Campaign"
   },
@@ -203,8 +203,8 @@ export const churches = [
 export const campaigns = [
   {
     image:"https://th.bing.com/th/id/OIP.NoDQSpgDUcl-J-WhXUDKAQHaDx?w=296&h=178&c=7&r=0&o=5&pid=1.7",
-    imageAlt:"capital2.0",
-    title: "Capital Raise 2.0",
+    imageAlt:"capital1.0",
+    title: "Capital Raise 1.0",
     description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
     goalValue: "100,000",
     raisedValue: "10,000",
@@ -215,11 +215,30 @@ export const campaigns = [
     doners:"20",
   },
   {
-    image:"https://www.fundraisingshoppingcart.com/images/fundraisingboy.png",
-    title: "Raise Funds for the broke boys ",
+    image:"https://th.bing.com/th/id/OIP.NoDQSpgDUcl-J-WhXUDKAQHaDx?w=296&h=178&c=7&r=0&o=5&pid=1.7",
+    imageAlt:"capital2.0",
+    title: "Capital Raise 2.0",
     description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
-    goalValue: "100,000",
-    raisedValue: "90,000",
-  }
+    goalValue: "200,000",
+    raisedValue: "20,000",
+    referralCode:"eiuhihfhwnwojjej",
+    USSDReferral:"*227*1234*eiuhihfhwnwojjej#",
+    KowriLinkReferral:"https://collections.kowri.app/main/1234/eiuhihfhwnwojjej",
+    raised:"20,000",
+    doners:"20",
+  },
+  {
+    image:"https://th.bing.com/th/id/OIP.NoDQSpgDUcl-J-WhXUDKAQHaDx?w=296&h=178&c=7&r=0&o=5&pid=1.7",
+    imageAlt:"capital3.0",
+    title: "Capital Raise 3.0",
+    description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
+    goalValue: "300,000",
+    raisedValue: "30,000",
+    referralCode:"eiuhihfhwnwojjej",
+    USSDReferral:"*227*1234*eiuhihfhwnwojjej#",
+    KowriLinkReferral:"https://collections.kowri.app/main/1234/eiuhihfhwnwojjej",
+    raised:"20,000",
+    doners:"20",
+  },
 ];
 

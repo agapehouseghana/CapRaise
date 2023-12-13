@@ -1,9 +1,9 @@
 import React from "react";
 import { Divider } from "@mui/material";
 import { statData, dashTopFundraisers } from "../utils/dummys";
+import MemberStatsBarChart from "../components/MemberStatsBarChart";
 
 const Dashboard = () => {
-
   return (
     <div className="p-10">
       <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
@@ -26,7 +26,11 @@ const Dashboard = () => {
       </div>
       <div className="mt-[50px]">
         <p className="text-sm uppercase font-medium mb-3">Charts</p>
-        <div className="bg-white border w-full h-[400px]"> </div>
+        <div className="">
+          <div className="w-max border bg-white">
+            <MemberStatsBarChart data={dashTopFundraisers} />
+          </div>
+        </div>
       </div>
 
       <div className="mt-[50px]">
