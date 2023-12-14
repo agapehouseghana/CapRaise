@@ -1,4 +1,5 @@
 import {
+  CircularProgress,
   IconButton,
   Table,
   TableBody,
@@ -21,6 +22,8 @@ const Churches = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [churches,setChurches]=useState([]);
+
+  const [loading, setLoading] = useState(false);
 
   const columns = [
     {
@@ -45,6 +48,7 @@ const Churches = () => {
 
   useEffect(() => {
     const fetchAdmins = async () => {
+      setLoading(true);
       const adminsCollectionRef = collection(db, 'admins');
       try {
         const querySnapshot = await getDocs(adminsCollectionRef);
@@ -57,6 +61,7 @@ const Churches = () => {
       } catch (error) {
         console.error('Error fetching admins: ', error);
       }
+      setLoading(false);
     };
 
     fetchAdmins(); 
@@ -83,6 +88,12 @@ const Churches = () => {
     setSearchQuery(event.target.value);
   };
   return (
+    <>
+    {loading ? (
+      <div className="w-full h-screen flex justify-center items-center">
+      <CircularProgress color="success" size={50} />
+      </div>
+    ) : (
     <div className="p-10">
       <h1 className="text-4xl text-gray-600 mb-10 font-bold">Churches</h1>
       <div className="mb-4 sm:flex sm:justify-between items-center">
@@ -170,6 +181,8 @@ const Churches = () => {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </div>
+          )}
+          </>
   );
 };
 

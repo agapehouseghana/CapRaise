@@ -1,10 +1,23 @@
-import React from "react";
-import { Divider } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { CircularProgress, Divider } from "@mui/material";
 import { statData, dashTopFundraisers } from "../utils/dummys";
 import MemberStatsBarChart from "../components/MemberStatsBarChart";
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true)
+    setLoading(false)
+  }, []);
+
   return (
+    <>
+    {loading ? (
+      <div className="w-full h-screen flex justify-center items-center">
+      <CircularProgress color="success" size={50} />
+      </div>
+    ) : (
     <div className="p-10">
       <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
       <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
@@ -61,6 +74,8 @@ const Dashboard = () => {
         </div>
       </div>
     </div>
+    )}
+    </>
   );
 };
 
