@@ -6,6 +6,7 @@ import AddCampaign from "../components/AddCampaign";
 import { useStateContext } from "../contexts/ContextProvider";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import CheckIcon from '@mui/icons-material/Check';
 
 const Campaigns = () => {
   const { adminData } = useStateContext();
@@ -134,7 +135,7 @@ const Campaigns = () => {
                     <p className="text-sm text-slate-600">Referral Code</p>
                     <div className="flex justify-between mt-2 border-b-1">
                       <p>{item.referralCode}</p>
-                      {refCopiedNotification ?("king"): (
+                      {refCopiedNotification ?(<CheckIcon color="success"/>): (
                       <ContentCopyIcon
                         fontSize="small"
                         onClick={() => handleRefCopy(item.referralCode)}
@@ -146,7 +147,7 @@ const Campaigns = () => {
                     <div className="flex justify-between mt-2 border-b-1">
                       <p> *227*{item.serviceCode}*referralCode#</p>
                       <div className="flex gap-2">
-                      {urlCopiedNotification ?("king"): (
+                      {urlCopiedNotification ?(<CheckIcon  color="success"/>): (
                         <ContentCopyIcon
                           fontSize="small"
                           onClick={() =>
@@ -171,7 +172,7 @@ const Campaigns = () => {
                         /referralCode
                       </p>
                       <div className="flex gap-2">
-                      {marketCopiedNotification ?("king"): (
+                      {marketCopiedNotification ?(<CheckIcon  color="success"/>): (
                         <ContentCopyIcon
                           fontSize="small"
                           onClick={() =>
