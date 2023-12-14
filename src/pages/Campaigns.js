@@ -15,7 +15,9 @@ const Campaigns = () => {
   const adminId = adminData?.adminId;
 
   const [loading, setLoading] = useState(false);
-  const [showCopiedNotification, setShowCopiedNotification] = useState(false);
+  const [refCopiedNotification, setRefCopiedNotification] = useState(false);
+  const [urlCopiedNotification, setUrlCopiedNotification] = useState(false);
+  const [marketCopiedNotification, setMarketCopiedNotification] = useState(false);
 
   const handleExpand = (index) => {
     if (expandedCard === index) {
@@ -24,13 +26,35 @@ const Campaigns = () => {
       setExpandedCard(index);
     }
   };
-  const handleCopy = async (textToCopy) => {
+  const handleRefCopy = async (textToCopy) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
-      setShowCopiedNotification(true);
+      setRefCopiedNotification(true);
       setTimeout(() => {
-        setShowCopiedNotification(false);
-      }, 2000); //
+        setRefCopiedNotification(false);
+      }, 1000); //
+    } catch (error) {
+      console.log("Unable to copy:", error);
+    }
+  };
+  const handleURLCopy = async (textToCopy) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setUrlCopiedNotification(true);
+      setTimeout(() => {
+        setUrlCopiedNotification(false);
+      }, 1000); //
+    } catch (error) {
+      console.log("Unable to copy:", error);
+    }
+  };
+  const handleMarketCopy = async (textToCopy) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setMarketCopiedNotification(true);
+      setTimeout(() => {
+        setMarketCopiedNotification(false);
+      }, 1000); //
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -110,10 +134,11 @@ const Campaigns = () => {
                     <p className="text-sm text-slate-600">Referral Code</p>
                     <div className="flex justify-between mt-2 border-b-1">
                       <p>{item.referralCode}</p>
+                      {refCopiedNotification ?("king"): (
                       <ContentCopyIcon
                         fontSize="small"
-                        onClick={() => handleCopy(item.referralCode)}
-                      />
+                        onClick={() => handleRefCopy(item.referralCode)}
+                      />)}
                     </div>
                   </div>
                   <div className="pt-5">
@@ -121,14 +146,15 @@ const Campaigns = () => {
                     <div className="flex justify-between mt-2 border-b-1">
                       <p> *227*{item.serviceCode}*referralCode#</p>
                       <div className="flex gap-2">
+                      {urlCopiedNotification ?("king"): (
                         <ContentCopyIcon
                           fontSize="small"
                           onClick={() =>
-                            handleCopy(
+                            handleURLCopy(
                               `*227*${item.serviceCode}*${item.referralCode}#`
                             )
                           }
-                        />
+                        />)}
                         <ShareRoundedIcon
                           fontSize="small"
                           onClick={() =>
@@ -139,25 +165,22 @@ const Campaigns = () => {
                         />
                       </div>
                     </div>
-                    {showCopiedNotification && (
-                        <div className="copied-notification">
-                          <p>Copied!</p>
-                        </div>
-                      )}
                     <div className="flex justify-between mt-10 border-b-1">
                       <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                         https://collections.kowri.app/main/{item.serviceCode}
                         /referralCode
                       </p>
                       <div className="flex gap-2">
+                      {marketCopiedNotification ?("king"): (
                         <ContentCopyIcon
                           fontSize="small"
                           onClick={() =>
-                            handleCopy(
+                            handleMarketCopy(
                               `https://collections.kowri.app/main/${item.serviceCode}/${item.referralCode}#`
                             )
                           }
-                        />
+                        /> 
+                        )}
                         <ShareRoundedIcon
                           fontSize="small"
                           onClick={() =>
