@@ -4,37 +4,41 @@ import { memberStatData } from "../utils/dummys";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useStateContext } from "../contexts/ContextProvider";
-import { collection, query, getDocs } from "firebase/firestore";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 
 const Dashboard = () => {
-  const { adminData } = useStateContext();
+  const { userData } = useStateContext();
   const [campaigns, setCampaigns] = useState([]);
   const [expandedCard, setExpandedCard] = useState(null);
-  const adminId = adminData?.adminId;
-  console.log(adminId,"adminId")
-  useEffect(() => {
-    const fetchCampaigns = async () => {
-      try {
-        const campaignsCollectionRef = collection(
-          db,
-          `admins/${adminId}/campaigns`
-        );
-        const q = query(campaignsCollectionRef);
+  const adminId = userData?.adminId;
 
+useEffect(() => {
+  const fetchCampaigns = async () => {
+    if (adminId) {
+      const campaignsCollectionRef = collection(db, "campaigns");
+      const q = query(campaignsCollectionRef, where("adminId", "==", adminId));
+      try {
         const querySnapshot = await getDocs(q);
         const campaignList = [];
+
         querySnapshot.forEach((doc) => {
-          campaignList.push({ id: doc.id, ...doc.data() });
+          const campaignData = doc.data();
+          campaignList.push(campaignData);
         });
         setCampaigns(campaignList);
       } catch (error) {
         console.error("Error fetching campaigns:", error);
       }
-    };
+    } else {
+      console.error("Admin ID is undefined or null");
+    }
+  };
 
-    fetchCampaigns();
-  }, [adminId]);
+  fetchCampaigns();
+}, [adminId]);
+
+
   const handleExpand = (index) => {
     if (expandedCard === index) {
       setExpandedCard(null);
@@ -42,7 +46,7 @@ const Dashboard = () => {
       setExpandedCard(index);
     }
   };
-console.log(campaigns,"campaigns")
+
   return (
     <div className="p-10">
       <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>

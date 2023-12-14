@@ -12,7 +12,7 @@ import React from "react";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { orange } from "@mui/material/colors";
 import {  db } from "../firebase/firebase";
-import {  doc, setDoc } from "firebase/firestore";
+import {  addDoc, collection} from "firebase/firestore";
 import { useStateContext } from "../contexts/ContextProvider";
 
 
@@ -29,31 +29,37 @@ const AddCampaign = () => {
   const [currentProgress, setCurrentProgress] = React.useState("");
   const [imageURL, setImageURL] = React.useState("");
 
-  const campaignId = campaignName
   const createCampaign = (e) => {
     e.preventDefault();
     const adminId = adminData?.adminId;
-    const campaignsCollectionRef = doc(db, `admins/${adminId}/campaigns`, campaignId);
+    const campaignsCollectionRef = collection(db, "campaigns");
   
     const campaignData = {
       campaignName: campaignName,
       description: description,
       adminId: adminId,
-      fundraisingGoal: fundraisingGoal,
-      currentProgress: currentProgress,
+      fundraisingGoal: parseFloat(fundraisingGoal),
+      currentProgress: parseFloat(currentProgress),
       imageURL: imageURL,
     };
   
-    setDoc(campaignsCollectionRef, campaignData)
-      .then(() => {
-        console.log("Campaign created successfully!");
-        setOpen(false)
+    console.log("Campaign Data:", campaignData); 
+  
+    addDoc(campaignsCollectionRef, campaignData)
+      .then((docRef) => {
+        console.log("Campaign created successfully with ID:", docRef.id);
+        setOpen(false);
+        setCampaignName("");
+        setDescription("");
+        setFundraisingGoal("");
+        setCurrentProgress("");
+        setImageURL("");
       })
       .catch((error) => {
-        console.error("Error creating campaign:", error);
+        console.log("Error creating campaign:", error);
       });
   };
-
+  
   return (
     <div>
       <Button

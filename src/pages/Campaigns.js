@@ -1,7 +1,7 @@
 import { Button, Divider } from "@mui/material";
 import { useState, useEffect } from "react";
 import { db } from "../firebase/firebase";
-import { collection, query, getDocs } from "firebase/firestore";
+import { collection, query, getDocs, where } from "firebase/firestore";
 import AddCampaign from "../components/AddCampaign";
 import { useStateContext } from "../contexts/ContextProvider";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
@@ -24,24 +24,22 @@ const Campaigns = () => {
 
   useEffect(() => {
     const fetchCampaigns = async () => {
+      const campaignsCollectionRef = collection(db, "campaigns");
+      const q = query(campaignsCollectionRef, where("adminId", "==", adminId));
+  
       try {
-        const campaignsCollectionRef = collection(
-          db,
-          `admins/${adminId}/campaigns`
-        );
-        const q = query(campaignsCollectionRef);
-
         const querySnapshot = await getDocs(q);
-        const campaignList = [];
+        const campaign = [];
         querySnapshot.forEach((doc) => {
-          campaignList.push({ id: doc.id, ...doc.data() });
+          const campaignsData = doc.data();
+          campaign.push(campaignsData);
         });
-        setCampaigns(campaignList);
+        setCampaigns(campaign);
       } catch (error) {
-        console.error("Error fetching campaigns:", error);
+        console.error("Error fetching users linked to admin:", error);
       }
     };
-
+  
     fetchCampaigns();
   }, [adminId]);
   return (
@@ -52,7 +50,7 @@ const Campaigns = () => {
           <AddCampaign />
         </div>
       </div>
-      <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
+      <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
         {campaigns.map((item, index) => (
           <div className="border bg-white">
             <div className="">
