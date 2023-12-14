@@ -28,12 +28,14 @@ const AddCampaign = () => {
   const [description, setDescription] = useState("");
   const [fundraisingGoal, setFundraisingGoal] = useState("");
   const [currentProgress, setCurrentProgress] = useState("");
+  const [serviceCode, setServiceCode] = useState("");
   const [imageURL, setImageURL] = useState("");
 
   const [campaignNameError, setCampaignNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [fundraisingGoalError, setFundraisingGoalError] = useState("");
   const [currentProgressError, setCurrentProgressError] = useState("");
+  const [serviceCodeError, setServiceCodeError] = useState("");
   const [imageURLError, setImageURLError] = useState("");
 
   const [loading,setLoading]=useState(false)
@@ -70,6 +72,13 @@ const AddCampaign = () => {
       setCurrentProgressError(false);
     }
 
+    if (serviceCode === "") {
+      setServiceCodeError(true);
+            setLoading(false);
+    } else {
+      setServiceCodeError(false);
+    }
+
     if (imageURL === "") {
       setImageURLError(true);
             setLoading(false);
@@ -84,6 +93,7 @@ const AddCampaign = () => {
     const campaignData = {
       campaignName: campaignName,
       description: description,
+      serviceCode:serviceCode,
       adminId: adminId,
       fundraisingGoal: parseFloat(fundraisingGoal),
       currentProgress: parseFloat(currentProgress),
@@ -160,6 +170,26 @@ const AddCampaign = () => {
               }
             />
           </FormControl>
+          <FormControl
+            fullWidth
+            required
+            variant="outlined"
+            margin="normal"
+            size="small"
+          >
+            <InputLabel htmlFor="outlined-address">Kowri Service Code</InputLabel>
+            <OutlinedInput
+              id="outlined-Address"
+              type="number"
+              label="Address"
+              value={serviceCode}
+              onChange={(e) => setServiceCode(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (serviceCodeError ? "border-red-500" : "")
+              }
+            />
+          </FormControl>
           <div className="grid grid-cols-2 gap-5">
             <FormControl
               fullWidth
@@ -173,7 +203,7 @@ const AddCampaign = () => {
               </InputLabel>
               <OutlinedInput
                 id="outlined-contact"
-                type="text"
+                type="number"
                 label="Contact Infor"
                 value={fundraisingGoal}
                 onChange={(e) => setFundraisingGoal(e.target.value)}
@@ -195,7 +225,7 @@ const AddCampaign = () => {
               </InputLabel>
               <OutlinedInput
                 id="outlined-contact"
-                type="text"
+                type="number"
                 label="Contact Infor"
                 value={currentProgress}
                 onChange={(e) => setCurrentProgress(e.target.value)}

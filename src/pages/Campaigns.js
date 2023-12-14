@@ -15,12 +15,32 @@ const Campaigns = () => {
   const adminId = adminData?.adminId;
 
   const [loading, setLoading] = useState(false);
+  const [showCopiedNotification, setShowCopiedNotification] = useState(false);
 
   const handleExpand = (index) => {
     if (expandedCard === index) {
       setExpandedCard(null);
     } else {
       setExpandedCard(index);
+    }
+  };
+  const handleCopy = async (textToCopy) => {
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      setShowCopiedNotification(true);
+      setTimeout(() => {
+        setShowCopiedNotification(false);
+      }, 2000); //
+    } catch (error) {
+      console.log("Unable to copy:", error);
+    }
+  };
+
+  const handleShare = async (textToShare) => {
+    try {
+      await navigator.share({ text: textToShare });
+    } catch (error) {
+      console.log("Sharing failed:", error);
     }
   };
 
@@ -67,7 +87,7 @@ const Campaigns = () => {
                   <img
                     src={item.imageURL}
                     alt={item.campaignName}
-                    className="object-inherit w-full h-[250px]"
+                    className="object-fit w-full h-[350px]"
                   />
                 </div>
                 <div key={index} className=" bg-white p-5 flex flex-col gap-3">
@@ -90,25 +110,62 @@ const Campaigns = () => {
                     <p className="text-sm text-slate-600">Referral Code</p>
                     <div className="flex justify-between mt-2 border-b-1">
                       <p>{item.referralCode}</p>
-                      <ContentCopyIcon fontSize="small" />
+                      <ContentCopyIcon
+                        fontSize="small"
+                        onClick={() => handleCopy(item.referralCode)}
+                      />
                     </div>
                   </div>
                   <div className="pt-5">
                     <p className="text-sm text-slate-600">Referral Links</p>
                     <div className="flex justify-between mt-2 border-b-1">
-                      <p>{item.USSDReferral}</p>
+                      <p> *227*{item.serviceCode}*referralCode#</p>
                       <div className="flex gap-2">
-                        <ContentCopyIcon fontSize="small" />
-                        <ShareRoundedIcon fontSize="small" />
+                        <ContentCopyIcon
+                          fontSize="small"
+                          onClick={() =>
+                            handleCopy(
+                              `*227*${item.serviceCode}*${item.referralCode}#`
+                            )
+                          }
+                        />
+                        <ShareRoundedIcon
+                          fontSize="small"
+                          onClick={() =>
+                            handleShare(
+                              `*227*${item.serviceCode}*${item.referralCode}#`
+                            )
+                          }
+                        />
                       </div>
                     </div>
-                    <div className="flex justify-between mt-4 border-b-1">
+                    {showCopiedNotification && (
+                        <div className="copied-notification">
+                          <p>Copied!</p>
+                        </div>
+                      )}
+                    <div className="flex justify-between mt-10 border-b-1">
                       <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                        {item.KowriLinkReferral}
+                        https://collections.kowri.app/main/{item.serviceCode}
+                        /referralCode
                       </p>
                       <div className="flex gap-2">
-                        <ContentCopyIcon fontSize="small" />
-                        <ShareRoundedIcon fontSize="small" />
+                        <ContentCopyIcon
+                          fontSize="small"
+                          onClick={() =>
+                            handleCopy(
+                              `https://collections.kowri.app/main/${item.serviceCode}/${item.referralCode}#`
+                            )
+                          }
+                        />
+                        <ShareRoundedIcon
+                          fontSize="small"
+                          onClick={() =>
+                            handleShare(
+                              `https://collections.kowri.app/main/${item.serviceCode}/${item.referralCode}#`
+                            )
+                          }
+                        />
                       </div>
                     </div>
                     <div className="pt-5 ">

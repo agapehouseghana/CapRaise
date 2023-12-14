@@ -87,14 +87,14 @@ const Dashboard = () => {
             <p className="text-sm uppercase font-medium mb-3 bg-slate-200 w-max py-2 px-3">
               Campaigns
             </p>
-            <div className="grid lg:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
+            <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
               {campaigns.map((item, index) => (
                 <div className="border bg-white">
                   <div className="">
                     <img
                       src={item.imageURL}
                       alt={item.campaignName}
-                      className="object-inherit w-full h-[250px]"
+                      className="object-fit w-full h-[350px]"
                     />
                   </div>
                   <div
@@ -132,7 +132,7 @@ const Dashboard = () => {
                           <ShareRoundedIcon fontSize="small" />
                         </div>
                       </div>
-                      <div className="flex justify-between mt-4 border-b-1">
+                      <div className="flex justify-between mt-10 border-b-1">
                         <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                           {item.KowriLinkReferral}
                         </p>
