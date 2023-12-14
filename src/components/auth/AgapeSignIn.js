@@ -4,25 +4,30 @@ import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import fund from "../../utils/images/fund.jpeg"
+import { CircularProgress } from "@mui/material";
 
 const AgapeSignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [loading,setLoading]=useState(false)
 
   const navigate = useNavigate();
 
   const signIn = (e) => {
     e.preventDefault();
+    setLoading(true)
     if (email === "") {
       setEmailError(true);
+            setLoading(false);
     } else {
       setEmailError(false);
     }
 
     if (password === "") {
       setPasswordError(true);
+            setLoading(false);
     } else {
       setPasswordError(false);
     }
@@ -31,11 +36,13 @@ const AgapeSignIn = () => {
         .then((userCredential) => {
           console.log(userCredential);
           navigate("/");
+          setLoading(false)
         })
         .catch((error) => {
           const errorMessage = error.message;
           console.log("Sign In Error:", errorMessage);
           toast.error("Invalid email or password");
+          setLoading(false)
         });
     }
   };
@@ -96,7 +103,7 @@ const AgapeSignIn = () => {
                   type="submit"
                   className="bg-green-200 py-4 px-5 rounded-md w-[240px] font-semibold"
                 >
-                  Log In
+                  {loading?<CircularProgress  size={20} />:" Log In"}
                 </button>
               </div>
             </form>

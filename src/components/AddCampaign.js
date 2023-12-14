@@ -7,8 +7,9 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  CircularProgress,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { orange } from "@mui/material/colors";
 import {  db } from "../firebase/firebase";
@@ -23,14 +24,60 @@ const AddCampaign = () => {
   const handleOpen = () => setOpen(true);
   const onCancel = () => setOpen(false);
 
-  const [campaignName, setCampaignName] = React.useState("");
-  const [description, setDescription] = React.useState("");
-  const [fundraisingGoal, setFundraisingGoal] = React.useState("");
-  const [currentProgress, setCurrentProgress] = React.useState("");
-  const [imageURL, setImageURL] = React.useState("");
+  const [campaignName, setCampaignName] = useState("");
+  const [description, setDescription] = useState("");
+  const [fundraisingGoal, setFundraisingGoal] = useState("");
+  const [currentProgress, setCurrentProgress] = useState("");
+  const [imageURL, setImageURL] = useState("");
+
+  const [campaignNameError, setCampaignNameError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+  const [fundraisingGoalError, setFundraisingGoalError] = useState("");
+  const [currentProgressError, setCurrentProgressError] = useState("");
+  const [imageURLError, setImageURLError] = useState("");
+
+  const [loading,setLoading]=useState(false)
 
   const createCampaign = (e) => {
     e.preventDefault();
+    setLoading(true)
+
+    if (campaignName === "") {
+      setCampaignNameError(true);
+            setLoading(false);
+    } else {
+      setCampaignNameError(false);
+    }
+
+    if (description === "") {
+      setDescriptionError(true);
+            setLoading(false);
+    } else {
+      setDescriptionError(false);
+    }
+
+    if (fundraisingGoal === "") {
+      setFundraisingGoalError(true);
+            setLoading(false);
+    } else {
+      setFundraisingGoalError(false);
+    }
+
+    if (currentProgress === "") {
+      setCurrentProgressError(true);
+            setLoading(false);
+    } else {
+      setCurrentProgressError(false);
+    }
+
+    if (imageURL === "") {
+      setImageURLError(true);
+            setLoading(false);
+    } else {
+      setImageURLError(false);
+    }
+
+    if (campaignName && description && fundraisingGoal&&currentProgress && imageURL) {
     const adminId = adminData?.adminId;
     const campaignsCollectionRef = collection(db, "campaigns");
   
@@ -43,21 +90,21 @@ const AddCampaign = () => {
       imageURL: imageURL,
     };
   
-    console.log("Campaign Data:", campaignData); 
-  
     addDoc(campaignsCollectionRef, campaignData)
       .then((docRef) => {
-        console.log("Campaign created successfully with ID:", docRef.id);
         setOpen(false);
         setCampaignName("");
         setDescription("");
         setFundraisingGoal("");
         setCurrentProgress("");
         setImageURL("");
+        setLoading(false)
       })
       .catch((error) => {
         console.log("Error creating campaign:", error);
+        setLoading(false)
       });
+    }
   };
   
   return (
@@ -87,6 +134,10 @@ const AddCampaign = () => {
               label="campaignName"
               value={campaignName}
               onChange={(e) => setCampaignName(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (campaignNameError ? "border-red-500" : "")
+              }
             />
           </FormControl>
           <FormControl
@@ -103,6 +154,10 @@ const AddCampaign = () => {
               label="Address"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (descriptionError ? "border-red-500" : "")
+              }
             />
           </FormControl>
           <div className="grid grid-cols-2 gap-5">
@@ -122,6 +177,10 @@ const AddCampaign = () => {
                 label="Contact Infor"
                 value={fundraisingGoal}
                 onChange={(e) => setFundraisingGoal(e.target.value)}
+                className={
+                  "border-1 px-3 py-4 rounded-md mb-5 " +
+                  (fundraisingGoalError ? "border-red-500" : "")
+                }
               />
             </FormControl>
             <FormControl
@@ -140,6 +199,10 @@ const AddCampaign = () => {
                 label="Contact Infor"
                 value={currentProgress}
                 onChange={(e) => setCurrentProgress(e.target.value)}
+                className={
+                  "border-1 px-3 py-4 rounded-md mb-5 " +
+                  (currentProgressError ? "border-red-500" : "")
+                }
               />
             </FormControl>
           </div>
@@ -157,6 +220,10 @@ const AddCampaign = () => {
               label="Address"
               value={imageURL}
               onChange={(e) => setImageURL(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (imageURLError ? "border-red-500" : "")
+              }
             />
           </FormControl>
         </DialogContent>
@@ -166,7 +233,7 @@ const AddCampaign = () => {
             onClick={createCampaign}
             style={{ background: "orange", color: "white" }}
           >
-            Add
+          {loading?<CircularProgress  size={20} />:"Add"}
           </Button>
         </DialogActions>
       </Dialog>

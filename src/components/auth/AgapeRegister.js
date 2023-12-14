@@ -4,9 +4,12 @@ import { auth, db } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { churchList } from "../../utils/dummys";
-import fund from "../../utils/images/fund.jpeg"
+import fund from "../../utils/images/fund.jpeg";
+import { CircularProgress } from "@mui/material";
 
 const AgapeRegister = () => {
+  const [loading, setLoading] = useState(false);
+
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -24,60 +27,67 @@ const AgapeRegister = () => {
 
   const signUp = (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (email === "") {
       setEmailError(true);
+      setLoading(false);
     } else {
       setEmailError(false);
     }
 
     if (password === "") {
       setPasswordError(true);
+      setLoading(false);
     } else {
       setPasswordError(false);
     }
 
     if (fullName === "") {
       setFullNameError(true);
+      setLoading(false);
     } else {
       setFullNameError(false);
     }
 
     if (phoneNumber === "") {
       setPhoneNumberError(true);
+      setLoading(false);
     } else {
       setPhoneNumberError(false);
     }
 
     if (church === "") {
       setChurchError(true);
+      setLoading(false);
     } else {
       setChurchError(false);
     }
 
     if (email && password && fullName && phoneNumber && church) {
       createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        const userId = userCredential.user.uid;
-        const userData = {
-          fullName: fullName,
-          email: userCredential.user.email,
-          phoneNumber: phoneNumber,
-          church: church,
-          role: role,
-          adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7"
-        };
-        navigate("/");
-        const usersCollectionRef = doc(db, "users", userId);
-        return setDoc(usersCollectionRef, { ...userData, userId });
-      })
-      .then(() => {
-        console.log("User registered successfully!");
-      })
-      .catch((error) => {
-        console.error("Error registering user:", error);
-      });
-    
+        .then((userCredential) => {
+          const userId = userCredential.user.uid;
+          const userData = {
+            fullName: fullName,
+            email: userCredential.user.email,
+            phoneNumber: phoneNumber,
+            church: church,
+            role: role,
+            adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7",
+          };
+          navigate("/");
+          const usersCollectionRef = doc(db, "users", userId);
+          return setDoc(usersCollectionRef, { ...userData, userId });
+        })
+        .then(() => {
+          console.log("User registered successfully!");
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error registering user:", error);
+          setLoading(false);
+        });
     }
   };
   const redirectToSignIn = () => {
@@ -86,9 +96,16 @@ const AgapeRegister = () => {
   return (
     <div className="md:flex-row flex-col  flex h-screen relative">
       <div className="hidden md:flex md:flex-1 bg-green-200 h-full">
-      <img src={fund} alt="fundraiser" className="object-fit"/>
+        <img src={fund} alt="fundraiser" className="object-fit" />
       </div>
-      <div className="h-full"  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div
+        className="h-full"
+        style={{
+          backgroundImage: `url(${fund})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+        }}
+      >
         <div className="flex md:flex-1 md:justify-center md:h-full bg-white m-10 md:m-0 rounded-md">
           <form
             onSubmit={signUp}
@@ -163,7 +180,7 @@ const AgapeRegister = () => {
                 type="submit"
                 className="bg-green-200 py-4 px-5 rounded-md w-[240px] font-semibold"
               >
-                Register
+                {loading ? <CircularProgress size={20} /> : "Register"}
               </button>
             </div>
           </form>

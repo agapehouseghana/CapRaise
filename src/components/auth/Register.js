@@ -5,8 +5,11 @@ import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import fund from "../../utils/images/R.jpeg";
+import { CircularProgress } from "@mui/material";
 
 const Register = () => {
+  const [loading, setLoading] = useState(false);
+
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -21,57 +24,62 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState(false);
   const [churchError, setChurchError] = useState(false);
 
-  const [churches,setChurches]=useState([]);
+  const [churches, setChurches] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAdmins = async () => {
-      const adminsCollectionRef = collection(db, 'admins');
+      const adminsCollectionRef = collection(db, "admins");
       try {
         const querySnapshot = await getDocs(adminsCollectionRef);
         const adminsData = querySnapshot.docs.map((doc) => ({
           adminId: doc.id,
-          ...doc.data()
+          ...doc.data(),
         }));
-      
+
         setChurches(adminsData);
       } catch (error) {
-        console.error('Error fetching admins: ', error);
+        console.error("Error fetching admins: ", error);
       }
     };
 
-    fetchAdmins(); 
+    fetchAdmins();
   }, []);
 
   const signUp = (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (email === "") {
       setEmailError(true);
+      setLoading(false);
     } else {
       setEmailError(false);
     }
 
     if (password === "") {
       setPasswordError(true);
+      setLoading(false);
     } else {
       setPasswordError(false);
     }
 
     if (fullName === "") {
       setFullNameError(true);
+      setLoading(false);
     } else {
       setFullNameError(false);
     }
 
     if (phoneNumber === "") {
       setPhoneNumberError(true);
+      setLoading(false);
     } else {
       setPhoneNumberError(false);
     }
 
     if (churchId === "") {
       setChurchError(true);
+      setLoading(false);
     } else {
       setChurchError(false);
     }
@@ -86,7 +94,7 @@ const Register = () => {
             phoneNumber: phoneNumber,
             church: churchName,
             role: role,
-            adminId: churchId
+            adminId: churchId,
           };
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
@@ -94,9 +102,11 @@ const Register = () => {
         })
         .then(() => {
           console.log("User registered successfully!");
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error registering user:", error);
+          setLoading(false);
         });
     }
   };
@@ -170,7 +180,7 @@ const Register = () => {
                 const selectedRisk = churches?.find(
                   (item) => item.adminId === e.target.value
                 );
-            
+
                 setChurchName(selectedRisk?.churchName);
               }}
               className={
@@ -179,7 +189,7 @@ const Register = () => {
               }
             >
               <option value="">Select your church</option>
-              {churches?.map((church,index) => (
+              {churches?.map((church, index) => (
                 <option key={index} value={church.adminId}>
                   {church.churchName}
                 </option>
@@ -197,7 +207,7 @@ const Register = () => {
                 type="submit"
                 className="bg-green-200 py-4 px-5 rounded-md w-[240px] font-semibold"
               >
-                Register
+                {loading ? <CircularProgress size={20} /> : "Register"}
               </button>
             </div>
           </form>
