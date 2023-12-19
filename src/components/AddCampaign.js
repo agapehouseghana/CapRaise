@@ -128,7 +128,7 @@ const AddCampaign = ({setRefreshCampaigns}) => {
       >
         Add Campaign
       </Button>
-      <Dialog open={open} onClose={onCancel} maxWidth="sm" fullWidth>
+      <Dialog open={open} onClose={onCancel} maxWidth="md" fullWidth>
         <DialogTitle>Add Church</DialogTitle>
         <DialogContent>
           <FormControl

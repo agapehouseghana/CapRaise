@@ -51,7 +51,7 @@ const AddChurches = () => {
           churchEmail: userCredential.user.email,
           role: role,
         };
-        function generateChurchReferralCode(churchKey, length) {
+        function generateChurchReferralCode(length) {
           function generateRandomDigits(length) {
             let randomDigits = '';
             const characters = '0123456789';
@@ -66,11 +66,10 @@ const AddChurches = () => {
         
           const randomDigits = generateRandomDigits(length);
         
-          return `${churchKey}${randomDigits}`;
+          return `${randomDigits}`;
         }
         
-        const churchKey = "AGA";
-        const referralCode = generateChurchReferralCode(churchKey, 5);
+        const referralCode = generateChurchReferralCode(5);
 
         const adminsCollectionRef = doc(db, "admins", adminId);
         return setDoc(adminsCollectionRef, { ...adminData, adminId, referralCode: referralCode, });

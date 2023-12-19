@@ -128,7 +128,7 @@ const Dashboard = () => {
                 </p>
                 <p className="text-2xl font-semibold">
                   <small className="mr-1">GHS</small>
-                  0.00
+                  {"0.00".toLocaleString()}
                 </p>
               </div>
             </div>
@@ -188,11 +188,11 @@ const Dashboard = () => {
                     </p>
                     <div className="flex justify-between mt-5">
                       <p className="text-slate-400">
-                        Goal: {item.fundraisingGoal}
+                        Goal: {item.fundraisingGoal.toLocaleString()}
                         <small className="ml-2">GHS</small>
                       </p>
                       <p className="text-slate-400">
-                        Raised: {item.currentProgress}
+                        Raised: {item.currentProgress.toLocaleString()} 
                         <small className="ml-2">GHS</small>
                       </p>
                     </div>
