@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Divider } from "@mui/material";
-import { memberStatData } from "../utils/dummys";
+// import { memberStatData } from "../utils/dummys";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useStateContext } from "../contexts/ContextProvider";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import CheckIcon from "@mui/icons-material/Check";
+import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 
 const Dashboard = () => {
   const { userData } = useStateContext();
@@ -20,13 +23,15 @@ const Dashboard = () => {
   const [marketCopiedNotification, setMarketCopiedNotification] =
     useState(false);
 
+  const campaignCount = campaigns.length;
+
   const handleRefCopy = async (textToCopy) => {
     try {
       await navigator.clipboard.writeText(textToCopy);
       setRefCopiedNotification(true);
       setTimeout(() => {
         setRefCopiedNotification(false);
-      }, 1000); 
+      }, 1000);
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -37,7 +42,7 @@ const Dashboard = () => {
       setUrlCopiedNotification(true);
       setTimeout(() => {
         setUrlCopiedNotification(false);
-      }, 1000); 
+      }, 1000);
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -48,7 +53,7 @@ const Dashboard = () => {
       setMarketCopiedNotification(true);
       setTimeout(() => {
         setMarketCopiedNotification(false);
-      }, 1000); 
+      }, 1000);
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -111,7 +116,7 @@ const Dashboard = () => {
         <div className="p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
           <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
-            {memberStatData.map((item, index) => (
+            {/* {memberStatData.map((item, index) => (
               <div
                 key={index}
                 className="flex flex-row border p-4 items-center bg-white"
@@ -127,7 +132,56 @@ const Dashboard = () => {
                   </p>
                 </div>
               </div>
-            ))}
+            ))} */}
+
+            <div className="flex flex-row border p-4 items-center bg-white">
+              <div className="bg-gray-100 p-2 mr-5">
+                <AccountBalanceWalletOutlinedIcon
+                  fontSize="large"
+                  className="text-slate-500"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Total Raised
+                </p>
+                <p className="text-2xl font-semibold">
+                  <small className="mr-1">GHS</small>
+                  0.00
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-row border p-4 items-center bg-white">
+              <div className="bg-gray-100 p-2 mr-5">
+                <GroupsOutlinedIcon
+                  fontSize="large"
+                  className="text-slate-500"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-500">
+                  Total Donors
+                </p>
+                <p className="text-2xl font-semibold">
+                  <small className="mr-1"></small>0
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-row border p-4 items-center bg-white">
+              <div className="bg-gray-100 p-2 mr-5">
+                <FavoriteBorderOutlinedIcon
+                  fontSize="large"
+                  className="text-slate-500"
+                />
+              </div>
+              <div>
+                <p className="text-sm font-medium text-slate-500">Campaigns</p>
+                <p className="text-2xl font-semibold">
+                  <small className="mr-1"></small>
+                  {campaignCount}
+                </p>
+              </div>
+            </div>
           </div>
           <div className="mt-[50px]">
             <p className="text-sm uppercase font-medium mb-3 bg-slate-200 w-max py-2 px-3">
@@ -165,7 +219,9 @@ const Dashboard = () => {
                     <div className="pt-5">
                       <p className="text-sm text-slate-600">Referral Code</p>
                       <div className="flex justify-between mt-2 border-b-1">
-                        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">{userData.referralCode}</p>
+                        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
+                          {userData.referralCode}
+                        </p>
                         {refCopiedNotification ? (
                           <CheckIcon color="success" />
                         ) : (

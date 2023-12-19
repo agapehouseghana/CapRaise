@@ -97,19 +97,27 @@ const Register = () => {
             adminId: churchId,
           };
 
-          function generateReferralCode(length) {
-            const characters = '0123456789';
-            let referralCode = '';
-    
-            for (let i = 0; i < length; i++) {
-              const randomIndex = Math.floor(Math.random() * characters.length);
-              referralCode += characters.charAt(randomIndex);
+          function generateChurchReferralCode(churchKey, length) {
+            function generateRandomDigits(length) {
+              let randomDigits = '';
+              const characters = '0123456789';
+          
+              for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * characters.length);
+                randomDigits += characters.charAt(randomIndex);
+              }
+          
+              return randomDigits;
             }
-    
-            return referralCode;
+          
+            const randomDigits = generateRandomDigits(length);
+          
+            return `${churchKey}${randomDigits}`;
           }
-    
-          const referralCode = generateReferralCode(12);
+          
+          const churchKey = "AGA";
+          const referralCode = generateChurchReferralCode(churchKey, 5);
+
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
           return setDoc(usersCollectionRef, {
