@@ -17,6 +17,7 @@ import AgapeRegister from "./components/auth/AgapeRegister";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import branch from "branch-sdk";
 
 function App() {
   const { authUser, userData, loading } = useStateContext();
@@ -29,6 +30,15 @@ function App() {
     }, 2000);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    branch.init('key_live_fsmuy5YHmP245wlULiJfkjimxDkwz7MA', (err, data) => {
+      if (err) {
+        console.log('Error initializing Branch:', err);
+        return;
+      }
+    });
   }, []);
 
   if (loading) {
