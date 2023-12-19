@@ -72,7 +72,7 @@ export const statData = [
     ),
     title: "Total Raised",
     currency: "GHS",
-    value: "34,800",
+    value: "0.00",
   },
   {
     icon: (
@@ -83,13 +83,13 @@ export const statData = [
     ),
     title: "Total Fundraisers",
     currency: "",
-    value: "48",
+    value: "0",
   },
   {
     icon: <GroupsOutlinedIcon fontSize="large" className="text-slate-500" />,
     title: "Total Donors",
     currency: "",
-    value: "107",
+    value: "0",
   },
   {
     icon: (
@@ -100,7 +100,7 @@ export const statData = [
     ),
     title: "Campaigns",
     currency: "",
-    value: "3",
+    value: "0",
   },
 ];
 export const memberStatData = [
@@ -113,13 +113,13 @@ export const memberStatData = [
     ),
     title: "Total Raised",
     currency: "GHS",
-    value: "34,000",
+    value: "0.00",
   },
   {
     icon: <GroupsOutlinedIcon fontSize="large" className="text-slate-500" />,
     title: "Total Donors",
     currency: "",
-    value: "107",
+    value: "0",
   },
   {
     icon: (
@@ -130,7 +130,7 @@ export const memberStatData = [
     ),
     title: "Campaigns",
     currency: "",
-    value: "2",
+    value: "0",
   },
 ];
 export const dashTopFundraisers = [
