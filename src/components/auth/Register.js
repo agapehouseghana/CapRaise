@@ -6,7 +6,6 @@ import { doc, setDoc } from "firebase/firestore";
 import { collection, getDocs } from "firebase/firestore";
 import fund from "../../utils/images/R.jpeg";
 import { CircularProgress } from "@mui/material";
-import branch from "branch-sdk";
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
@@ -97,27 +96,37 @@ const Register = () => {
             role: role,
             adminId: churchId,
           };
-          var linkData = {
-            data: {
-              name: fullName,
-            },
-          };
-          
-          branch.link(linkData, function(err, link) {
-            const usersCollectionRef = doc(db, "users", userId);
-            return setDoc(usersCollectionRef, {
-              ...userData,
-              userId,
-              referralLink: link,
-            });
-          });
+
+          function generateReferralCode(length) {
+            const characters = '0123456789';
+            let referralCode = '';
+    
+            for (let i = 0; i < length; i++) {
+              const randomIndex = Math.floor(Math.random() * characters.length);
+              referralCode += characters.charAt(randomIndex);
+            }
+    
+            return referralCode;
+          }
+    
+          const referralCode = generateReferralCode(12);
           navigate("/");
+          const usersCollectionRef = doc(db, "users", userId);
+          return setDoc(usersCollectionRef, {
+            ...userData,
+            userId,
+            referralCode: referralCode,
+          }).then(() => {
+            console.log("User registered successfully!");
+            setLoading(false);
+          });
         })
         .catch((error) => {
           console.log("Error registering user:", error);
           setLoading(false);
         });
     }
+    
   };
 
   const redirectToSignIn = () => {

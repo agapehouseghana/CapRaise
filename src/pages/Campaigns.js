@@ -134,25 +134,25 @@ const Campaigns = () => {
                   <div className="pt-5">
                     <p className="text-sm text-slate-600">Referral Code</p>
                     <div className="flex justify-between mt-2 border-b-1">
-                      <p>{item.referralCode}</p>
+                      <p>{adminData.referralCode}</p>
                       {refCopiedNotification ?(<CheckIcon color="success"/>): (
                       <ContentCopyIcon
                         fontSize="small"
-                        onClick={() => handleRefCopy(item.referralCode)}
+                        onClick={() => handleRefCopy(adminData.referralCode)}
                       />)}
                     </div>
                   </div>
                   <div className="pt-5">
                     <p className="text-sm text-slate-600">Referral Links</p>
                     <div className="flex justify-between mt-2 border-b-1">
-                      <p> *227*{item.serviceCode}*referralCode#</p>
+                      <p> *227*{item.serviceCode}*{adminData.referralCode}#</p>
                       <div className="flex gap-2">
                       {urlCopiedNotification ?(<CheckIcon  color="success"/>): (
                         <ContentCopyIcon
                           fontSize="small"
                           onClick={() =>
                             handleURLCopy(
-                              `*227*${item.serviceCode}*${item.referralCode}#`
+                              `*227*${item.serviceCode}*${adminData.referralCode}#`
                             )
                           }
                         />)}
@@ -160,7 +160,7 @@ const Campaigns = () => {
                           fontSize="small"
                           onClick={() =>
                             handleShare(
-                              `*227*${item.serviceCode}*${item.referralCode}#`
+                              `*227*${item.serviceCode}*${adminData.referralCode}#`
                             )
                           }
                         />
@@ -169,7 +169,7 @@ const Campaigns = () => {
                     <div className="flex justify-between mt-10 border-b-1">
                       <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                         https://collections.kowri.app/main/{item.serviceCode}
-                        /referralCode
+                        /{adminData.referralCode}
                       </p>
                       <div className="flex gap-2">
                       {marketCopiedNotification ?(<CheckIcon  color="success"/>): (
@@ -177,7 +177,7 @@ const Campaigns = () => {
                           fontSize="small"
                           onClick={() =>
                             handleMarketCopy(
-                              `https://collections.kowri.app/main/${item.serviceCode}/${item.referralCode}#`
+                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referralCode}#`
                             )
                           }
                         /> 
@@ -186,7 +186,7 @@ const Campaigns = () => {
                           fontSize="small"
                           onClick={() =>
                             handleShare(
-                              `https://collections.kowri.app/main/${item.serviceCode}/${item.referralCode}#`
+                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referralCode}#`
                             )
                           }
                         />

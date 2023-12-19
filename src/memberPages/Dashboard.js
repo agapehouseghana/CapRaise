@@ -26,7 +26,7 @@ const Dashboard = () => {
       setRefCopiedNotification(true);
       setTimeout(() => {
         setRefCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -37,7 +37,7 @@ const Dashboard = () => {
       setUrlCopiedNotification(true);
       setTimeout(() => {
         setUrlCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -48,7 +48,7 @@ const Dashboard = () => {
       setMarketCopiedNotification(true);
       setTimeout(() => {
         setMarketCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -165,13 +165,13 @@ const Dashboard = () => {
                     <div className="pt-5">
                       <p className="text-sm text-slate-600">Referral Code</p>
                       <div className="flex justify-between mt-2 border-b-1">
-                        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">{userData.referralLink}</p>
+                        <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">{userData.referralCode}</p>
                         {refCopiedNotification ? (
                           <CheckIcon color="success" />
                         ) : (
                           <ContentCopyIcon
                             fontSize="small"
-                            onClick={() => handleRefCopy(userData.referralLink)}
+                            onClick={() => handleRefCopy(userData.referralCode)}
                           />
                         )}
                       </div>
@@ -181,7 +181,7 @@ const Dashboard = () => {
                       <div className="flex justify-between mt-2 border-b-1">
                         <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                           {" "}
-                          *227*{item.serviceCode}*{userData.referralLink}#
+                          *227*{item.serviceCode}*{userData.referralCode}#
                         </p>
                         <div className="flex gap-2">
                           {urlCopiedNotification ? (
@@ -191,7 +191,7 @@ const Dashboard = () => {
                               fontSize="small"
                               onClick={() =>
                                 handleURLCopy(
-                                  `*227*${item.serviceCode}*${userData.referralLink}#`
+                                  `*227*${item.serviceCode}*${userData.referralCode}#`
                                 )
                               }
                             />
@@ -200,7 +200,7 @@ const Dashboard = () => {
                             fontSize="small"
                             onClick={() =>
                               handleShare(
-                                `*227*${item.serviceCode}*${userData.referralLink}#`
+                                `*227*${item.serviceCode}*${userData.referralCode}#`
                               )
                             }
                           />
@@ -209,7 +209,7 @@ const Dashboard = () => {
                       <div className="flex justify-between mt-10 border-b-1">
                         <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                           https://collections.kowri.app/main/{item.serviceCode}/
-                          {userData.referralLink}
+                          {userData.referralCode}
                         </p>
                         <div className="flex gap-2">
                           {marketCopiedNotification ? (
@@ -219,7 +219,7 @@ const Dashboard = () => {
                               fontSize="small"
                               onClick={() =>
                                 handleMarketCopy(
-                                  `https://collections.kowri.app/main/${item.serviceCode}/${userData.referralLink}#`
+                                  `https://collections.kowri.app/main/${item.serviceCode}/${userData.referralCode}#`
                                 )
                               }
                             />
@@ -228,7 +228,7 @@ const Dashboard = () => {
                             fontSize="small"
                             onClick={() =>
                               handleShare(
-                                `https://collections.kowri.app/main/${item.serviceCode}/${userData.referralLink}#`
+                                `https://collections.kowri.app/main/${item.serviceCode}/${userData.referralCode}#`
                               )
                             }
                           />

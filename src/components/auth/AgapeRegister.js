@@ -76,9 +76,22 @@ const AgapeRegister = () => {
             role: role,
             adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7",
           };
+          function generateReferralCode(length) {
+            const characters = '0123456789';
+            let referralCode = '';
+    
+            for (let i = 0; i < length; i++) {
+              const randomIndex = Math.floor(Math.random() * characters.length);
+              referralCode += characters.charAt(randomIndex);
+            }
+    
+            return referralCode;
+          }
+
+          const referralCode = generateReferralCode(12);
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
-          return setDoc(usersCollectionRef, { ...userData, userId });
+          return setDoc(usersCollectionRef, { ...userData, userId ,  referralCode: referralCode,});
         })
         .then(() => {
           console.log("User registered successfully!");
