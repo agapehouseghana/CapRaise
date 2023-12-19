@@ -9,6 +9,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from '@mui/icons-material/Check';
 
 const Campaigns = () => {
+  const [refreshCampaigns, setRefreshCampaigns] = useState(false);
+
   const { adminData } = useStateContext();
   const [campaigns, setCampaigns] = useState([]);
   const [expandedCard, setExpandedCard] = useState(null);
@@ -33,7 +35,7 @@ const Campaigns = () => {
       setRefCopiedNotification(true);
       setTimeout(() => {
         setRefCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -44,7 +46,7 @@ const Campaigns = () => {
       setUrlCopiedNotification(true);
       setTimeout(() => {
         setUrlCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -55,7 +57,7 @@ const Campaigns = () => {
       setMarketCopiedNotification(true);
       setTimeout(() => {
         setMarketCopiedNotification(false);
-      }, 1000); //
+      }, 1000); 
     } catch (error) {
       console.log("Unable to copy:", error);
     }
@@ -90,7 +92,7 @@ const Campaigns = () => {
     };
 
     fetchCampaigns();
-  }, [adminId]);
+  }, [adminId,refreshCampaigns]);
   return (
     <>
       {loading ? (
@@ -102,7 +104,7 @@ const Campaigns = () => {
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Campaigns</h1>
           <div className=" w-full">
             <div className="mb-10 float-right">
-              <AddCampaign />
+              <AddCampaign setRefreshCampaigns={setRefreshCampaigns}/>
             </div>
           </div>
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">

@@ -17,7 +17,7 @@ import {  addDoc, collection} from "firebase/firestore";
 import { useStateContext } from "../contexts/ContextProvider";
 
 
-const AddCampaign = () => {
+const AddCampaign = ({setRefreshCampaigns}) => {
   const { adminData } =
   useStateContext();
   const [open, setOpen] = React.useState(false);
@@ -109,6 +109,7 @@ const AddCampaign = () => {
         setCurrentProgress("");
         setImageURL("");
         setLoading(false)
+        setRefreshCampaigns((prevRefresh) => !prevRefresh);
       })
       .catch((error) => {
         console.log("Error creating campaign:", error);
