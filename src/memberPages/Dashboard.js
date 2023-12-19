@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress, Divider } from "@mui/material";
-// import { memberStatData } from "../utils/dummys";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -116,24 +115,6 @@ const Dashboard = () => {
         <div className="p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
           <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
-            {/* {memberStatData.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-row border p-4 items-center bg-white"
-              >
-                <div className="bg-gray-100 p-2 mr-5">{item.icon}</div>
-                <div>
-                  <p className="text-sm font-medium text-slate-500">
-                    {item.title}
-                  </p>
-                  <p className="text-2xl font-semibold">
-                    <small className="mr-1">{item.currency}</small>
-                    {item.value}
-                  </p>
-                </div>
-              </div>
-            ))} */}
-
             <div className="flex flex-row border p-4 items-center bg-white">
               <div className="bg-gray-100 p-2 mr-5">
                 <AccountBalanceWalletOutlinedIcon

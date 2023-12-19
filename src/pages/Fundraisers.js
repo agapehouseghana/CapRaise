@@ -45,6 +45,12 @@ const Fundraisers = () => {
       minWidth: 170,
       align: "left",
     },
+    {
+      id: "referralCode",
+      label: "Referral Code",
+      minWidth: 170,
+      align: "left",
+    },
   ];
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
