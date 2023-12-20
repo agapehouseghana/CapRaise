@@ -148,7 +148,7 @@ const Campaign = ({ adminData, campaigns }) => {
                 <p className="text-sm text-slate-600">Kowri Link</p>
                 <div className="flex justify-between mt-2 border-b-1">
                   <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                    https://collections.kowri.app/main/{item.serviceCode}/
+                    https://kbnewmarketplace.mykowri.com/main/{item.serviceCode}/
                     {adminData.referralCode}
                   </p>
                   <div className="flex gap-2">
@@ -159,7 +159,7 @@ const Campaign = ({ adminData, campaigns }) => {
                         fontSize="small"
                         onClick={() =>
                           handleMarketCopy(
-                            `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referralCode}#`
+                            `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
                           )
                         }
                       />
@@ -168,7 +168,7 @@ const Campaign = ({ adminData, campaigns }) => {
                       fontSize="small"
                       onClick={() =>
                         handleShare(
-                          `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referralCode}#`
+                          `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
                         )
                       }
                     />
