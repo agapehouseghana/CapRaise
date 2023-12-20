@@ -5,10 +5,7 @@ import MemberStatsBarChart from "../components/MemberStatsBarChart";
 import { useStateContext } from "../contexts/ContextProvider";
 import { collection, query, getDocs, where } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
+import Statistics from "../components/Statistics";
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
@@ -78,73 +75,7 @@ const Dashboard = () => {
       ) : (
         <div className="p-3 sm:p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
-          <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
-            <div className="flex flex-row border p-4 items-center bg-white">
-              <div className="bg-gray-100 p-2 mr-5">
-                <AccountBalanceWalletOutlinedIcon
-                  fontSize="large"
-                  className="text-slate-500"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-500">
-                  Total Raised
-                </p>
-                <p className="text-2xl font-semibold">
-                  <small className="mr-1">GHS</small>
-                  0.00
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-row border p-4 items-center bg-white">
-              <div className="bg-gray-100 p-2 mr-5">
-                <PeopleOutlineOutlinedIcon
-                  fontSize="large"
-                  className="text-slate-500"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-500">
-                  Total Fundraisers
-                </p>
-                <p className="text-2xl font-semibold">
-                  <small className="mr-1"></small>{fundraiserCount}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-row border p-4 items-center bg-white">
-              <div className="bg-gray-100 p-2 mr-5">
-                <GroupsOutlinedIcon
-                  fontSize="large"
-                  className="text-slate-500"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-500">
-                  Total Donors
-                </p>
-                <p className="text-2xl font-semibold">
-                  <small className="mr-1"></small>
-                  {"0"}
-                </p>
-              </div>
-            </div>
-            <div className="flex flex-row border p-4 items-center bg-white">
-              <div className="bg-gray-100 p-2 mr-5">
-                <FavoriteBorderOutlinedIcon
-                  fontSize="large"
-                  className="text-slate-500"
-                />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-slate-500">Campaigns</p>
-                <p className="text-2xl font-semibold">
-                  <small className="mr-1"></small>
-                  {campaignCount}
-                </p>
-              </div>
-            </div>
-          </div>
+          <Statistics campaignCount={campaignCount}fundraiserCount={fundraiserCount}/>
           <div className="mt-[50px]">
             <p className="text-sm uppercase font-medium mb-3">Charts</p>
             <div className="">
