@@ -94,7 +94,7 @@ const Churches = () => {
       <CircularProgress color="success" size={50} />
       </div>
     ) : (
-    <div className="p-10">
+    <div className="p-3 sm:p-10">
       <h1 className="text-4xl text-gray-600 mb-10 font-bold">Churches</h1>
       <div className="mb-4 sm:flex sm:justify-between items-center">
         <div style={{ maxWidth: "40ch" }}>

@@ -101,7 +101,7 @@ const Fundraisers = () => {
           <CircularProgress color="success" size={50} />
         </div>
       ) : (
-        <div className="p-10">
+        <div className="p-3 sm:p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">
             Fundraisers
           </h1>

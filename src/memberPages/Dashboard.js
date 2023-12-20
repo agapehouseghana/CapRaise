@@ -114,7 +114,7 @@ const Dashboard = () => {
           <CircularProgress color="success" size={50} />
         </div>
       ) : (
-        <div className="p-10">
+        <div className="p-3 sm:p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
           <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
             <div className="flex flex-row border p-4 items-center bg-white">
@@ -166,7 +166,7 @@ const Dashboard = () => {
               </div>
             </div>
           </div>
-          <div className="mt-[50px]">
+          <div className="my-[50px]">
             <p className="text-sm uppercase font-medium mb-3 bg-slate-200 w-max py-2 px-3">
               Campaigns
             </p>

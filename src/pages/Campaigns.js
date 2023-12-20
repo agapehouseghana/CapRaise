@@ -102,14 +102,14 @@ const Campaigns = () => {
           <CircularProgress color="success" size={50} />
         </div>
       ) : (
-        <div className="p-10 flex flex-col">
+        <div className="p-3 sm:p-10 flex flex-col">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Campaigns</h1>
           <div className=" w-full">
             <div className="mb-10 float-right">
               <AddCampaign setRefreshCampaigns={setRefreshCampaigns}/>
             </div>
           </div>
-          <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
+          <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px]">
             {campaigns.map((item, index) => (
               <div className="border bg-white">
                   <div className="">
