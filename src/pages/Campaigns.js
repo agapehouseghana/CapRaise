@@ -158,7 +158,7 @@ const Campaigns = () => {
                   <div className="pt-5">
                     <div className="mt-2">
                     <p className="text-sm text-slate-600">USSD Code</p>
-                    <div className="flex justify-betweenmt-2 border-b-1">
+                    <div className="flex justify-between mt-2 border-b-1">
                       <p  className="w-full overflow-hidden text-ellipsis whitespace-nowrap"> *227*{item.serviceCode}*{adminData.referralCode}#</p>
                       <div className="flex gap-2">
                       {urlCopiedNotification ?(<CheckIcon  color="success"/>): (
