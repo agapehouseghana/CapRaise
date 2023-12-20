@@ -105,7 +105,7 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
       });
 
       const downloadURLs = await Promise.all(uploadPromises);
-      console.log(downloadURLs,"downloadURLs")
+ 
 
       const adminId = adminData?.adminId;
       const campaignsCollectionRef = collection(db, "campaigns");

@@ -147,7 +147,7 @@ const Campaigns = () => {
                   <div className="pt-5">
                     <p className="text-sm text-slate-600">Referral Code</p>
                     <div className="flex justify-between mt-2 border-b-1">
-                      <p>{adminData.referralCode}</p>
+                      <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold">{adminData.referralCode}</p>
                       {refCopiedNotification ?(<CheckIcon color="success"/>): (
                       <ContentCopyIcon
                         fontSize="small"
@@ -156,9 +156,10 @@ const Campaigns = () => {
                     </div>
                   </div>
                   <div className="pt-5">
-                    <p className="text-sm text-slate-600">Referral Links</p>
-                    <div className="flex justify-between mt-2 border-b-1">
-                      <p> *227*{item.serviceCode}*{adminData.referralCode}#</p>
+                    <div className="mt-2">
+                    <p className="text-sm text-slate-600">USSD Code</p>
+                    <div className="flex justify-betweenmt-2 border-b-1">
+                      <p  className="w-full overflow-hidden text-ellipsis whitespace-nowrap"> *227*{item.serviceCode}*{adminData.referralCode}#</p>
                       <div className="flex gap-2">
                       {urlCopiedNotification ?(<CheckIcon  color="success"/>): (
                         <ContentCopyIcon
@@ -178,8 +179,10 @@ const Campaigns = () => {
                           }
                         />
                       </div>
-                    </div>
-                    <div className="flex justify-between mt-10 border-b-1">
+                    </div></div>
+                    <div className="mt-10 ">
+                    <p className="text-sm text-slate-600">Kowri Link</p>
+                    <div className="flex justify-between mt-2 border-b-1">
                       <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
                         https://collections.kowri.app/main/{item.serviceCode}
                         /{adminData.referralCode}
@@ -204,7 +207,7 @@ const Campaigns = () => {
                           }
                         />
                       </div>
-                    </div>
+                    </div></div>
                     <div className="pt-5 ">
                       {expandedCard === index && (
                         <div>
