@@ -148,7 +148,7 @@ const Dashboard = () => {
           <div className="mt-[50px]">
             <p className="text-sm uppercase font-medium mb-3">Charts</p>
             <div className="">
-              <div className="w-max border bg-white">
+              <div className="w-full md:w-[500px] border bg-white">
                 <MemberStatsBarChart data={dashTopFundraisers} />
               </div>
             </div>

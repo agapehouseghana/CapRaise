@@ -3,7 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 
 const MemberStatsBarChart = ({ data }) => {
   return (
-    <ResponsiveContainer width={500} height={400} className="py-10">
+    <ResponsiveContainer width="100%" height={400} className="py-10">
       <BarChart data={data}>
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis dataKey="name" />
