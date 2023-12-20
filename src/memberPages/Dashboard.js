@@ -9,6 +9,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Dashboard = () => {
   const { userData } = useStateContext();
@@ -172,11 +174,20 @@ const Dashboard = () => {
               {campaigns.map((item, index) => (
                 <div className="border bg-white">
                   <div className="">
-                    <img
-                      src={item.imageURL}
-                      alt={item.campaignName}
-                      className="object-fit w-full h-[350px]"
-                    />
+                    {Array.isArray(item.imagesURL) &&
+                      item.imagesURL.length > 0 && (
+                        <Carousel showThumbs={false}>
+                          {item.imagesURL.map((url, i) => (
+                            <div key={i}>
+                              <img
+                                src={url}
+                                alt={`${item.campaignName}_${i}`}
+                                className="object-fit w-full h-[350px]"
+                              />
+                            </div>
+                          ))}
+                        </Carousel>
+                      )}
                   </div>
                   <div
                     key={index}
@@ -192,7 +203,7 @@ const Dashboard = () => {
                         <small className="ml-2">GHS</small>
                       </p>
                       <p className="text-slate-400">
-                        Raised: {item.currentProgress.toLocaleString()} 
+                        Raised: {item.currentProgress.toLocaleString()}
                         <small className="ml-2">GHS</small>
                       </p>
                     </div>
@@ -217,7 +228,6 @@ const Dashboard = () => {
                       <p className="text-sm text-slate-600">Referral Links</p>
                       <div className="flex justify-between mt-2 border-b-1">
                         <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                          {" "}
                           *227*{item.serviceCode}*{userData.referralCode}#
                         </p>
                         <div className="flex gap-2">

@@ -12,14 +12,14 @@ import {
 import React, { useState } from "react";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { orange } from "@mui/material/colors";
-import {  db } from "../firebase/firebase";
-import {  addDoc, collection} from "firebase/firestore";
+import { db } from "../firebase/firebase";
+import { addDoc, collection } from "firebase/firestore";
 import { useStateContext } from "../contexts/ContextProvider";
+import { ref, getDownloadURL, uploadBytes ,getStorage} from "firebase/storage";
 
-
-const AddCampaign = ({setRefreshCampaigns}) => {
-  const { adminData } =
-  useStateContext();
+const AddCampaign = ({ setRefreshCampaigns }) => {
+  const storage = getStorage();
+  const { adminData } = useStateContext();
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const onCancel = () => setOpen(false);
@@ -29,95 +29,120 @@ const AddCampaign = ({setRefreshCampaigns}) => {
   const [fundraisingGoal, setFundraisingGoal] = useState("");
   const [currentProgress, setCurrentProgress] = useState("");
   const [serviceCode, setServiceCode] = useState("");
-  const [imageURL, setImageURL] = useState("");
-
+  const [images, setImages] = useState([]);
   const [campaignNameError, setCampaignNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [fundraisingGoalError, setFundraisingGoalError] = useState("");
   const [currentProgressError, setCurrentProgressError] = useState("");
   const [serviceCodeError, setServiceCodeError] = useState("");
-  const [imageURLError, setImageURLError] = useState("");
+  const [imageError, setImageError] = useState("");
 
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const createCampaign = (e) => {
+  
+  
+  const createCampaign = async (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
 
     if (campaignName === "") {
       setCampaignNameError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setCampaignNameError(false);
     }
 
     if (description === "") {
       setDescriptionError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setDescriptionError(false);
     }
 
     if (fundraisingGoal === "") {
       setFundraisingGoalError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setFundraisingGoalError(false);
     }
 
     if (currentProgress === "") {
       setCurrentProgressError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setCurrentProgressError(false);
     }
 
     if (serviceCode === "") {
       setServiceCodeError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setServiceCodeError(false);
     }
 
-    if (imageURL === "") {
-      setImageURLError(true);
-            setLoading(false);
+    if (images.length === 0) {
+      setImageError(true);
+      setLoading(false);
     } else {
-      setImageURLError(false);
+      setImageError(false);
     }
 
-    if (campaignName && description && fundraisingGoal&&currentProgress && imageURL) {
-    const adminId = adminData?.adminId;
-    const campaignsCollectionRef = collection(db, "campaigns");
-  
-    const campaignData = {
-      campaignName: campaignName,
-      description: description,
-      serviceCode:serviceCode,
-      adminId: adminId,
-      fundraisingGoal: parseFloat(fundraisingGoal),
-      currentProgress: parseFloat(currentProgress),
-      imageURL: imageURL,
-    };
-  
-    addDoc(campaignsCollectionRef, campaignData)
-      .then((docRef) => {
-        setOpen(false);
-        setCampaignName("");
-        setDescription("");
-        setFundraisingGoal("");
-        setCurrentProgress("");
-        setImageURL("");
-        setLoading(false)
-        setRefreshCampaigns((prevRefresh) => !prevRefresh);
-      })
-      .catch((error) => {
-        console.log("Error creating campaign:", error);
-        setLoading(false)
+    if (
+      campaignName &&
+      description &&
+      fundraisingGoal &&
+      currentProgress &&
+      images.length > 0
+    ) {
+   
+    try {
+      const filesArray = Array.from(images);
+
+      const uploadPromises = filesArray.map((file) => {
+        const storageRef = ref(storage, `images/${file.name}`);
+        return uploadBytes(storageRef, file)
+          .then((snapshot) => getDownloadURL(snapshot.ref));
       });
+
+      const downloadURLs = await Promise.all(uploadPromises);
+      console.log(downloadURLs,"downloadURLs")
+
+      const adminId = adminData?.adminId;
+      const campaignsCollectionRef = collection(db, "campaigns");
+
+      const campaignData = {
+        campaignName: campaignName,
+        description: description,
+        serviceCode: serviceCode,
+        adminId: adminId,
+        fundraisingGoal: parseFloat(fundraisingGoal),
+        currentProgress: parseFloat(currentProgress),
+        imagesURL: downloadURLs, 
+      };
+
+      await addDoc(campaignsCollectionRef, campaignData);
+
+      setOpen(false);
+      setCampaignName("");
+      setDescription("");
+      setFundraisingGoal("");
+      setCurrentProgress("");
+      setImages([]);
+      setLoading(false);
+      setRefreshCampaigns((prevRefresh) => !prevRefresh);
+    } catch (error) {
+      console.log("Error creating campaign:", error);
+      setLoading(false);
+    }
     }
   };
-  
+
+  const handleFileInputChange = (e) => {
+    const files = e.target.files;
+    console.log(files);
+    setImages(files);
+  };
+
   return (
     <div>
       <Button
@@ -178,7 +203,9 @@ const AddCampaign = ({setRefreshCampaigns}) => {
             margin="normal"
             size="small"
           >
-            <InputLabel htmlFor="outlined-address">Kowri Service Code</InputLabel>
+            <InputLabel htmlFor="outlined-address">
+              Kowri Service Code
+            </InputLabel>
             <OutlinedInput
               id="outlined-Address"
               type="number"
@@ -237,26 +264,15 @@ const AddCampaign = ({setRefreshCampaigns}) => {
               />
             </FormControl>
           </div>
-          <FormControl
-            fullWidth
-            required
-            variant="outlined"
-            margin="normal"
-            size="small"
-          >
-            <InputLabel htmlFor="outlined-address">Image URL</InputLabel>
-            <OutlinedInput
-              id="outlined-Address"
-              type="text"
-              label="Address"
-              value={imageURL}
-              onChange={(e) => setImageURL(e.target.value)}
-              className={
-                "border-1 px-3 py-4 rounded-md mb-5 " +
-                (imageURLError ? "border-red-500" : "")
-              }
-            />
-          </FormControl>
+          <input
+            type="file"
+            onChange={handleFileInputChange}
+            className={
+              "border-1 px-3 py-4 rounded-md mb-5 " +
+              (imageError ? "border-red-500" : "")
+            }
+            multiple
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Cancel</Button>
@@ -264,7 +280,7 @@ const AddCampaign = ({setRefreshCampaigns}) => {
             onClick={createCampaign}
             style={{ background: "orange", color: "white" }}
           >
-          {loading?<CircularProgress  size={20} />:"Add"}
+            {loading ? <CircularProgress size={20} /> : "Add"}
           </Button>
         </DialogActions>
       </Dialog>

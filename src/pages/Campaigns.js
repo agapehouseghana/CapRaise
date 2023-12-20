@@ -7,6 +7,8 @@ import { useStateContext } from "../contexts/ContextProvider";
 import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from '@mui/icons-material/Check';
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const Campaigns = () => {
   const [refreshCampaigns, setRefreshCampaigns] = useState(false);
@@ -110,13 +112,22 @@ const Campaigns = () => {
           <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10">
             {campaigns.map((item, index) => (
               <div className="border bg-white">
-                <div className="">
-                  <img
-                    src={item.imageURL}
-                    alt={item.campaignName}
-                    className="object-fit w-full h-[350px]"
-                  />
-                </div>
+                  <div className="">
+                    {Array.isArray(item.imagesURL) &&
+                      item.imagesURL.length > 0 && (
+                        <Carousel showThumbs={false}>
+                          {item.imagesURL.map((url, i) => (
+                            <div key={i}>
+                              <img
+                                src={url}
+                                alt={`${item.campaignName}_${i}`}
+                                className="object-fit w-full h-[350px]"
+                              />
+                            </div>
+                          ))}
+                        </Carousel>
+                      )}
+                  </div>
                 <div key={index} className=" bg-white p-5 flex flex-col gap-3">
                   <p className="text-xl font-medium">{item.campaignName}</p>
                   <p className="text-slate-400 text-md font-medium">
