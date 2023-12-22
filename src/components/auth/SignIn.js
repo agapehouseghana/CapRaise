@@ -58,7 +58,7 @@ const SignIn = () => {
           <img src={fund} alt="fundraiser" className="object-fit"/>
         </div>
         <div className="h-full "  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <div className="flex md:flex-1 justify-center md:h-full bg-white m-10 md:m-0 rounded-md">
+          <div className="flex md:flex-1 justify-center md:h-full bg-white m-3 md:m-0 rounded-md">
             <form
               onSubmit={signIn}
               className="flex flex-col w-full xl:py-[200px] lg:py-[150px] md:py-[100px] xl:px-[150px] lg:px-[100px] md:px-[80px] sm:p-[80px] p-[40px]"
