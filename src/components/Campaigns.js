@@ -62,7 +62,7 @@ const Campaign = ({ adminData, campaigns }) => {
     }
   };
   return (
-    <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px]">
+    <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px] w-auto">
       {campaigns.map((item, index) => (
         <div className="border bg-white">
           <div className="">
@@ -73,7 +73,7 @@ const Campaign = ({ adminData, campaigns }) => {
                     <img
                       src={url}
                       alt={`${item.campaignName}_${i}`}
-                      className="object-fit w-full h-[350px]"
+                      className="object-contain w-auto h-auto"
                     />
                   </div>
                 ))}

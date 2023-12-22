@@ -2,15 +2,16 @@ import { initializeApp } from "firebase/app";
 import {getFirestore} from "firebase/firestore"
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage"; 
+const config = require('./config');
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBnio-PSFk8TkXgcNgC-g7351yD4NubFp4",
-  authDomain: "capraise100.firebaseapp.com",
-  projectId: "capraise100",
-  storageBucket: "capraise100.appspot.com",
-  messagingSenderId: "680397788487",
-  appId: "1:680397788487:web:efc01a5f2776aaaabba862"
+  apiKey: config.FIREBASE_API_KEY ,
+  authDomain: config.FIREBASE_AUTH_DOMAIN,
+  projectId: config.FIREBASE_PROJECT_ID,
+  storageBucket: config.FIREBASE_STORAGE_BUCKET ,
+  messagingSenderId: config.FIREBASE_MESSAGING_SENDER_ID,
+  appId: config.FIREBASE_APP_ID,
 };
 
 
