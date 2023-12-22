@@ -23,6 +23,20 @@ function App() {
   const { authUser, userData, loading } = useStateContext();
   const [welcome, setWelcome] = useState(true);
   const { activeMenu } = useStateContext();
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+
+  const handleInstallPrompt = (e) => {
+    e.preventDefault();
+    setDeferredPrompt(e);
+  };
+
+  useEffect(() => {
+    window.addEventListener('beforeinstallprompt', handleInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleInstallPrompt);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -120,6 +134,21 @@ function App() {
         )}
       </BrowserRouter>
       <ToastContainer />
+      {deferredPrompt && (
+        <button onClick={() => {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+              console.log('User accepted the install prompt');
+            } else {
+              console.log('User dismissed the install prompt');
+            }
+            setDeferredPrompt(null);
+          });
+        }}>
+          Install App
+        </button>
+      )}
     </div>
   );
 }
