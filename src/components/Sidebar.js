@@ -1,14 +1,14 @@
 import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { links ,memberLinks,superAdminLinks} from "../utils/dummys";
+import { links, memberLinks, superAdminLinks } from "../utils/dummys";
 import { useStateContext } from "../contexts/ContextProvider";
 import { ToggleButton } from "@mui/material";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 
-const Sidebar = () => {
-  const { currentColor, activeMenu, setActiveMenu, screenSize,userData } =
+const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
+  const { currentColor, activeMenu, setActiveMenu, screenSize, userData } =
     useStateContext();
   const navigate = useNavigate();
 
@@ -62,7 +62,7 @@ const Sidebar = () => {
           </div>
 
           <div className="mt-10 hidden sm:block">
-            {userData?.role ==="admin" ? (
+            {userData?.role === "admin" ? (
               <>
                 {links.map((item) => (
                   <NavLink
@@ -81,50 +81,67 @@ const Sidebar = () => {
                   </NavLink>
                 ))}
               </>
-            ) : userData?.role ==="SuperAdmin" ? (
+            ) : userData?.role === "SuperAdmin" ? (
               <>
-              {superAdminLinks.map((item) => (
-                <NavLink
-                  to={`/${item.name}`}
-                  key={item.name}
-                  onClick={handleCloseSideBar}
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive ? currentColor : "",
-                  })}
-                  className={({ isActive }) =>
-                    isActive ? activeLink : normalLink
-                  }
-                >
-                  {item.icon}
-                  <span className="capitalize p-2">{item.name}</span>
-                </NavLink>
-              ))}
-            </>
-            ):(
+                {superAdminLinks.map((item) => (
+                  <NavLink
+                    to={`/${item.name}`}
+                    key={item.name}
+                    onClick={handleCloseSideBar}
+                    style={({ isActive }) => ({
+                      backgroundColor: isActive ? currentColor : "",
+                    })}
+                    className={({ isActive }) =>
+                      isActive ? activeLink : normalLink
+                    }
+                  >
+                    {item.icon}
+                    <span className="capitalize p-2">{item.name}</span>
+                  </NavLink>
+                ))}
+              </>
+            ) : (
               <>
-              {memberLinks.map((item) => (
-                <NavLink
-                  to={`/${item.name}`}
-                  key={item.name}
-                  onClick={handleCloseSideBar}
-                  style={({ isActive }) => ({
-                    backgroundColor: isActive ? currentColor : "",
-                  })}
-                  className={({ isActive }) =>
-                    isActive ? activeLink : normalLink
-                  }
-                >
-                  {item.icon}
-                  <span className="capitalize p-2">{item.name}</span>
-                </NavLink>
-              ))}
-            </>
+                {memberLinks.map((item) => (
+                  <NavLink
+                    to={`/${item.name}`}
+                    key={item.name}
+                    onClick={handleCloseSideBar}
+                    style={({ isActive }) => ({
+                      backgroundColor: isActive ? currentColor : "",
+                    })}
+                    className={({ isActive }) =>
+                      isActive ? activeLink : normalLink
+                    }
+                  >
+                    {item.icon}
+                    <span className="capitalize p-2">{item.name}</span>
+                  </NavLink>
+                ))}
+              </>
             )}
           </div>
-          <div className="mt-10 justify-center flex sm:hidden">
-            <button onClick={userSignOut} className="font-semibold">
+          <div className="mt-10 justify-center flex sm:hidden flex-col">
+            <button onClick={userSignOut} className="font-semibold mb-10">
               Sign Out
             </button>
+            {deferredPrompt && (
+              <button
+                onClick={() => {
+                  deferredPrompt.prompt();
+                  deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === "accepted") {
+                      console.log("User accepted the install prompt");
+                    } else {
+                      console.log("User dismissed the install prompt");
+                    }
+                    setDeferredPrompt(null);
+                  });
+                }}
+              >
+                Install App
+              </button>
+            )}
           </div>
         </>
       )}

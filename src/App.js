@@ -82,7 +82,7 @@ function App() {
           <div className="flex relative dark:bg-main-dark-bg">
             {activeMenu ? (
               <div className="w-72 fixed sidebar dark:bg-secondary-dark-bg bg-white ">
-                <Sidebar />
+                <Sidebar deferredPrompt={deferredPrompt} setDeferredPrompt={setDeferredPrompt}/>
               </div>
             ) : (
               <div className="w-0 dark:bg-secondary-dark-bg">
@@ -134,21 +134,6 @@ function App() {
         )}
       </BrowserRouter>
       <ToastContainer />
-      {deferredPrompt && (
-        <button onClick={() => {
-          deferredPrompt.prompt();
-          deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-              console.log('User accepted the install prompt');
-            } else {
-              console.log('User dismissed the install prompt');
-            }
-            setDeferredPrompt(null);
-          });
-        }}>
-          Install App
-        </button>
-      )}
     </div>
   );
 }
