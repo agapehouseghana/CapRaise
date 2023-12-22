@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import axios from "axios";
 
 const StateContext = createContext();
 
@@ -25,6 +26,9 @@ export const ContextProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const [adminData, setAdminData] = useState("");
+
+  const [externalData, setExternalData] = useState([]);
+  console.log(externalData,"externalData")
 
   const adminId = authUser?.uid;
 
@@ -110,6 +114,20 @@ export const ContextProvider = ({ children }) => {
   const handleClick = (clicked) =>
     setIsClicked({ ...initialState, [clicked]: true });
 
+
+    const fetchDataFromExternalAPI = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/v1/fetchData");
+        setExternalData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchDataFromExternalAPI();
+    }, []); 
+
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values
     <StateContext.Provider
@@ -135,6 +153,7 @@ export const ContextProvider = ({ children }) => {
         loading,
         setAuthUser,
         adminData,
+        externalData
       }}
     >
       {children}
