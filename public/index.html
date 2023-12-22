@@ -5,10 +5,7 @@
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Fundraiser App"
-    />
+    <meta name="description" content="Fundraiser App" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="./manifest.json" />
     <script src="https://cdn.branch.io/branch-latest.min.js"></script>
@@ -18,13 +15,14 @@
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
     <script>
-      if('serviceWorker' in navigator) {
-          window.addEventListener('load', () => {
-              navigator.serviceWorker.register('./serviceworker.js')
-                  .then((reg) => console.log('Success: ', reg.scope))
-                  .catch((err) => console.log('Failure: ', err));
-          })
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./serviceworker.js")
+            .then((reg) => console.log("Success: ", reg.scope))
+            .catch((err) => console.log("Failure: ", err));
+        });
       }
-  </script>
+    </script>
   </body>
 </html>
