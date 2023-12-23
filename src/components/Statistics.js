@@ -9,7 +9,7 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
   const { userData, externalData } = useStateContext();
 
   const findDonersCount = (referralCode) => {
-    const found = externalData.filter(
+    const found = externalData?.filter(
       (data) => data.referralCode === referralCode
     );
     return found ? found.length : 0;
@@ -21,7 +21,7 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
       : 0;
 
   const getTotalRaisedForServiceCode = (referralCode) => {
-    const filteredData = externalData.filter(
+    const filteredData = externalData?.filter(
       (data) => data.referralCode === referralCode
     );
     return filteredData.reduce((total, item) => total + item.amount, 0);
@@ -37,14 +37,14 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
       !Array.isArray(campaigns) ||
       campaigns.length === 0 ||
       !Array.isArray(externalData) ||
-      externalData.length === 0
+      externalData?.length === 0
     ) {
       return { totalRaised: 0, totalCount: 0 };
     }
 
     const totalRaised = campaigns.reduce(
       (accumulator, campaign) => {
-        const filteredData = externalData.filter(
+        const filteredData = externalData?.filter(
           (data) => data.serviceCode === campaign.serviceCode
         );
 

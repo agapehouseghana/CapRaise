@@ -27,7 +27,7 @@ const Campaign = ({ adminData, campaigns }) => {
 
   useEffect(() => {
     const newData = campaigns.flatMap((item) =>
-      externalData.filter((data) => data.serviceCode === item.serviceCode)
+      externalData?.filter((data) => data.serviceCode === item.serviceCode)
     );
     setFoundData(newData);
   }, [externalData, campaigns]);
