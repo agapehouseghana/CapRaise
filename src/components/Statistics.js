@@ -5,7 +5,7 @@ import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
 import { useStateContext } from "../contexts/ContextProvider";
 
-const Statistics = ({ campaignCount, fundraiserCount }) => {
+const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
   const { userData, externalData } = useStateContext();
 
   const findDonersCount = (referralCode) => {
@@ -28,9 +28,35 @@ const Statistics = ({ campaignCount, fundraiserCount }) => {
   };
 
   const totalRaisedForReferral =
-  userData && userData.referralCode
-    ? getTotalRaisedForServiceCode(userData.referralCode)
-    : 0;
+    userData && userData.referralCode
+      ? getTotalRaisedForServiceCode(userData.referralCode)
+      : 0;
+
+  const getTotalRaisedForAllServiceCodes = () => {
+    if (!Array.isArray(campaigns) || campaigns.length === 0) {
+      return 0;
+    }
+
+    const totalRaised = campaigns.reduce((total, campaign) => {
+      const filteredData = externalData.filter(
+        (data) => data.serviceCode === campaign.serviceCode
+      );
+
+      const campaignTotal = filteredData.reduce(
+        (campaignTotal, item) => campaignTotal + item.amount,
+        0
+      );
+
+      return total + campaignTotal;
+    }, 0);
+
+    return totalRaised;
+  };
+
+  const totalRaisedForAllServiceCodes = getTotalRaisedForAllServiceCodes();
+ 
+  
+  
 
   return (
     <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
@@ -43,10 +69,18 @@ const Statistics = ({ campaignCount, fundraiserCount }) => {
         </div>
         <div>
           <p className="text-sm font-medium text-slate-500">Total Raised</p>
-          <p className="text-2xl font-semibold">
-            <small className="mr-1">GHS</small>
-            {totalRaisedForReferral.toLocaleString()?totalRaisedForReferral.toLocaleString():"0.00"}
-          </p>
+
+          {userData?.role === "admin" ? (
+            <p className="text-2xl font-semibold">
+              <small className="mr-1">GHS</small>
+              {totalRaisedForAllServiceCodes}
+            </p>
+          ) : (
+            <p className="text-2xl font-semibold">
+              <small className="mr-1">GHS</small>
+              {totalRaisedForReferral?.toLocaleString()}
+            </p>
+          )}
         </div>
       </div>
       {userData?.role === "admin" ? (

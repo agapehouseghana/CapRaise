@@ -54,7 +54,7 @@ const Dashboard = () => {
       ) : (
         <div className="p-3 sm:p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
-          <Statistics campaignCount={campaignCount}/>
+          <Statistics campaignCount={campaignCount} campaigns={campaigns}/>
           <div className="my-[50px]">
             <p className="text-sm uppercase font-medium mb-3 bg-slate-200 w-max py-2 px-3">
               Campaigns

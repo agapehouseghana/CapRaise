@@ -18,7 +18,11 @@ const Campaign = ({ adminData, campaigns }) => {
  
   const getTotalRaisedForServiceCode = (serviceCode) => {
     const filteredData = foundData.filter((data) => data.serviceCode === serviceCode);
-    return filteredData.reduce((total, item) => total + item.amount, 0);
+    const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
+    return {
+      totalAmount,
+      count: filteredData.length,
+    };
   };
 
   useEffect(() => {
@@ -28,9 +32,9 @@ const Campaign = ({ adminData, campaigns }) => {
     setFoundData(newData);
   }, [externalData, campaigns]);
 
-  console.log(foundData, "foundData");
-  console.log(adminData, "adminData");
-  console.log(campaigns, "campaigns");
+  // console.log(foundData, "foundData");
+  // console.log(adminData, "adminData");
+
 
   const handleExpand = (index) => {
     if (expandedCard === index) {
@@ -82,7 +86,7 @@ const Campaign = ({ adminData, campaigns }) => {
   return (
     <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px] w-auto">
       {campaigns.map((item, index) => {
-        const totalRaisedForService = getTotalRaisedForServiceCode(item.serviceCode);
+          const { totalAmount, count } = getTotalRaisedForServiceCode(item.serviceCode);
         return (
           <div className="border bg-white" key={index}>
             <div className="">
@@ -111,7 +115,7 @@ const Campaign = ({ adminData, campaigns }) => {
                   <small className="ml-2">GHS</small>
                 </p>
                 <p className="text-slate-400">
-                  Raised: {totalRaisedForService.toLocaleString()?totalRaisedForService.toLocaleString():"0"}
+                  Raised: {totalAmount.toLocaleString()?totalAmount.toLocaleString():"0"}
                   <small className="ml-2">GHS</small>
                 </p>
               </div>
@@ -208,7 +212,7 @@ const Campaign = ({ adminData, campaigns }) => {
                       </div>
                       <div className="flex justify-between mt-2">
                         <p>Doners:</p>
-                        <p>{"0"}</p>
+                        <p>{count}</p>
                       </div>
                     </div>
                   )}
