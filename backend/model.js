@@ -7,6 +7,7 @@ const DataSchema = new mongoose.Schema({
     rail: String,
     amount: Number,
     paymentChannel: String,
+    serviceCode: String
 });
 
 const DataModel = mongoose.model('Data', DataSchema);

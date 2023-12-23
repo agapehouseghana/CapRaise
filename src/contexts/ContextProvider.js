@@ -28,7 +28,7 @@ export const ContextProvider = ({ children }) => {
   const [adminData, setAdminData] = useState("");
 
   const [externalData, setExternalData] = useState([]);
-  console.log(externalData,"externalData")
+
 
   const adminId = authUser?.uid;
 

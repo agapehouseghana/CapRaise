@@ -1,7 +1,7 @@
 const model = require('./model');
 
 exports.processCallback =(async (req, res) => {
-    const { payerPhoneNumber, referralCode, payerName, rail, amount, paymentChannel } = req.body;
+    const { payerPhoneNumber, referralCode, payerName, rail, amount, paymentChannel,serviceCode } = req.body;
 
     try {
         const newData = new model({
@@ -11,6 +11,7 @@ exports.processCallback =(async (req, res) => {
             rail,
             amount,
             paymentChannel,
+            serviceCode
         });
 
         await newData.save();
