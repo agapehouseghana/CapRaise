@@ -117,7 +117,7 @@ export const ContextProvider = ({ children }) => {
 
     const fetchDataFromExternalAPI = async () => {
       try {
-        const response = await axios.get("https://capraise.netlify.app/api/v1/fetchData");
+        const response = await axios.get("http://localhost:5000/api/v1/fetchData");
         setExternalData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
