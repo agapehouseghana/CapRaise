@@ -25,6 +25,28 @@ const Campaign = ({ adminData, campaigns }) => {
     };
   };
 
+//   const getTotalRaisedForServiceAndReferral = (serviceCode, referralCode) => {
+//     const filteredData = foundData.filter(
+//       (data) => data.serviceCode === serviceCode && data.referralCode === referralCode
+//     );
+//     const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
+//     return {
+//       totalAmount,
+//       count: filteredData.length,
+//     };
+//   };
+
+//   const specificReferralCode = adminData?.referralCode;
+// const specificServiceCode = campaigns.referralCode;
+
+// // Call the function to get the total raised amount for the specific referral code and service code
+// const { totalAmount: totalRaised, count: donorCount } = getTotalRaisedForServiceAndReferral(specificServiceCode, specificReferralCode);
+
+// // Use totalRaised and donorCount as needed in your component
+// console.log('Total Raised:', totalRaised); // Display or use totalRaised as needed
+// console.log('Donor Count:', donorCount); 
+// console.log('adminData:', adminData); 
+
   useEffect(() => {
     const newData = campaigns.flatMap((item) =>
       externalData?.filter((data) => data.serviceCode === item.serviceCode)
