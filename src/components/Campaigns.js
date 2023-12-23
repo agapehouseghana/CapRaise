@@ -32,9 +32,6 @@ const Campaign = ({ adminData, campaigns }) => {
     setFoundData(newData);
   }, [externalData, campaigns]);
 
-  // console.log(foundData, "foundData");
-  // console.log(adminData, "adminData");
-
 
   const handleExpand = (index) => {
     if (expandedCard === index) {

@@ -33,30 +33,38 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
       : 0;
 
   const getTotalRaisedForAllServiceCodes = () => {
-    if (!Array.isArray(campaigns) || campaigns.length === 0) {
-      return 0;
+    if (
+      !Array.isArray(campaigns) ||
+      campaigns.length === 0 ||
+      !Array.isArray(externalData) ||
+      externalData.length === 0
+    ) {
+      return { totalRaised: 0, totalCount: 0 };
     }
 
-    const totalRaised = campaigns.reduce((total, campaign) => {
-      const filteredData = externalData.filter(
-        (data) => data.serviceCode === campaign.serviceCode
-      );
+    const totalRaised = campaigns.reduce(
+      (accumulator, campaign) => {
+        const filteredData = externalData.filter(
+          (data) => data.serviceCode === campaign.serviceCode
+        );
 
-      const campaignTotal = filteredData.reduce(
-        (campaignTotal, item) => campaignTotal + item.amount,
-        0
-      );
+        const campaignTotal = filteredData.reduce(
+          (campaignTotal, item) => campaignTotal + item.amount,
+          0
+        );
 
-      return total + campaignTotal;
-    }, 0);
+        return {
+          totalRaised: accumulator.totalRaised + campaignTotal,
+          totalCount: accumulator.totalCount + filteredData.length,
+        };
+      },
+      { totalRaised: 0, totalCount: 0 }
+    );
 
     return totalRaised;
   };
 
   const totalRaisedForAllServiceCodes = getTotalRaisedForAllServiceCodes();
- 
-  
-  
 
   return (
     <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
@@ -73,7 +81,7 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
           {userData?.role === "admin" ? (
             <p className="text-2xl font-semibold">
               <small className="mr-1">GHS</small>
-              {totalRaisedForAllServiceCodes}
+              {totalRaisedForAllServiceCodes.totalRaised}
             </p>
           ) : (
             <p className="text-2xl font-semibold">
@@ -110,10 +118,17 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
         </div>
         <div>
           <p className="text-sm font-medium text-slate-500">Total Donors</p>
-          <p className="text-2xl font-semibold">
-            <small className="mr-1"></small>
-            {donersCount}
-          </p>
+          {userData?.role === "admin" ? (
+            <p className="text-2xl font-semibold">
+              <small className="mr-1"></small>
+              {totalRaisedForAllServiceCodes.totalCount}
+            </p>
+          ) : (
+            <p className="text-2xl font-semibold">
+              <small className="mr-1"></small>
+              {donersCount?.toLocaleString()}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-row border p-4 items-center bg-white">
