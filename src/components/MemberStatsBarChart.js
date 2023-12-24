@@ -76,7 +76,7 @@ const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
   return (
     <div className="grid md:grid-cols-3 gap-10">
       <div className=" border bg-white">
-        <h2 className="text-center mb-4">Donors Chart</h2>
+        <h2 className="text-center m-4 text-xl font-semibold text-blue-500">Donors Chart</h2>
         <ResponsiveContainer width="100%" height={400} className="py-10">
           <BarChart
             data={donersChartData}
@@ -92,7 +92,7 @@ const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
         </ResponsiveContainer>
       </div>
       <div className=" border bg-white">
-        <h2 className="text-center mb-4">Total Raised Chart</h2>
+        <h2 className="text-center m-4 text-xl font-semibold text-purple-400">Total Raised Chart</h2>
         <ResponsiveContainer width="100%" height={400} className="py-10">
           <BarChart
             data={totalRaisedChartData}
