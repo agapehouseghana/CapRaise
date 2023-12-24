@@ -15,7 +15,7 @@ import { purple } from "@mui/material/colors";
 import { db } from "../firebase/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useStateContext } from "../contexts/ContextProvider";
-import { ref, getDownloadURL, uploadBytes ,getStorage} from "firebase/storage";
+import { ref, getDownloadURL, uploadBytes, getStorage } from "firebase/storage";
 
 const AddCampaign = ({ setRefreshCampaigns }) => {
   const storage = getStorage();
@@ -30,17 +30,19 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
   const [currentProgress, setCurrentProgress] = useState("");
   const [serviceCode, setServiceCode] = useState("");
   const [images, setImages] = useState([]);
+  const [date, setDate] = useState(null);
   const [campaignNameError, setCampaignNameError] = useState("");
   const [descriptionError, setDescriptionError] = useState("");
   const [fundraisingGoalError, setFundraisingGoalError] = useState("");
   const [currentProgressError, setCurrentProgressError] = useState("");
   const [serviceCodeError, setServiceCodeError] = useState("");
   const [imageError, setImageError] = useState("");
+  const [dateError, setDateError] = useState(null);
+
+  console.log(date,"date")
 
   const [loading, setLoading] = useState(false);
 
-  
-  
   const createCampaign = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -80,6 +82,13 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
       setServiceCodeError(false);
     }
 
+    if (date === "") {
+      setDateError(true);
+      setLoading(false);
+    } else {
+      setDateError(false);
+    }
+
     if (images.length === 0) {
       setImageError(true);
       setLoading(false);
@@ -92,48 +101,50 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
       description &&
       fundraisingGoal &&
       currentProgress &&
-      images.length > 0
+      images.length > 0 &&
+      date
     ) {
-   
-    try {
-      const filesArray = Array.from(images);
+      try {
+        const filesArray = Array.from(images);
 
-      const uploadPromises = filesArray.map((file) => {
-        const storageRef = ref(storage, `images/${file.name}`);
-        return uploadBytes(storageRef, file)
-          .then((snapshot) => getDownloadURL(snapshot.ref));
-      });
+        const uploadPromises = filesArray.map((file) => {
+          const storageRef = ref(storage, `images/${file.name}`);
+          return uploadBytes(storageRef, file).then((snapshot) =>
+            getDownloadURL(snapshot.ref)
+          );
+        });
 
-      const downloadURLs = await Promise.all(uploadPromises);
- 
+        const downloadURLs = await Promise.all(uploadPromises);
 
-      const adminId = adminData?.adminId;
-      const campaignsCollectionRef = collection(db, "campaigns");
+        const adminId = adminData?.adminId;
+        const campaignsCollectionRef = collection(db, "campaigns");
 
-      const campaignData = {
-        campaignName: campaignName,
-        description: description,
-        serviceCode: serviceCode,
-        adminId: adminId,
-        fundraisingGoal: parseFloat(fundraisingGoal),
-        currentProgress: parseFloat(currentProgress),
-        imagesURL: downloadURLs, 
-      };
+        const campaignData = {
+          campaignName: campaignName,
+          description: description,
+          serviceCode: serviceCode,
+          adminId: adminId,
+          fundraisingGoal: parseFloat(fundraisingGoal),
+          currentProgress: parseFloat(currentProgress),
+          imagesURL: downloadURLs,
+          endDate: date,
+        };
 
-      await addDoc(campaignsCollectionRef, campaignData);
+        await addDoc(campaignsCollectionRef, campaignData);
 
-      setOpen(false);
-      setCampaignName("");
-      setDescription("");
-      setFundraisingGoal("");
-      setCurrentProgress("");
-      setImages([]);
-      setLoading(false);
-      setRefreshCampaigns((prevRefresh) => !prevRefresh);
-    } catch (error) {
-      console.log("Error creating campaign:", error);
-      setLoading(false);
-    }
+        setOpen(false);
+        setCampaignName("");
+        setDescription("");
+        setFundraisingGoal("");
+        setCurrentProgress("");
+        setImages([]);
+        setDate(null);
+        setLoading(false);
+        setRefreshCampaigns((prevRefresh) => !prevRefresh);
+      } catch (error) {
+        console.log("Error creating campaign:", error);
+        setLoading(false);
+      }
     }
   };
 
@@ -218,7 +229,7 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
               }
             />
           </FormControl>
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 gap-10">
             <FormControl
               fullWidth
               required
@@ -264,15 +275,47 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
               />
             </FormControl>
           </div>
-          <input
-            type="file"
-            onChange={handleFileInputChange}
-            className={
-              "border-1 px-3 py-4 rounded-md mb-5 " +
-              (imageError ? "border-red-500" : "")
-            }
-            multiple
-          />
+          <div className="grid grid-cols-2 gap-10 justify-center items-center">
+            <FormControl
+              fullWidth
+              required
+              variant="outlined"
+              margin="normal"
+              size="small"
+            >
+              <InputLabel htmlFor="outlined-departureDate">End Date</InputLabel>
+              <OutlinedInput
+                id="outlined-departureDate"
+                type="date"
+                label="End Date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className={
+                  "border-1 px-3 py-4 rounded-md mb-5 " +
+                  (dateError ? "border-red-500" : "")
+                }
+              />
+            </FormControl>
+            <FormControl
+              fullWidth
+              required
+              variant="outlined"
+              margin="normal"
+              size="small"
+            >
+              <InputLabel htmlFor="outlined-images">Images</InputLabel>
+              <OutlinedInput
+                id="outlined-images"
+                type="file"
+                inputProps={{ multiple: true }}
+                onChange={handleFileInputChange}
+                className={
+                  "border-1 px-3 py-4 rounded-md mb-5 " +
+                  (imageError ? "border-red-500" : "")
+                }
+              />
+            </FormControl>
+          </div>
         </DialogContent>
         <DialogActions>
           <Button onClick={onCancel}>Cancel</Button>

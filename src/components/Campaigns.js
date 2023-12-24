@@ -6,6 +6,7 @@ import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Divider } from "@mui/material";
 import { useStateContext } from "../contexts/ContextProvider";
+import Countdown from "react-countdown";
 
 const Campaign = ({ adminData, campaigns }) => {
   const { externalData } = useStateContext();
@@ -45,6 +46,10 @@ const Campaign = ({ adminData, campaigns }) => {
     setFoundData(newData);
   }, [externalData, campaigns]);
 
+  const calculateTimeLeft = (endTime) => {
+    const difference = +new Date(endTime) - +new Date();
+    return difference > 0 ? difference : 0;
+  };
 
   const handleExpand = (index) => {
     if (expandedCard === index) {
@@ -98,6 +103,7 @@ const Campaign = ({ adminData, campaigns }) => {
       {campaigns.map((item, index) => {
           const { totalAmount } = getTotalRaisedForServiceCode(item.serviceCode);
           const { totalAmount: totalRaised, count: donorCount } = getTotalRaisedForServiceAndReferral(item.serviceCode, specificReferralCode);
+          const timeLeft = calculateTimeLeft(item.endDate);
         return (
           <div className="border bg-white" key={index}>
             <div className="">
@@ -108,7 +114,7 @@ const Campaign = ({ adminData, campaigns }) => {
                       <img
                         src={url}
                         alt={`${item.campaignName}_${i}`}
-                        className="object-contain w-auto h-auto"
+                        className="object-contain w-auto h-[350px]"
                       />
                     </div>
                   ))}
@@ -130,6 +136,20 @@ const Campaign = ({ adminData, campaigns }) => {
                   <small className="ml-2">GHS</small>
                 </p>
               </div>
+              <div className="pt-5">
+              <p className="text-sm text-slate-600">Countdown</p>
+              <div className="flex justify-between mt-2 border-b-1">
+                <Countdown
+                  date={Date.now() + timeLeft}
+                  renderer={({ days }) => (
+                    <div className="timer">
+                      <div className="text-2xl font-semibold">{days}</div>
+                      <div className="text-xs font-medium">Days</div>
+                    </div>
+                  )}
+                />
+              </div>
+            </div>
               <Divider />
               <div className="pt-5">
                 <p className="text-sm text-slate-600">Referral Code</p>
