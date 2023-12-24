@@ -190,7 +190,7 @@ const Campaign = ({ adminData, campaigns }) => {
                 </div>
               </div>
               <Divider />
-              <div className="bg-purple-400 p-10 rounded-xl text-white">
+              <div className="bg-purple-400 p-4 sm:p-10 rounded-xl text-white">
                 <div className="pt-5 ">
                   <p className="text-sm text-slate-200">Referral Code</p>
                   <div className="flex justify-between mt-2 border-b-1">
