@@ -39,8 +39,6 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
   const [imageError, setImageError] = useState("");
   const [dateError, setDateError] = useState(null);
 
-  console.log(date,"date")
-
   const [loading, setLoading] = useState(false);
 
   const createCampaign = async (e) => {
@@ -321,7 +319,7 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
           <Button onClick={onCancel}>Cancel</Button>
           <Button
             onClick={createCampaign}
-            style={{ background: "orange", color: "white" }}
+            style={{ background: "purple", color: "white" }}
           >
             {loading ? <CircularProgress size={20} /> : "Add"}
           </Button>
