@@ -16,10 +16,15 @@ const Campaign = ({ adminData, campaigns }) => {
     useState(false);
   const [expandedCard, setExpandedCard] = useState(null);
   const [foundData, setFoundData] = useState([]);
- 
+
   const getTotalRaisedForServiceCode = (serviceCode) => {
-    const filteredData = foundData.filter((data) => data.serviceCode === serviceCode);
-    const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
+    const filteredData = foundData.filter(
+      (data) => data.serviceCode === serviceCode
+    );
+    const totalAmount = filteredData.reduce(
+      (total, item) => total + item.amount,
+      0
+    );
     return {
       totalAmount,
       count: filteredData.length,
@@ -28,9 +33,13 @@ const Campaign = ({ adminData, campaigns }) => {
 
   const getTotalRaisedForServiceAndReferral = (serviceCode, referralCode) => {
     const filteredData = foundData.filter(
-      (data) => data.referralCode === referralCode && data.serviceCode === serviceCode
+      (data) =>
+        data.referralCode === referralCode && data.serviceCode === serviceCode
     );
-    const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
+    const totalAmount = filteredData.reduce(
+      (total, item) => total + item.amount,
+      0
+    );
     return {
       totalAmount,
       count: filteredData.length,
@@ -49,6 +58,9 @@ const Campaign = ({ adminData, campaigns }) => {
   const calculateTimeLeft = (endTime) => {
     const difference = +new Date(endTime) - +new Date();
     return difference > 0 ? difference : 0;
+  };
+  const calculatePercentage = (raised, goal) => {
+    return (raised / goal) * 100;
   };
 
   const handleExpand = (index) => {
@@ -101,9 +113,17 @@ const Campaign = ({ adminData, campaigns }) => {
   return (
     <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px] w-auto">
       {campaigns.map((item, index) => {
-          const { totalAmount } = getTotalRaisedForServiceCode(item.serviceCode);
-          const { totalAmount: totalRaised, count: donorCount } = getTotalRaisedForServiceAndReferral(item.serviceCode, specificReferralCode);
-          const timeLeft = calculateTimeLeft(item.endDate);
+        const { totalAmount } = getTotalRaisedForServiceCode(item.serviceCode);
+        const { totalAmount: totalRaised, count: donorCount } =
+          getTotalRaisedForServiceAndReferral(
+            item.serviceCode,
+            specificReferralCode
+          );
+        const timeLeft = calculateTimeLeft(item.endDate);
+        const raisedPercentage = calculatePercentage(
+          totalAmount,
+          item.fundraisingGoal
+        );
         return (
           <div className="border bg-white" key={index}>
             <div className="">
@@ -132,24 +152,40 @@ const Campaign = ({ adminData, campaigns }) => {
                   <small className="ml-2">GHS</small>
                 </p>
                 <p className="text-slate-400">
-                  Raised: {totalAmount.toLocaleString()?totalAmount.toLocaleString():item.currentProgress.toLocaleString()}
+                  Raised:{" "}
+                  {totalAmount.toLocaleString()
+                    ? totalAmount.toLocaleString()
+                    : item.currentProgress.toLocaleString()}
                   <small className="ml-2">GHS</small>
                 </p>
               </div>
               <div className="pt-5">
-              <p className="text-sm text-slate-600">Countdown</p>
-              <div className="flex justify-between mt-2 border-b-1">
-                <Countdown
-                  date={Date.now() + timeLeft}
-                  renderer={({ days }) => (
-                    <div className="timer">
-                      <div className="text-2xl font-semibold">{days}</div>
-                      <div className="text-xs font-medium">Days</div>
-                    </div>
-                  )}
-                />
+                <p className="text-sm text-slate-600">Countdown</p>
+                <div className="flex justify-between mt-2 border-b-1">
+                  <Countdown
+                    date={Date.now() + timeLeft}
+                    renderer={({ days }) => (
+                      <div className="timer">
+                        <div className="text-2xl font-semibold">{days}</div>
+                        <div className="text-xs font-medium">Days</div>
+                      </div>
+                    )}
+                  />
+                </div>
               </div>
-            </div>
+              <div className="pt-3">
+                <div className="h-4 bg-gray-200 rounded-full">
+                  <div
+                    className="h-full rounded-full bg-purple-500"
+                    style={{ width: `${raisedPercentage}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-center mt-1">
+                  <span className="text-xs font-semibold text-gray-600">
+                    {raisedPercentage}%
+                  </span>
+                </div>
+              </div>
               <Divider />
               <div className="pt-5">
                 <p className="text-sm text-slate-600">Referral Code</p>
