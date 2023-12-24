@@ -25,27 +25,18 @@ const Campaign = ({ adminData, campaigns }) => {
     };
   };
 
-//   const getTotalRaisedForServiceAndReferral = (serviceCode, referralCode) => {
-//     const filteredData = foundData.filter(
-//       (data) => data.serviceCode === serviceCode && data.referralCode === referralCode
-//     );
-//     const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
-//     return {
-//       totalAmount,
-//       count: filteredData.length,
-//     };
-//   };
+  const getTotalRaisedForServiceAndReferral = (serviceCode, referralCode) => {
+    const filteredData = foundData.filter(
+      (data) => data.referralCode === referralCode && data.serviceCode === serviceCode
+    );
+    const totalAmount = filteredData.reduce((total, item) => total + item.amount, 0);
+    return {
+      totalAmount,
+      count: filteredData.length,
+    };
+  };
 
-//   const specificReferralCode = adminData?.referralCode;
-// const specificServiceCode = campaigns.referralCode;
-
-// // Call the function to get the total raised amount for the specific referral code and service code
-// const { totalAmount: totalRaised, count: donorCount } = getTotalRaisedForServiceAndReferral(specificServiceCode, specificReferralCode);
-
-// // Use totalRaised and donorCount as needed in your component
-// console.log('Total Raised:', totalRaised); // Display or use totalRaised as needed
-// console.log('Donor Count:', donorCount); 
-// console.log('adminData:', adminData); 
+  const specificReferralCode = adminData?.referralCode;
 
   useEffect(() => {
     const newData = campaigns.flatMap((item) =>
@@ -105,7 +96,8 @@ const Campaign = ({ adminData, campaigns }) => {
   return (
     <div className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-5 sm:gap-10 mb-[50px] w-auto">
       {campaigns.map((item, index) => {
-          const { totalAmount, count } = getTotalRaisedForServiceCode(item.serviceCode);
+          const { totalAmount } = getTotalRaisedForServiceCode(item.serviceCode);
+          const { totalAmount: totalRaised, count: donorCount } = getTotalRaisedForServiceAndReferral(item.serviceCode, specificReferralCode);
         return (
           <div className="border bg-white" key={index}>
             <div className="">
@@ -226,12 +218,12 @@ const Campaign = ({ adminData, campaigns }) => {
                         <p>Raised:</p>
                         <p>
                           <small className="mr-2">GHS</small>
-                          {"0"}
+                          {totalRaised}
                         </p>
                       </div>
                       <div className="flex justify-between mt-2">
                         <p>Doners:</p>
-                        <p>{count}</p>
+                        <p>{donorCount}</p>
                       </div>
                     </div>
                   )}
