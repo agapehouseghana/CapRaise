@@ -13,7 +13,7 @@ const FetchData = () => {
 
   const fetchDataFromExternalAPI = async () => {
     try {
-      const response = await axios.get("http://external-callback-api-url");
+      const response = await axios.get("https://external-callback-api-url");
       setExternalData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -28,7 +28,7 @@ const FetchData = () => {
     try {
       
       const response = await axios.post(
-        "http://localhost:3000/process_callback",
+        "https://localhost:3000/process_callback",
         externalData
       );
 
