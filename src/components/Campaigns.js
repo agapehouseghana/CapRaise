@@ -126,7 +126,7 @@ const Campaign = ({ adminData, campaigns }) => {
                   <small className="ml-2">GHS</small>
                 </p>
                 <p className="text-slate-400">
-                  Raised: {totalAmount.toLocaleString()?totalAmount.toLocaleString():"0"}
+                  Raised: {totalAmount.toLocaleString()?totalAmount.toLocaleString():item.currentProgress.toLocaleString()}
                   <small className="ml-2">GHS</small>
                 </p>
               </div>
