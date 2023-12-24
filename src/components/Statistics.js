@@ -8,29 +8,78 @@ import { useStateContext } from "../contexts/ContextProvider";
 const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
   const { userData, externalData } = useStateContext();
 
-  const findDonersCount = (referralCode) => {
-    const found = externalData?.filter(
-      (data) => data.referralCode === referralCode
+  // const findDonersCount = (referralCode) => {
+  //   const found = externalData?.filter(
+  //     (data) => data.referralCode === referralCode
+  //   );
+  //   return found ? found.length : 0;
+  // };
+
+  // const donersCount =
+  //   userData && userData.referralCode
+  //     ? findDonersCount(userData.referralCode)
+  //     : 0;
+
+  // const getTotalRaisedForServiceCode = (referralCode) => {
+  //   const filteredData = externalData?.filter(
+  //     (data) => data.referralCode === referralCode
+  //   );
+  //   return filteredData.reduce((total, item) => total + item.amount, 0);
+  // };
+
+  // const totalRaisedForReferral =
+  //   userData && userData.referralCode
+  //     ? getTotalRaisedForServiceCode(userData.referralCode)
+  //     : 0;
+
+  const findDonersCount = (referralCode, serviceCode) => {
+    const filteredData = externalData?.filter(
+      (data) =>
+        data.referralCode === referralCode && data.serviceCode === serviceCode
     );
-    return found ? found.length : 0;
+    return filteredData ? filteredData.length : 0;
   };
 
-  const donersCount =
-    userData && userData.referralCode
-      ? findDonersCount(userData.referralCode)
-      : 0;
+  let totalDonersCount = 0;
 
-  const getTotalRaisedForServiceCode = (referralCode) => {
+  if (userData && userData.referralCode && Array.isArray(campaigns)) {
+    campaigns.forEach((campaign) => {
+      const currentServiceCode = campaign.serviceCode;
+      const donersCountForCampaign =
+        userData && userData.referralCode
+          ? findDonersCount(userData.referralCode, currentServiceCode)
+          : 0;
+      totalDonersCount += donersCountForCampaign;
+    });
+  }
+
+  const donersCount = totalDonersCount;
+
+  const getTotalRaisedForServiceCode = (referralCode, serviceCode) => {
     const filteredData = externalData?.filter(
-      (data) => data.referralCode === referralCode
+      (data) =>
+        data.referralCode === referralCode && data.serviceCode === serviceCode
     );
     return filteredData.reduce((total, item) => total + item.amount, 0);
   };
 
-  const totalRaisedForReferral =
-    userData && userData.referralCode
-      ? getTotalRaisedForServiceCode(userData.referralCode)
-      : 0;
+  let totalRaisedAmount = 0;
+
+  if (userData && userData.referralCode && Array.isArray(campaigns)) {
+    campaigns.forEach((campaign) => {
+      const currentServiceCode = campaign.serviceCode;
+      const raisedAmountForCampaign =
+        userData && userData.referralCode
+          ? getTotalRaisedForServiceCode(
+              userData.referralCode,
+              currentServiceCode
+            )
+          : 0;
+      totalRaisedAmount += raisedAmountForCampaign;
+    });
+  }
+
+  const totalRaisedForReferral = totalRaisedAmount;
 
   const getTotalRaisedForAllServiceCodes = () => {
     if (
@@ -77,11 +126,10 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
         </div>
         <div>
           <p className="text-sm font-medium text-slate-500">Total Raised</p>
-
           {userData?.role === "admin" ? (
             <p className="text-2xl font-semibold">
               <small className="mr-1">GHS</small>
-              {totalRaisedForAllServiceCodes.totalRaised}
+              {totalRaisedForAllServiceCodes.totalRaised.toLocaleString()}
             </p>
           ) : (
             <p className="text-2xl font-semibold">
