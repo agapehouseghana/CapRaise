@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { dashTopFundraisers } from "../utils/dummys";
 import MemberStatsBarChart from "../components/MemberStatsBarChart";
 import { useStateContext } from "../contexts/ContextProvider";
 import { collection, query, getDocs, where } from "firebase/firestore";
@@ -81,8 +80,8 @@ const Dashboard = () => {
           <div className="mt-[50px]">
             <p className="text-sm uppercase font-medium mb-3">Charts</p>
             <div className="">
-              <div className="w-full md:w-[500px] border bg-white">
-                <MemberStatsBarChart data={dashTopFundraisers} />
+              <div>
+                <MemberStatsBarChart usersLinkedToAdmin={usersLinkedToAdmin} campaigns={campaigns}/>
               </div>
             </div>
           </div>
