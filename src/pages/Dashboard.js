@@ -66,7 +66,6 @@ const Dashboard = () => {
     fetchCampaigns();
   }, [adminId]);
 
-
   return (
     <>
       {loading ? (
@@ -76,21 +75,28 @@ const Dashboard = () => {
       ) : (
         <div className="p-3 sm:p-10">
           <h1 className="text-4xl text-gray-600 mb-10 font-bold">Dashboard</h1>
-          <Statistics campaignCount={campaignCount}fundraiserCount={fundraiserCount} campaigns={campaigns}/>
+          <Statistics
+            campaignCount={campaignCount}
+            fundraiserCount={fundraiserCount}
+            campaigns={campaigns}
+          />
           <div className="mt-[50px]">
             <p className="text-sm uppercase font-medium mb-3">Charts</p>
-            <div className="">
-              <div>
-                <MemberStatsBarChart usersLinkedToAdmin={usersLinkedToAdmin} campaigns={campaigns}/>
-              </div>
-            </div>
+
+            <MemberStatsBarChart
+              usersLinkedToAdmin={usersLinkedToAdmin}
+              campaigns={campaigns}
+            />
           </div>
 
           <div className="my-[50px]">
             <p className="text-sm uppercase font-medium mb-3">
               Top Fundraisers
             </p>
-            <TopFundraisers usersLinkedToAdmin={usersLinkedToAdmin} campaigns={campaigns}/>
+            <TopFundraisers
+              usersLinkedToAdmin={usersLinkedToAdmin}
+              campaigns={campaigns}
+            />
           </div>
         </div>
       )}
