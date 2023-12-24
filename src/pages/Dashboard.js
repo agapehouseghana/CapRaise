@@ -91,7 +91,7 @@ const Dashboard = () => {
             <p className="text-sm uppercase font-medium mb-3">
               Top Fundraisers
             </p>
-            <TopFundraisers usersLinkedToAdmin={usersLinkedToAdmin}/>
+            <TopFundraisers usersLinkedToAdmin={usersLinkedToAdmin} campaigns={campaigns}/>
           </div>
         </div>
       )}

@@ -52,7 +52,6 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
       totalDonersCount += donersCountForCampaign;
     });
   }
-
   const donersCount = totalDonersCount;
 
   const getTotalRaisedForServiceCode = (referralCode, serviceCode) => {
