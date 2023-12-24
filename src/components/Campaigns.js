@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ShareRoundedIcon from "@mui/icons-material/ShareRounded";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CheckIcon from "@mui/icons-material/Check";
 import { Carousel } from "react-responsive-carousel";
@@ -134,7 +133,7 @@ const Campaign = ({ adminData, campaigns }) => {
                       <img
                         src={url}
                         alt={`${item.campaignName}_${i}`}
-                        className="object-contain w-auto h-[350px]"
+                        className="object-cover w-auto md:h-[350px] h-[250px]"
                       />
                     </div>
                   ))}
@@ -142,38 +141,42 @@ const Campaign = ({ adminData, campaigns }) => {
               )}
             </div>
             <div key={index} className=" bg-white p-5 flex flex-col gap-3">
-              <p className="text-xl font-medium">{item.campaignName}</p>
-              <p className="text-slate-400 text-md font-medium">
+              <p className="text-3xl font-medium text-purple-500 mt-5">
+                {item.campaignName}
+              </p>
+              <p className="text-slate-500 text-md font-medium">
                 {item.description}
               </p>
-              <div className="flex justify-between mt-5">
-                <p className="text-slate-400">
-                  Goal: {item.fundraisingGoal.toLocaleString()}
-                  <small className="ml-2">GHS</small>
-                </p>
-                <p className="text-slate-400">
-                  Raised:{" "}
-                  {totalAmount.toLocaleString()
-                    ? totalAmount.toLocaleString()
-                    : item.currentProgress.toLocaleString()}
-                  <small className="ml-2">GHS</small>
-                </p>
-              </div>
-              <div className="pt-5">
-                <p className="text-sm text-slate-600">Countdown</p>
-                <div className="flex justify-between mt-2 border-b-1">
-                  <Countdown
-                    date={Date.now() + timeLeft}
-                    renderer={({ days }) => (
-                      <div className="timer">
-                        <div className="text-2xl font-semibold">{days}</div>
-                        <div className="text-xs font-medium">Days</div>
-                      </div>
-                    )}
-                  />
+              <div className="flex justify-between mt-10">
+                <div className="flex flex-col">
+                  <p className="text-xl font-medium ">
+                    {item.fundraisingGoal.toLocaleString()}
+                    <small className="ml-2">GHS</small>
+                  </p>
+                  <p className="text-slate-400">goal</p>
                 </div>
+                <Divider orientation="vertical" flexItem />
+                <div className="flex flex-col">
+                  <p className="text-xl font-medium ">
+                    {totalAmount.toLocaleString()
+                      ? totalAmount.toLocaleString()
+                      : item.currentProgress.toLocaleString()}
+                    <small className="ml-2">GHS</small>
+                  </p>
+                  <p className="text-slate-400">raised</p>
+                </div>
+                <Divider orientation="vertical" flexItem />
+                <Countdown
+                  date={Date.now() + timeLeft}
+                  renderer={({ days }) => (
+                    <div>
+                      <p className="text-xl font-medium ">{days}</p>
+                      <p className="text-slate-400">days to go</p>
+                    </div>
+                  )}
+                />
               </div>
-              <div className="pt-3">
+              <div className="mt-10">
                 <div className="h-4 bg-gray-200 rounded-full">
                   <div
                     className="h-full rounded-full bg-purple-500"
@@ -187,102 +190,113 @@ const Campaign = ({ adminData, campaigns }) => {
                 </div>
               </div>
               <Divider />
-              <div className="pt-5">
-                <p className="text-sm text-slate-600">Referral Code</p>
-                <div className="flex justify-between mt-2 border-b-1">
-                  <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold">
-                    {adminData.referralCode}
-                  </p>
-                  {refCopiedNotification ? (
-                    <CheckIcon color="success" />
-                  ) : (
-                    <ContentCopyIcon
-                      fontSize="small"
-                      onClick={() => handleRefCopy(adminData.referralCode)}
-                    />
-                  )}
-                </div>
-              </div>
-              <div className="pt-5">
-                <div className="mt-2">
-                  <p className="text-sm text-slate-600">USSD Code</p>
+              <div className="bg-purple-400 p-10 rounded-xl text-white">
+                <div className="pt-5 ">
+                  <p className="text-sm text-slate-200">Referral Code</p>
                   <div className="flex justify-between mt-2 border-b-1">
-                    <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                      {" "}
-                      *227*{item.serviceCode}*{adminData.referralCode}#
+                    <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold">
+                      {adminData.referralCode}
                     </p>
-                    <div className="flex gap-2">
-                      {urlCopiedNotification ? (
-                        <CheckIcon color="success" />
-                      ) : (
-                        <ContentCopyIcon
-                          fontSize="small"
+                    {refCopiedNotification ? (
+                      <CheckIcon color="success" />
+                    ) : (
+                      <ContentCopyIcon
+                        fontSize="small"
+                        onClick={() => handleRefCopy(adminData.referralCode)}
+                      />
+                    )}
+                  </div>
+                </div>
+                <div className="pt-5">
+                  <div className="mt-2">
+                    <p className="text-sm text-slate-200">USSD Code</p>
+                    <div className="flex justify-between mt-2  items-center">
+                      <p className="w-full overflow-hidden border-b-1 text-ellipsis whitespace-nowrap">
+                        *227*{item.serviceCode}*{adminData.referralCode}#
+                      </p>
+                      <div className="flex gap-2 items-center ml-5">
+                        <Button
+                          variant="outlined"
                           onClick={() =>
-                            handleURLCopy(
+                            handleShare(
                               `*227*${item.serviceCode}*${adminData.referralCode}#`
                             )
                           }
-                        />
-                      )}
-                      <ShareRoundedIcon
-                        fontSize="small"
-                        onClick={() =>
-                          handleShare(
-                            `*227*${item.serviceCode}*${adminData.referralCode}#`
-                          )
-                        }
-                      />
+                          style={{ background: "white", color: "purple" }}
+                        >
+                          Share
+                        </Button>
+                        {urlCopiedNotification ? (
+                          <CheckIcon color="success" />
+                        ) : (
+                          <ContentCopyIcon
+                            fontSize="small"
+                            onClick={() =>
+                              handleURLCopy(
+                                `*227*${item.serviceCode}*${adminData.referralCode}#`
+                              )
+                            }
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="mt-10 ">
-                  <p className="text-sm text-slate-600">Kowri Link</p>
-                  <div className="flex justify-between mt-2 border-b-1">
-                    <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap">
-                      https://kbnewmarketplace.mykowri.com/main/
-                      {item.serviceCode}/{adminData.referralCode}
-                    </p>
-                    <div className="flex gap-2">
-                      {marketCopiedNotification ? (
-                        <CheckIcon color="success" />
-                      ) : (
-                        <ContentCopyIcon
-                          fontSize="small"
+                  <div className="mt-10 pb-10">
+                    <p className="text-sm text-slate-200">Kowri Link</p>
+                    <div className="flex justify-between mt-2 items-center">
+                      <p className="w-full overflow-hidden text-ellipsis border-b-1 whitespace-nowrap">
+                        https://kbnewmarketplace.mykowri.com/main/
+                        {item.serviceCode}/{adminData.referralCode}
+                      </p>
+                      <div className="flex gap-2 items-center ml-5">
+                        <Button
+                          variant="outlined"
                           onClick={() =>
-                            handleMarketCopy(
+                            handleShare(
                               `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
                             )
                           }
-                        />
-                      )}
-                      <ShareRoundedIcon
-                        fontSize="small"
-                        onClick={() =>
-                          handleShare(
-                            `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
-                          )
-                        }
-                      />
+                          style={{ background: "white", color: "purple" }}
+                        >
+                          Share
+                        </Button>
+                        {marketCopiedNotification ? (
+                          <CheckIcon color="success" />
+                        ) : (
+                          <ContentCopyIcon
+                            fontSize="small"
+                            onClick={() =>
+                              handleMarketCopy(
+                                `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
+                              )
+                            }
+                          />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="pt-5 ">
-                  {expandedCard === index && (
-                    <div>
-                      <p className=" text-sm py-2 text-slate-600">Your Stats</p>
-                      <div className="flex justify-between">
-                        <p>Raised:</p>
-                        <p>
-                          <small className="mr-2">GHS</small>
-                          {totalRaised}
+                  <Divider/>
+                  <div className="pt-5">
+                    {expandedCard === index && (
+                      <div>
+                        <p className=" text-md py-2 text-slate-200 font-semibold">
+                          Your Stats
                         </p>
+                        <div className="flex">
+                          <div className="flex flex-col flex-1">
+                            <p className="text-xl font-medium ">
+                              {totalRaised} <small className="mr-2">GHS</small>
+                            </p>
+                            <p>raised</p>
+                          </div>
+                          <div className="flex flex-col flex-1">
+                            <p className="text-xl font-medium ">{donorCount}</p>
+                            <p>doners</p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex justify-between mt-2">
-                        <p>Doners:</p>
-                        <p>{donorCount}</p>
-                      </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
