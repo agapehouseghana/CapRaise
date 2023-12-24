@@ -62,7 +62,7 @@ const Navbar = () => {
   };
   return (
     <div
-      className="flex justify-between  items-center relative bg-orange-300"
+      className="flex justify-between  items-center relative bg-purple-500"
       style={{ height: "60px" }}
     >
       <ToggleButton

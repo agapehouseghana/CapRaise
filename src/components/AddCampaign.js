@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import { orange } from "@mui/material/colors";
+import { purple } from "@mui/material/colors";
 import { db } from "../firebase/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { useStateContext } from "../contexts/ContextProvider";
@@ -149,7 +149,7 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
         variant="contained"
         startIcon={<PlaylistAddIcon />}
         onClick={handleOpen}
-        style={{ background: orange[500], color: "white" }}
+        style={{ background: purple[500], color: "white" }}
       >
         Add Campaign
       </Button>

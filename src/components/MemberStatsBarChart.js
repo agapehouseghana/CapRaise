@@ -10,7 +10,7 @@ const MemberStatsBarChart = ({ data }) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="value" fill="#e69b00" />
+        <Bar dataKey="value" fill="#a400b4" />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -72,8 +72,8 @@ function App() {
     >
       <BrowserRouter>
         {welcome ? (
-          <div className="w-full h-screen flex justify-center items-center bg-orange-50">
-            <p className="text-5xl font-semibold text-orange-300">CapRaise</p>
+          <div className="w-full h-screen flex justify-center items-center bg-purple-100">
+            <p className="text-5xl font-semibold text-purple-400">CapRaise</p>
           </div>
         ) : (
           ""

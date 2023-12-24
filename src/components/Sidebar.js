@@ -37,7 +37,7 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
       {activeMenu && (
         <>
           <div
-            className="flex justify-between items-center w-72 bg-orange-400"
+            className="flex justify-between items-center w-72 bg-purple-600"
             style={{ height: "60px" }}
           >
             <Link

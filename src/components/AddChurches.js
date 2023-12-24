@@ -14,7 +14,7 @@ import {
   IconButton,
   // FormHelperText,
 } from "@mui/material";
-import { orange } from '@mui/material/colors'
+import { purple } from '@mui/material/colors'
 import { doc, setDoc } from "firebase/firestore";
 import { auth, db } from "../firebase/firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -97,7 +97,7 @@ const AddChurches = () => {
         variant="contained"
         startIcon={<PlaylistAddIcon />}
         onClick={handleOpen}
-        style={{ background: orange[500], color: "white" }} 
+        style={{ background: purple[500], color: "white" }} 
       >
         Add Church
       </Button>
