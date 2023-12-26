@@ -38,7 +38,7 @@
 //   );
 // });
 const CACHE_NAME = "my-pwa-cache-v1";
-const urlsToCache = ["index.html", "offline.html"];
+const urlsToCache = ["offline.html"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
