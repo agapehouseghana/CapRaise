@@ -38,13 +38,7 @@
 //   );
 // });
 const CACHE_NAME = "my-pwa-cache-v1";
-const urlsToCache = [
-  "/",
-  "/styles/main.css",
-  "/scripts/main.js",
-  "index.html",
-  "offline.html",
-];
+const urlsToCache = ["index.html", "offline.html"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
@@ -64,25 +58,32 @@ self.addEventListener("fetch", (event) => {
           return response;
         }
 
-        return fetch(event.request).then((response) => {
-          if (
-            !response ||
-            response.status !== 200 ||
-            response.type !== "basic"
-          ) {
+        return fetch(event.request)
+          .then((response) => {
+            if (
+              !response ||
+              response.status !== 200 ||
+              response.type !== "basic"
+            ) {
+              return response;
+            }
+
+            const responseToCache = response.clone();
+
+            caches
+              .open(CACHE_NAME)
+              .then((cache) => cache.put(event.request, responseToCache))
+              .catch((error) => console.log("Failed to cache:", error));
+
             return response;
-          }
-
-          const responseToCache = response.clone();
-
-          caches
-            .open(CACHE_NAME)
-            .then((cache) => cache.put(event.request, responseToCache))
-            .catch((error) => console.error("Failed to cache:", error));
-
-          return response;
-        });
+          })
+          .catch((fetchError) => {
+            console.log("Fetch failed:", fetchError);
+            return new Response("Fetch failed. Check your network connection.");
+          });
       })
-      .catch((error) => console.error("Fetch failed:", error))
+      .catch((cacheError) => {
+        console.log("Cache match failed:", cacheError);
+      })
   );
 });
