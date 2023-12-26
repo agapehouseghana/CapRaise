@@ -53,9 +53,9 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches
       .match(event.request)
-      .then((response) => {
-        if (response) {
-          return response;
+      .then((cachedResponse) => {
+        if (cachedResponse) {
+          return cachedResponse;
         }
 
         return fetch(event.request)
@@ -79,11 +79,12 @@ self.addEventListener("fetch", (event) => {
           })
           .catch((fetchError) => {
             console.log("Fetch failed:", fetchError);
-            return new Response("Fetch failed. Check your network connection.");
+            return caches.match("offline.html");
           });
       })
       .catch((cacheError) => {
         console.log("Cache match failed:", cacheError);
+        return caches.match("offline.html");
       })
   );
 });
