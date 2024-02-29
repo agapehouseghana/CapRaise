@@ -6,6 +6,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Divider } from "@mui/material";
 import { useStateContext } from "../contexts/ContextProvider";
 import Countdown from "react-countdown";
+import fund from "../utils/images/Agape.png";
 
 const Campaign = ({ adminData, campaigns }) => {
   const { externalData } = useStateContext();
@@ -102,9 +103,18 @@ const Campaign = ({ adminData, campaigns }) => {
       console.log("Unable to copy:", error);
     }
   };
-  const handleShare = async (textToShare) => {
+  const handleShare = async (textToShare, imageUrl) => {
     try {
-      await navigator.share({ text: textToShare });
+      if (navigator.share) {
+        const file = await fetch(imageUrl).then((response) => response.blob());
+        const filesArray = [new File([file], 'image.jpg', { type: 'image/jpeg' })];
+        await navigator.share({
+          title: "Agape House New Testament Church",
+          text: "Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️",
+          url: textToShare,
+          files: filesArray,
+        });
+      }
     } catch (error) {
       console.log("Sharing failed:", error);
     }
@@ -209,7 +219,9 @@ const Campaign = ({ adminData, campaigns }) => {
                 </div>
                 <div className="pt-5">
                   <div className="mt-2">
-                    <p className="text-sm text-slate-600">USSD Code (MTN Momo, Vodafone Cash, AirtelTigo Cash)</p>
+                    <p className="text-sm text-slate-600">
+                      USSD Code (MTN Momo, Vodafone Cash, AirtelTigo Cash)
+                    </p>
                     <div className="flex justify-between mt-2  items-center">
                       <p className="w-full overflow-hidden border-b-1 text-ellipsis whitespace-nowrap">
                         *227*{item.serviceCode}*{adminData.referalCode}#
@@ -242,7 +254,9 @@ const Campaign = ({ adminData, campaigns }) => {
                     </div>
                   </div>
                   <div className="mt-10 pb-10">
-                    <p className="text-sm text-slate-600">Online Payment (Visa/Mastercard, Mobile Money)</p>
+                    <p className="text-sm text-slate-600">
+                      Online Payment (Visa/Mastercard, Mobile Money)
+                    </p>
                     <div className="flex justify-between mt-2 items-center">
                       <p className="w-full overflow-hidden text-ellipsis border-b-1 whitespace-nowrap">
                         https://collections.kowri.app/main/
@@ -253,7 +267,8 @@ const Campaign = ({ adminData, campaigns }) => {
                           variant="outlined"
                           onClick={() =>
                             handleShare(
-                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`
+                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`,
+                          <img src={fund} alt="king"/>
                             )
                           }
                           style={{ background: "white", color: "purple" }}
@@ -275,7 +290,7 @@ const Campaign = ({ adminData, campaigns }) => {
                       </div>
                     </div>
                   </div>
-                  <Divider/>
+                  <Divider />
                   <div className="pt-5">
                     {expandedCard === index && (
                       <div>
