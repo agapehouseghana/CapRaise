@@ -6,6 +6,7 @@ import { ToggleButton } from "@mui/material";
 import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
+import Agape from "../utils/images/Agape.png";
 
 const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
   const { currentColor, activeMenu, setActiveMenu, screenSize, userData } =
@@ -37,7 +38,7 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
       {activeMenu && (
         <>
           <div
-            className="flex justify-between items-center w-72 bg-purple-600"
+            className="flex justify-between items-center w-72 bg-white shadow-sm"
             style={{ height: "60px" }}
           >
             <Link
@@ -45,7 +46,7 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
               onClick={handleCloseSideBar}
               className="items-center gap-3 ml-3 mt-4 mb-4 flex text-xl font-extrabold tracking-tight text-white"
             >
-              <h1 className="w-20 ml-14">CapRaise</h1>
+              <img src={Agape} alt="logo" className="w-[200px]"/>
             </Link>
             <div className="md:hidden">
               <ToggleButton
@@ -55,7 +56,7 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
                 sx={{ border: "none" }}
               >
                 <ReplyOutlinedIcon
-                  style={{ color: "white", fontSize: "25px" }}
+                  style={{ color: "purple", fontSize: "25px" }}
                 />
               </ToggleButton>
             </div>

@@ -14,6 +14,7 @@ import { signOut} from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { Logout } from "@mui/icons-material";
+import Agape from "../utils/images/Agape.png";
 
 const Navbar = () => {
   
@@ -82,7 +83,7 @@ const Navbar = () => {
         onClick={handleCloseSideBar}
         className="items-center gap-3 ml-3 mt-4 mb-4 flex text-xl font-extrabold tracking-tight text-white sm:hidden"
       >
-        <h1 className="w-20 ml-14">CapRaise</h1>
+        <img src={Agape} alt="logo" className="w-[150px]"/>
       </Link>
       <div className="mr-[40px] hidden sm:flex">
         <Box
