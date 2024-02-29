@@ -6,7 +6,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Divider } from "@mui/material";
 import { useStateContext } from "../contexts/ContextProvider";
 import Countdown from "react-countdown";
-import fund from "../utils/images/Agape.png";
+import fund from "../utils/images/fund.jpeg";
 
 const Campaign = ({ adminData, campaigns }) => {
   const { externalData } = useStateContext();
