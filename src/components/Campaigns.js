@@ -105,13 +105,14 @@ const Campaign = ({ adminData, campaigns }) => {
   };
   const handleShare = async (momoShare,onlineShare, imageUrl) => {
     try {
+      if (navigator.share) {
         await navigator.share({
           title: "Agape House New Testament Church",
           text: "Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️",
           files: imageUrl,
           momoLink: `Mobile Money (MTN Momo, Vodafone Cash, Airtel Tigo) :${momoShare}`,
           onlineLink: `Mobile Money (MTN Momo, Vodafone Cash, Airtel Tigo) :${onlineShare}`,
-        });
+        });}
     } catch (error) {
       console.log("Sharing failed:", error);
     }
