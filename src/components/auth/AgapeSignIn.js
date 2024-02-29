@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import fund from "../../utils/images/Image.png"
+import fund from "../../utils/images/Image.png";
 import { CircularProgress } from "@mui/material";
 
 const AgapeSignIn = () => {
@@ -11,23 +11,23 @@ const AgapeSignIn = () => {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
-  const [loading,setLoading]=useState(false)
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const signIn = (e) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     if (email === "") {
       setEmailError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setEmailError(false);
     }
 
     if (password === "") {
       setPasswordError(true);
-            setLoading(false);
+      setLoading(false);
     } else {
       setPasswordError(false);
     }
@@ -36,13 +36,13 @@ const AgapeSignIn = () => {
         .then((userCredential) => {
           console.log(userCredential);
           navigate("/");
-          setLoading(false)
+          setLoading(false);
         })
         .catch((error) => {
           const errorMessage = error.message;
           console.log("Sign In Error:", errorMessage);
           toast.error("Invalid email or password");
-          setLoading(false)
+          setLoading(false);
         });
     }
   };
@@ -53,61 +53,69 @@ const AgapeSignIn = () => {
 
   return (
     <>
-      <div className="md:flex-row flex-col  flex h-screen relative">
-        <div className="hidden lg:flex lg:flex-1 h-full">
-        <img src={fund} alt="fundraiser" className="object-cover"/>
+      <div className="md:flex-row flex-col  flex h-screen relative w-full">
+        <div className="hidden md:flex md:flex-1 h-full">
+          <img src={fund} alt="fundraiser" className="object-cover" />
         </div>
-        <div className="h-full "  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'contain', backgroundPosition: 'center' }}>
-          <div className="flex lg:flex-1 justify-center lg:h-full bg-white m-3 lg:m-0 rounded-md">
-            <form
-              onSubmit={signIn}
-              className="flex flex-col w-full xl:py-[200px] lg:py-[150px] md:py-[100px] xl:px-[150px] lg:px-[100px] md:px-[80px] sm:p-[80px] p-[40px]"
-            >
-              <div>
-                <h1 className="text-lg font-medium mb-2 text-slate-500">
-                  Welcome Back
-                </h1>
-                <h1 className="text-2xl font-medium mb-10">
-                  Log In to your Account
-                </h1>
-              </div>
-              <input
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={
-                  "border-1 px-3 py-4 rounded-md mb-5 " +
-                  (emailError ? "border-red-500" : "")
-                }
-              ></input>
-              <input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={
-                  "border-1 px-3 py-4 rounded-md mb-5 " +
-                  (passwordError ? "border-red-500" : "")
-                }
-              ></input>
-              <div className="flex justify-between">
-                <button
-                  type="button"
-                  className="py-4 px-5 rounded-md w-[240px] font-semibold"
-                  onClick={redirectToRegister}
-                >
-                  Register
-                </button>
-                <button
-                  type="submit"
-                  className="bg-green-200 py-4 px-5 rounded-md w-[240px] font-semibold"
-                >
-                  {loading?<CircularProgress  size={20} />:" Log In"}
-                </button>
-              </div>
-            </form>
-          </div>
+        <div
+          className="md:hidden h-full flex justify-center items-center "
+          style={{
+            backgroundImage: `url(${fund})`,
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+          }}
+        ></div>
+        <div className="md:hidden h-full w-full absolute bg-black opacity-40"></div>
+        <div className="flex md:flex-1 justify-center md:h-full  md:m-0 rounded-md w-[100%] absolute md:relative top-[30%] md:top-0 p-3">
+          <div className=" bg-white w-full rounded-md">
+          <form
+            onSubmit={signIn}
+            className="flex flex-col w-full xl:py-[200px] lg:py-[150px] md:py-[100px] xl:px-[150px] lg:px-[100px] md:px-[80px] sm:p-[80px] p-[30px]"
+          >
+            <div>
+              <h1 className="text-lg font-medium mb-2 text-slate-500">
+                Welcome Back
+              </h1>
+              <h1 className="text-2xl font-medium mb-10">
+                Log In to your Account
+              </h1>
+            </div>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (emailError ? "border-red-500" : "")
+              }
+            ></input>
+            <input
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={
+                "border-1 px-3 py-4 rounded-md mb-5 " +
+                (passwordError ? "border-red-500" : "")
+              }
+            ></input>
+            <div className="flex justify-between">
+              <button
+                type="button"
+                className="py-4 px-5 rounded-md w-[240px] font-semibold"
+                onClick={redirectToRegister}
+              >
+                Register
+              </button>
+              <button
+                type="submit"
+                className="bg-green-200 py-4 px-5 rounded-md w-[240px] font-semibold"
+              >
+                {loading ? <CircularProgress size={20} /> : " Log In"}
+              </button>
+            </div>
+          </form></div>
         </div>
       </div>
     </>
