@@ -118,7 +118,7 @@ function App() {
           </div>
         ) : (
           <Routes>
-            <Route path="/" element={<SignIn />} />
+            <Route path="/" element={<AgapeSignIn />} />
             <Route path="/register" element={<Register />} />
             <Route path="/agape" element={<AgapeSignIn />} />
             <Route path="/agape/register" element={<AgapeRegister />} />
