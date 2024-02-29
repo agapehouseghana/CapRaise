@@ -1,6 +1,6 @@
 import "./App.css";
 import Register from "./components/auth/Register";
-import SignIn from "./components/auth/SignIn";
+// import SignIn from "./components/auth/SignIn";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import Sidebar from "./components/Sidebar";
