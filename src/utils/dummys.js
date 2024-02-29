@@ -170,14 +170,14 @@ export const fundraiser = [
     lastName: "King",
     email: "david@gmail.com",
     mobileNumber:"0203465176",
-    referralCode:"K9I9N0G"
+    referalCode:"K9I9N0G"
   },
   {
     firstName: "Chris",
     lastName: "Atu",
     email: "chris@gmail.com",
     mobileNumber:"0203465176",
-    referralCode:"C9H9R0I"
+    referalCode:"C9H9R0I"
   },
 ];
 export const churches = [
@@ -208,7 +208,7 @@ export const campaigns = [
     description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
     goalValue: "100,000",
     raisedValue: "10,000",
-    referralCode:"eiuhihfhwnwojjej",
+    referalCode:"eiuhihfhwnwojjej",
     USSDReferral:"*227*1234*eiuhihfhwnwojjej#",
     KowriLinkReferral:"https://collections.kowri.app/main/1234/eiuhihfhwnwojjej",
     raised:"20,000",
@@ -221,7 +221,7 @@ export const campaigns = [
     description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
     goalValue: "200,000",
     raisedValue: "20,000",
-    referralCode:"eiuhihfhwnwojjej",
+    referalCode:"eiuhihfhwnwojjej",
     USSDReferral:"*227*1234*eiuhihfhwnwojjej#",
     KowriLinkReferral:"https://collections.kowri.app/main/1234/eiuhihfhwnwojjej",
     raised:"20,000",
@@ -234,7 +234,7 @@ export const campaigns = [
     description: "Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys,Raise Funds for the broke boys",
     goalValue: "300,000",
     raisedValue: "30,000",
-    referralCode:"eiuhihfhwnwojjej",
+    referalCode:"eiuhihfhwnwojjej",
     USSDReferral:"*227*1234*eiuhihfhwnwojjej#",
     KowriLinkReferral:"https://collections.kowri.app/main/1234/eiuhihfhwnwojjej",
     raised:"20,000",

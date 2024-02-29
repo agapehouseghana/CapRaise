@@ -30,10 +30,10 @@ const Campaign = ({ adminData, campaigns }) => {
     };
   };
 
-  const getTotalRaisedForServiceAndReferral = (serviceCode, referralCode) => {
+  const getTotalRaisedForServiceAndReferral = (serviceCode, referalCode) => {
     const filteredData = foundData.filter(
       (data) =>
-        data.referralCode === referralCode && data.serviceCode === serviceCode
+        data.referalCode === referalCode && data.serviceCode === serviceCode
     );
     const totalAmount = filteredData.reduce(
       (total, item) => total + item.amount,
@@ -45,7 +45,7 @@ const Campaign = ({ adminData, campaigns }) => {
     };
   };
 
-  const specificReferralCode = adminData?.referralCode;
+  const specificReferalCode = adminData?.referalCode;
 
   useEffect(() => {
     const newData = campaigns.flatMap((item) =>
@@ -116,7 +116,7 @@ const Campaign = ({ adminData, campaigns }) => {
         const { totalAmount: totalRaised, count: donorCount } =
           getTotalRaisedForServiceAndReferral(
             item.serviceCode,
-            specificReferralCode
+            specificReferalCode
           );
         const timeLeft = calculateTimeLeft(item.endDate);
         const raisedPercentage = calculatePercentage(
@@ -190,36 +190,36 @@ const Campaign = ({ adminData, campaigns }) => {
                 </div>
               </div>
               <Divider />
-              <div className="bg-purple-400 p-4 sm:p-10 rounded-xl text-white">
+              <div className="bg-white p-4 sm:p-10 rounded-xl">
                 <div className="pt-5 ">
-                  <p className="text-sm text-slate-200">Referral Code</p>
+                  <p className="text-sm text-slate-600">Referral Code</p>
                   <div className="flex justify-between mt-2 border-b-1">
                     <p className="w-full overflow-hidden text-ellipsis whitespace-nowrap font-semibold">
-                      {adminData.referralCode}
+                      {adminData.referalCode}
                     </p>
                     {refCopiedNotification ? (
                       <CheckIcon color="success" />
                     ) : (
                       <ContentCopyIcon
                         fontSize="small"
-                        onClick={() => handleRefCopy(adminData.referralCode)}
+                        onClick={() => handleRefCopy(adminData.referalCode)}
                       />
                     )}
                   </div>
                 </div>
                 <div className="pt-5">
                   <div className="mt-2">
-                    <p className="text-sm text-slate-200">USSD Code</p>
+                    <p className="text-sm text-slate-600">USSD Code (MTN Momo, Vodafone Cash, AirtelTigo Cash)</p>
                     <div className="flex justify-between mt-2  items-center">
                       <p className="w-full overflow-hidden border-b-1 text-ellipsis whitespace-nowrap">
-                        *227*{item.serviceCode}*{adminData.referralCode}#
+                        *227*{item.serviceCode}*{adminData.referalCode}#
                       </p>
                       <div className="flex gap-2 items-center ml-5">
                         <Button
                           variant="outlined"
                           onClick={() =>
                             handleShare(
-                              `*227*${item.serviceCode}*${adminData.referralCode}#`
+                              `*227*${item.serviceCode}*${adminData.referalCode}#`
                             )
                           }
                           style={{ background: "white", color: "purple" }}
@@ -233,7 +233,7 @@ const Campaign = ({ adminData, campaigns }) => {
                             fontSize="small"
                             onClick={() =>
                               handleURLCopy(
-                                `*227*${item.serviceCode}*${adminData.referralCode}#`
+                                `*227*${item.serviceCode}*${adminData.referalCode}#`
                               )
                             }
                           />
@@ -242,18 +242,18 @@ const Campaign = ({ adminData, campaigns }) => {
                     </div>
                   </div>
                   <div className="mt-10 pb-10">
-                    <p className="text-sm text-slate-200">Kowri Link</p>
+                    <p className="text-sm text-slate-600">Online Payment (Visa/Mastercard, Mobile Money)</p>
                     <div className="flex justify-between mt-2 items-center">
                       <p className="w-full overflow-hidden text-ellipsis border-b-1 whitespace-nowrap">
-                        https://kbnewmarketplace.mykowri.com/main/
-                        {item.serviceCode}/{adminData.referralCode}
+                        https://collections.kowri.app/main/
+                        {item.serviceCode}/{adminData.referalCode}
                       </p>
                       <div className="flex gap-2 items-center ml-5">
                         <Button
                           variant="outlined"
                           onClick={() =>
                             handleShare(
-                              `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
+                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`
                             )
                           }
                           style={{ background: "white", color: "purple" }}
@@ -267,7 +267,7 @@ const Campaign = ({ adminData, campaigns }) => {
                             fontSize="small"
                             onClick={() =>
                               handleMarketCopy(
-                                `https://kbnewmarketplace.mykowri.com/main/${item.serviceCode}/${adminData.referralCode}#`
+                                `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`
                               )
                             }
                           />
@@ -279,7 +279,7 @@ const Campaign = ({ adminData, campaigns }) => {
                   <div className="pt-5">
                     {expandedCard === index && (
                       <div>
-                        <p className=" text-md py-2 text-slate-200 font-semibold">
+                        <p className=" text-md py-2 text-slate-600 font-semibold">
                           Your Stats
                         </p>
                         <div className="flex">

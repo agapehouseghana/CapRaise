@@ -13,10 +13,10 @@ import { useStateContext } from "../contexts/ContextProvider";
 
 const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
   const { externalData } = useStateContext();
-  const findDonersCount = (referralCode, serviceCode) => {
+  const findDonersCount = (referalCode, serviceCode) => {
     const filteredData = externalData?.filter(
       (data) =>
-        data.referralCode === referralCode && data.serviceCode === serviceCode
+        data.referalCode === referalCode && data.serviceCode === serviceCode
     );
     return filteredData ? filteredData.length : 0;
   };
@@ -24,11 +24,11 @@ const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
   const calculateDonersCount = (user) => {
     let totalDonersCount = 0;
 
-    if (user && user.referralCode && Array.isArray(campaigns)) {
+    if (user && user.referalCode && Array.isArray(campaigns)) {
       campaigns.forEach((campaign) => {
         const currentServiceCode = campaign.serviceCode;
         const donersCountForCampaign = findDonersCount(
-          user.referralCode,
+          user.referalCode,
           currentServiceCode
         );
         totalDonersCount += donersCountForCampaign;
@@ -38,10 +38,10 @@ const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
     return totalDonersCount;
   };
 
-  const getTotalRaisedForServiceCode = (referralCode, serviceCode) => {
+  const getTotalRaisedForServiceCode = (referalCode, serviceCode) => {
     const filteredData = externalData?.filter(
       (data) =>
-        data.referralCode === referralCode && data.serviceCode === serviceCode
+        data.referalCode === referalCode && data.serviceCode === serviceCode
     );
     return filteredData.reduce((total, item) => total + item.amount, 0);
   };
@@ -49,11 +49,11 @@ const MemberStatsBarChart = ({ usersLinkedToAdmin, campaigns }) => {
   const calculateTotalRaisedForUser = (user) => {
     let totalRaisedAmount = 0;
 
-    if (user && user.referralCode && Array.isArray(campaigns)) {
+    if (user && user.referalCode && Array.isArray(campaigns)) {
       campaigns.forEach((campaign) => {
         const currentServiceCode = campaign.serviceCode;
         const raisedAmountForCampaign = getTotalRaisedForServiceCode(
-          user.referralCode,
+          user.referalCode,
           currentServiceCode
         );
         totalRaisedAmount += raisedAmountForCampaign;

@@ -46,7 +46,7 @@ const Fundraisers = () => {
       align: "left",
     },
     {
-      id: "referralCode",
+      id: "referalCode",
       label: "Referral Code",
       minWidth: 170,
       align: "left",

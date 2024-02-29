@@ -97,7 +97,7 @@ const Register = () => {
             adminId: churchId,
           };
 
-          function generateChurchReferralCode(length) {
+          function generateChurchReferalCode(length) {
             function generateRandomDigits(length) {
               let randomDigits = '';
               const characters = '0123456789';
@@ -115,14 +115,14 @@ const Register = () => {
             return `${randomDigits}`;
           }
           
-          const referralCode = generateChurchReferralCode(5);
+          const referalCode = generateChurchReferalCode(5);
 
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
           return setDoc(usersCollectionRef, {
             ...userData,
             userId,
-            referralCode: referralCode,
+            referalCode: referalCode,
           }).then(() => {
             console.log("User registered successfully!");
             setLoading(false);

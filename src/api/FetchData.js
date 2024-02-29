@@ -4,7 +4,7 @@ import axios from "axios";
 const FetchData = () => {
   const [externalData, setExternalData] = useState({
     payerPhoneNumber: "",
-    referralCode: "",
+    referalCode: "",
     payerName: "",
     rail: "",
     amount: "",

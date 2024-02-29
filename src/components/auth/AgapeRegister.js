@@ -76,7 +76,7 @@ const AgapeRegister = () => {
             role: role,
             adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7",
           };
-          function generateChurchReferralCode( length) {
+          function generateChurchReferalCode( length) {
             function generateRandomDigits(length) {
               let randomDigits = '';
               const characters = '0123456789';
@@ -93,11 +93,11 @@ const AgapeRegister = () => {
           
             return `${randomDigits}`;
           }
-          const referralCode = generateChurchReferralCode(5);
+          const referalCode = generateChurchReferalCode(5);
 
           navigate("/");
           const usersCollectionRef = doc(db, "users", userId);
-          return setDoc(usersCollectionRef, { ...userData, userId ,  referralCode: referralCode,});
+          return setDoc(usersCollectionRef, { ...userData, userId ,  referalCode: referalCode,});
         })
         .then(() => {
           console.log("User registered successfully!");
