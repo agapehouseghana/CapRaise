@@ -103,14 +103,16 @@ const Campaign = ({ adminData, campaigns }) => {
       console.log("Unable to copy:", error);
     }
   };
-  const handleShare = async (textToShare) => {
+  const handleShare = async (textToShare,fileUrl) => {
     try {
       const shareData = {
         title: "Agape House Church",
         text: "Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️",
         url: textToShare,
-        icon: 'https://th.bing.com/th/id/OIP._eGn2SAoYyXKaW0hubK5LwHaCn?rs=1&pid=ImgDetMain',
       };
+      if (fileUrl) {
+        shareData.files = [fileUrl];
+      }
   
       await navigator.share(shareData);
     } catch (error) {
@@ -265,7 +267,8 @@ const Campaign = ({ adminData, campaigns }) => {
                           variant="outlined"
                           onClick={() =>
                             handleShare(
-                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`
+                              `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`,
+                              'https://th.bing.com/th/id/OIP._eGn2SAoYyXKaW0hubK5LwHaCn?rs=1&pid=ImgDetMain'
                             )
                           }
                           style={{ background: "white", color: "purple" }}
