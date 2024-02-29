@@ -6,6 +6,7 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { Button, Divider } from "@mui/material";
 import { useStateContext } from "../contexts/ContextProvider";
 import Countdown from "react-countdown";
+import fund from "../utils/images/Agape.png";
 
 const Campaign = ({ adminData, campaigns }) => {
   const { externalData } = useStateContext();
@@ -106,7 +107,7 @@ const Campaign = ({ adminData, campaigns }) => {
     try {
       const shareData = {
         title: "Agape House Church",
-        text: "Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️",
+        text: `Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️ ${fund}`,
         url: textToShare,
       };
       await navigator.share(shareData);
@@ -263,7 +264,7 @@ const Campaign = ({ adminData, campaigns }) => {
                           onClick={() =>
                             handleShare(
                               `https://collections.kowri.app/main/${item.serviceCode}/${adminData.referalCode}#`
-                              )
+                            )
                           }
                           style={{ background: "white", color: "purple" }}
                         >
