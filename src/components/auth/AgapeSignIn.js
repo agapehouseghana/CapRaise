@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import fund from "../../utils/images/fund.jpeg"
+import fund from "../../utils/images/Image.png"
 import { CircularProgress } from "@mui/material";
 
 const AgapeSignIn = () => {
@@ -54,11 +54,11 @@ const AgapeSignIn = () => {
   return (
     <>
       <div className="md:flex-row flex-col  flex h-screen relative">
-        <div className="hidden md:flex md:flex-1 h-full">
-        <img src={fund} alt="fundraiser" className="object-fit"/>
+        <div className="hidden lg:flex lg:flex-1 h-full">
+        <img src={fund} alt="fundraiser" className="object-cover"/>
         </div>
-        <div className="h-full "  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-          <div className="flex md:flex-1 justify-center md:h-full bg-white m-3 md:m-0 rounded-md">
+        <div className="h-full "  style={{ backgroundImage: `url(${fund})`, backgroundSize: 'contain', backgroundPosition: 'center' }}>
+          <div className="flex lg:flex-1 justify-center lg:h-full bg-white m-3 lg:m-0 rounded-md">
             <form
               onSubmit={signIn}
               className="flex flex-col w-full xl:py-[200px] lg:py-[150px] md:py-[100px] xl:px-[150px] lg:px-[100px] md:px-[80px] sm:p-[80px] p-[40px]"

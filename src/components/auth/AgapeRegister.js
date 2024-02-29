@@ -4,7 +4,7 @@ import { auth, db } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
 import { doc, setDoc } from "firebase/firestore";
 import { churchList } from "../../utils/dummys";
-import fund from "../../utils/images/fund.jpeg";
+import fund from "../../utils/images/Image.png";
 import { CircularProgress } from "@mui/material";
 
 const AgapeRegister = () => {

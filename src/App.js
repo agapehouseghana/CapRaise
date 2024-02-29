@@ -16,6 +16,7 @@ import AgapeSignIn from "./components/auth/AgapeSignIn";
 import AgapeRegister from "./components/auth/AgapeRegister";
 import { Backdrop, CircularProgress } from "@mui/material";
 import { ToastContainer } from "react-toastify";
+import logo from "./utils/images/logo.png";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
       <BrowserRouter>
         {welcome ? (
           <div className="w-full h-screen flex justify-center items-center bg-purple-100">
-            <p className="text-5xl font-semibold text-purple-400">CapRaise</p>
+            <img src={logo} alt="logo" className="w-[50px]"/>
           </div>
         ) : (
           ""
