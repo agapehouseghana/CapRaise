@@ -188,7 +188,7 @@ const AgapeRegister = () => {
             }
             disabled={true}
           >
-            <option value="3H3Jc3ZTQTOmSYNpedgGIPwyUlF7">Agape</option>
+            <option value="TNJ71Eyh5whEzms5ALsccHvovth2">Agape</option>
             {churchList.map((church) => (
               <option key={church.id} value={church.name}>
                 {church.name}
