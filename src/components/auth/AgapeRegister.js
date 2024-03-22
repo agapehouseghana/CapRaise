@@ -74,7 +74,7 @@ const AgapeRegister = () => {
             phoneNumber: phoneNumber,
             church: church,
             role: role,
-            adminId: "3H3Jc3ZTQTOmSYNpedgGIPwyUlF7",
+            adminId: "3XXjbBVSIycV9IitM19W6i6W84y2",
           };
           function generateChurchReferalCode(length) {
             function generateRandomDigits(length) {
