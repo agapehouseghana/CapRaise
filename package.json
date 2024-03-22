@@ -21,6 +21,7 @@
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
+    "react-pwa-add-to-homescreen": "^1.1.8",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.20.1",
     "react-scripts": "5.0.1",

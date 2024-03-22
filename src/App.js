@@ -18,6 +18,7 @@ import { Backdrop, CircularProgress } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import logo from "./utils/images/logo.png";
 import "react-toastify/dist/ReactToastify.css";
+import { AddToHomeScreen } from 'react-pwa-add-to-homescreen';
 
 function App() {
   const { authUser, userData, loading } = useStateContext();
@@ -124,6 +125,7 @@ function App() {
             <Route path="/agape/register" element={<AgapeRegister />} />
           </Routes>
         )}
+     <AddToHomeScreen />
       </BrowserRouter>
       <ToastContainer />
     </div>
