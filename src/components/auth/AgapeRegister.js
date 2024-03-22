@@ -14,7 +14,7 @@ const AgapeRegister = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [church, setChurch] = useState("Agape");
+  const [church, setChurch] = useState("Agape House");
   const role = "member";
 
   const [fullNameError, setFullNameError] = useState("");
