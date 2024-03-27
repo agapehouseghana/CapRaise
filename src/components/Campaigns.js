@@ -49,11 +49,17 @@ const Campaign = ({ adminData, campaigns }) => {
   const specificReferalCode = adminData?.referalCode;
 
   useEffect(() => {
+    if (!Array.isArray(externalData)) {
+      console.log("External data is not an array:", externalData);
+      return;
+    }
+  
     const newData = campaigns?.flatMap((item) =>
       externalData?.filter((data) => data?.serviceCode === item?.serviceCode)
     );
     setFoundData(newData);
   }, [externalData, campaigns]);
+
 
   const calculateTimeLeft = (endTime) => {
     const difference = +new Date(endTime) - +new Date();

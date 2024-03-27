@@ -117,10 +117,10 @@ export const ContextProvider = ({ children }) => {
 
     const fetchDataFromExternalAPI = async () => {
       try {
-        const response = await axios.get("https://capraisebackend.onrender.com/api/v1/fetchData");
+        const response = await axios.get("https://capraise-backend.onrender.com/api/v1/fetchData");
         setExternalData(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:", error);
       }
     };
   
