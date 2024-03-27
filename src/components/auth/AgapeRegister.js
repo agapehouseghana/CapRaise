@@ -1,8 +1,5 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
-import { auth, db } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
 import { churchList } from "../../utils/dummys";
 import fund from "../../utils/images/Image.png";
 import { CircularProgress } from "@mui/material";
@@ -15,7 +12,6 @@ const AgapeRegister = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [church, setChurch] = useState("Agape House");
-  const role = "member";
 
   const [fullNameError, setFullNameError] = useState("");
   const [phoneNumberError, setPhoneNumberError] = useState("");
@@ -24,8 +20,11 @@ const AgapeRegister = () => {
   const [churchError, setChurchError] = useState(false);
 
   const navigate = useNavigate();
-
-  const signUp = (e) => {
+  
+  const redirectToSignIn = () => {
+    navigate("/agape");
+  };
+  const verifyOTP = (e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -63,60 +62,17 @@ const AgapeRegister = () => {
     } else {
       setChurchError(false);
     }
-
     if (email && password && fullName && phoneNumber && church) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          const userId = userCredential.user.uid;
-          const userData = {
-            fullName: fullName,
-            email: userCredential.user.email,
-            phoneNumber: phoneNumber,
-            church: church,
-            role: role,
-            adminId: "3XXjbBVSIycV9IitM19W6i6W84y2",
-          };
-          function generateChurchReferalCode(length) {
-            function generateRandomDigits(length) {
-              let randomDigits = "";
-              const characters = "0123456789";
-
-              for (let i = 0; i < length; i++) {
-                const randomIndex = Math.floor(
-                  Math.random() * characters.length
-                );
-                randomDigits += characters.charAt(randomIndex);
-              }
-
-              return randomDigits;
-            }
-
-            const randomDigits = generateRandomDigits(length);
-
-            return `${randomDigits}`;
-          }
-          const referalCode = generateChurchReferalCode(5);
-
-          navigate("/");
-          const usersCollectionRef = doc(db, "users", userId);
-          return setDoc(usersCollectionRef, {
-            ...userData,
-            userId,
-            referalCode: referalCode,
-          });
-        })
-        .then(() => {
-          console.log("User registered successfully!");
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error registering user:", error);
-          setLoading(false);
-        });
+      const userData ={
+        email:email,
+        password:password,
+        fullName:fullName,
+        phoneNumber:phoneNumber,
+        church:church
+      }
+      localStorage.setItem("userData", JSON.stringify(userData));
+      navigate("/OTP");
     }
-  };
-  const redirectToSignIn = () => {
-    navigate("/agape");
   };
   return (
     <div className="md:flex-row flex-col  flex h-screen relative w-full">
@@ -135,7 +91,7 @@ const AgapeRegister = () => {
       <div className="flex md:flex-1 justify-center md:h-full  md:m-0 rounded-md w-[100%] absolute md:relative top-[20%] md:top-0 p-3">
           <div className=" bg-white w-full rounded-md">
         <form
-          onSubmit={signUp}
+          onSubmit={verifyOTP}
           className="flex flex-col w-full xl:py-[200px] lg:py-[150px] md:py-[100px] xl:px-[150px] lg:px-[100px] md:px-[80px] sm:p-[80px] p-[30px]"
         >
           <h1 className="text-2xl font-medium mb-10">Create Account</h1>

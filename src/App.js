@@ -19,6 +19,7 @@ import { ToastContainer } from "react-toastify";
 import logo from "./utils/images/logo.png";
 import "react-toastify/dist/ReactToastify.css";
 import { AddToHomeScreen } from 'react-pwa-add-to-homescreen';
+import OTP from "./components/auth/OTP";
 
 function App() {
   const { authUser, userData, loading } = useStateContext();
@@ -122,10 +123,11 @@ function App() {
             <Route path="/" element={<AgapeSignIn />} />
             <Route path="/register" element={<Register />} />
             <Route path="/agape" element={<AgapeSignIn />} />
+            <Route path="/OTP" element={<OTP />} />
             <Route path="/agape/register" element={<AgapeRegister />} />
           </Routes>
         )}
-     <AddToHomeScreen />
+      <AddToHomeScreen />
       </BrowserRouter>
       <ToastContainer />
     </div>

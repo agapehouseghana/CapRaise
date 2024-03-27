@@ -23,13 +23,13 @@ const Campaigns = () => {
       try {
         const querySnapshot = await getDocs(q);
         const campaign = [];
-        querySnapshot.forEach((doc) => {
-          const campaignsData = doc.data();
-          campaign.push(campaignsData);
+        querySnapshot?.forEach((doc) => {
+          const campaignsData = doc?.data();
+          campaign?.push(campaignsData);
         });
         setCampaigns(campaign);
       } catch (error) {
-        console.error("Error fetching users linked to admin:", error);
+        console.log("Error fetching users linked to admin:", error);
       }
       setLoading(false);
     };

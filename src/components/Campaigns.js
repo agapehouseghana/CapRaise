@@ -18,39 +18,39 @@ const Campaign = ({ adminData, campaigns }) => {
   const [foundData, setFoundData] = useState([]);
 
   const getTotalRaisedForServiceCode = (serviceCode) => {
-    const filteredData = foundData.filter(
-      (data) => data.serviceCode === serviceCode
+    const filteredData = foundData?.filter(
+      (data) => data?.serviceCode === serviceCode
     );
-    const totalAmount = filteredData.reduce(
-      (total, item) => total + item.amount,
+    const totalAmount = filteredData?.reduce(
+      (total, item) => total + item?.amount,
       0
     );
     return {
       totalAmount,
-      count: filteredData.length,
+      count: filteredData?.length,
     };
   };
 
   const getTotalRaisedForServiceAndReferral = (serviceCode, referalCode) => {
-    const filteredData = foundData.filter(
+    const filteredData = foundData?.filter(
       (data) =>
-        data.referalCode === referalCode && data.serviceCode === serviceCode
+        data?.referalCode === referalCode && data?.serviceCode === serviceCode
     );
-    const totalAmount = filteredData.reduce(
-      (total, item) => total + item.amount,
+    const totalAmount = filteredData?.reduce(
+      (total, item) => total + item?.amount,
       0
     );
     return {
       totalAmount,
-      count: filteredData.length,
+      count: filteredData?.length,
     };
   };
 
   const specificReferalCode = adminData?.referalCode;
 
   useEffect(() => {
-    const newData = campaigns.flatMap((item) =>
-      externalData?.filter((data) => data.serviceCode === item.serviceCode)
+    const newData = campaigns?.flatMap((item) =>
+      externalData?.filter((data) => data?.serviceCode === item?.serviceCode)
     );
     setFoundData(newData);
   }, [externalData, campaigns]);
@@ -72,7 +72,7 @@ const Campaign = ({ adminData, campaigns }) => {
   };
   const handleRefCopy = async (textToCopy) => {
     try {
-      await navigator.clipboard.writeText(textToCopy);
+      await navigator?.clipboard?.writeText(textToCopy);
       setRefCopiedNotification(true);
       setTimeout(() => {
         setRefCopiedNotification(false);
@@ -83,7 +83,7 @@ const Campaign = ({ adminData, campaigns }) => {
   };
   const handleURLCopy = async (textToCopy) => {
     try {
-      await navigator.clipboard.writeText(textToCopy);
+      await navigator?.clipboard?.writeText(textToCopy);
       setUrlCopiedNotification(true);
       setTimeout(() => {
         setUrlCopiedNotification(false);
@@ -94,7 +94,7 @@ const Campaign = ({ adminData, campaigns }) => {
   };
   const handleMarketCopy = async (textToCopy) => {
     try {
-      await navigator.clipboard.writeText(textToCopy);
+      await navigator?.clipboard?.writeText(textToCopy);
       setMarketCopiedNotification(true);
       setTimeout(() => {
         setMarketCopiedNotification(false);
@@ -110,7 +110,7 @@ const Campaign = ({ adminData, campaigns }) => {
         text: `Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️ ${fund}`,
         url: textToShare,
       };
-      await navigator.share(shareData);
+      await navigator?.share(shareData);
     } catch (error) {
       console.log("Sharing failed:", error);
     }
@@ -127,12 +127,12 @@ const Campaign = ({ adminData, campaigns }) => {
         const timeLeft = calculateTimeLeft(item.endDate);
         const raisedPercentage = calculatePercentage(
           totalAmount,
-          item.fundraisingGoal
+          item?.fundraisingGoal
         );
         return (
           <div className="border bg-white" key={index}>
             <div className="">
-              {Array.isArray(item.imagesURL) && item.imagesURL.length > 0 && (
+              {Array.isArray(item?.imagesURL) && item?.imagesURL?.length > 0 && (
                 <Carousel showThumbs={false}>
                   {item.imagesURL.map((url, i) => (
                     <div key={i}>

@@ -34,7 +34,6 @@ const AgapeSignIn = () => {
     if (email && password) {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-          console.log(userCredential);
           navigate("/");
           setLoading(false);
         })

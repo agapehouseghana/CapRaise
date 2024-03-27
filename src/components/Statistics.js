@@ -53,7 +53,6 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
     });
   }
   const donersCount = totalDonersCount;
-  console.log(donersCount,"donersCount")
 
   const getTotalRaisedForServiceCode = (referalCode, serviceCode) => {
     const filteredData = externalData?.filter(

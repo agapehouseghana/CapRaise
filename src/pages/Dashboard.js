@@ -14,8 +14,8 @@ const Dashboard = () => {
   const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
   const adminId = adminData?.adminId;
 
-  const campaignCount = campaigns.length;
-  const fundraiserCount = usersLinkedToAdmin.length;
+  const campaignCount = campaigns?.length;
+  const fundraiserCount = usersLinkedToAdmin?.length;
 
   useEffect(() => {
     const fetchCampaigns = async () => {
@@ -30,17 +30,17 @@ const Dashboard = () => {
           const querySnapshot = await getDocs(q);
           const campaignList = [];
 
-          querySnapshot.forEach((doc) => {
-            const campaignData = doc.data();
-            campaignList.push(campaignData);
+          querySnapshot?.forEach((doc) => {
+            const campaignData = doc?.data();
+            campaignList?.push(campaignData);
           });
           setCampaigns(campaignList);
         } catch (error) {
-          console.error("Error fetching campaigns:", error);
+          console.log("Error fetching campaigns:", error);
         }
         setLoading(false);
       } else {
-        console.error("Admin ID is undefined or null");
+        console.log("Admin ID is undefined or null");
         setLoading(false);
       }
     };
@@ -52,13 +52,13 @@ const Dashboard = () => {
       try {
         const querySnapshot = await getDocs(q);
         const users = [];
-        querySnapshot.forEach((doc) => {
-          const userData = doc.data();
-          users.push(userData);
+        querySnapshot?.forEach((doc) => {
+          const userData = doc?.data();
+          users?.push(userData);
         });
         setUsersLinkedToAdmin(users);
       } catch (error) {
-        console.error("Error fetching users linked to admin:", error);
+        console.log("Error fetching users linked to admin:", error);
       }
       setLoading(false);
     };
