@@ -18,6 +18,7 @@ const OTP = () => {
   const email = customerData?.email;
   const password = customerData?.password;
   const church = customerData?.church;
+  const otpVerify = customerData?.otp;
   const role = "member";
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +47,9 @@ const OTP = () => {
     } else {
       setOtpValuesError(false);
     }
-    if (otp) {
+    console.log(otp,"otp")
+    console.log(otpVerify,"otpVerify")
+    if (otp === otpVerify) {
       createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
           const userId = userCredential.user.uid;
