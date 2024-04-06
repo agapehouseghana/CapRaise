@@ -171,7 +171,7 @@ const Campaign = ({ adminData, campaigns }) => {
                 <div className="flex flex-col">
                   <p className="text-xl font-medium ">
                     {totalAmount.toLocaleString()
-                      ? totalAmount.toLocaleString()
+                      ? (totalAmount+item.currentProgress).toLocaleString()
                       : item.currentProgress.toLocaleString()}
                     <small className="ml-2">GHS</small>
                   </p>
