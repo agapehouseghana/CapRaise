@@ -132,7 +132,7 @@ const Campaign = ({ adminData, campaigns }) => {
           );
         const timeLeft = calculateTimeLeft(item.endDate);
         const raisedPercentage = calculatePercentage(
-          totalAmount,
+          totalAmount+item.currentProgress,
           item?.fundraisingGoal
         );
         return (
