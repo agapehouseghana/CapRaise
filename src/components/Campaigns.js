@@ -9,7 +9,7 @@ import Countdown from "react-countdown";
 import fund from "../utils/images/fund.jpeg";
 
 const Campaign = ({ adminData, campaigns }) => {
-  const { externalData } = useStateContext();
+  const { externalData,userData } = useStateContext();
   const [refCopiedNotification, setRefCopiedNotification] = useState(false);
   const [urlCopiedNotification, setUrlCopiedNotification] = useState(false);
   const [marketCopiedNotification, setMarketCopiedNotification] =
@@ -113,7 +113,7 @@ const Campaign = ({ adminData, campaigns }) => {
     try {
       const shareData = {
         title: "Agape House Church",
-        text: `Hi there! It's Claud from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️ ${fund}`,
+        text: `Hi there! It's ${userData?.fullName} from Agape House New Testament Church. 🌟 We're on a mission to enhance our sanctuary through Capital Raise 2.0, creating more space for our growing family, from Kidz to Teens. Your support would mean so much to us. If you're able to contribute, every bit helps us move closer to our goal. 🙏 Thank you for considering supporting this cause. Together, we can make a big difference. God bless! 🕊️ ${fund}`,
         url: textToShare,
       };
       await navigator?.share(shareData);
