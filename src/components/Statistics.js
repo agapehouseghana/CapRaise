@@ -3,34 +3,11 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined";
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { useStateContext } from "../contexts/ContextProvider";
 
 const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
   const { userData, externalData } = useStateContext();
-
-  // const findDonersCount = (referalCode) => {
-  //   const found = externalData?.filter(
-  //     (data) => data.referalCode === referalCode
-  //   );
-  //   return found ? found.length : 0;
-  // };
-
-  // const donersCount =
-  //   userData && userData.referalCode
-  //     ? findDonersCount(userData.referalCode)
-  //     : 0;
-
-  // const getTotalRaisedForServiceCode = (referalCode) => {
-  //   const filteredData = externalData?.filter(
-  //     (data) => data.referalCode === referalCode
-  //   );
-  //   return filteredData.reduce((total, item) => total + item.amount, 0);
-  // };
-
-  // const totalRaisedForReferral =
-  //   userData && userData.referalCode
-  //     ? getTotalRaisedForServiceCode(userData.referalCode)
-  //     : 0;
 
   const findDonersCount = (referalCode, serviceCode) => {
     const filteredData = externalData?.filter(
@@ -114,85 +91,104 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
 
   const totalRaisedForAllServiceCodes = getTotalRaisedForAllServiceCodes();
 
+  // Calculate active campaigns
+  const activeCampaigns = campaigns?.filter(campaign => {
+    const endDate = campaign.endDate ? new Date(campaign.endDate) : null;
+    return !endDate || endDate > new Date();
+  }) || [];
+
+  const statsData = [
+    {
+      title: "Total Raised",
+      value: userData?.role === "admin" 
+        ? totalRaisedForAllServiceCodes.totalRaised 
+        : totalRaisedForReferral,
+      formatter: (val) => `GHS ${val.toLocaleString()}`,
+      icon: AccountBalanceWalletOutlinedIcon,
+      iconBgColor: "bg-purple-100",
+      iconColor: "text-purple-600",
+      trend: "+12%",
+      trendColor: "text-green-600",
+      description: "from last month"
+    },
+    ...(userData?.role === "admin" ? [{
+      title: "Total Fundraisers",
+      value: fundraiserCount || 0,
+      formatter: (val) => val.toString(),
+      icon: PeopleOutlineOutlinedIcon,
+      iconBgColor: "bg-blue-100",
+      iconColor: "text-blue-600",
+      trend: "+8",
+      trendColor: "text-green-600",
+      description: "new this month"
+    }] : []),
+    {
+      title: "Total Donors",
+      value: userData?.role === "admin" 
+        ? totalRaisedForAllServiceCodes.totalCount 
+        : donersCount,
+      formatter: (val) => val.toLocaleString(),
+      icon: GroupsOutlinedIcon,
+      iconBgColor: "bg-green-100",
+      iconColor: "text-green-600",
+      trend: userData?.role === "admin" ? "+15%" : `${donersCount}`,
+      trendColor: "text-green-600",
+      description: userData?.role === "admin" ? "growth rate" : "total supporters"
+    },
+    {
+      title: "Active Campaigns",
+      value: activeCampaigns.length,
+      formatter: (val) => val.toString(),
+      icon: FavoriteBorderOutlinedIcon,
+      iconBgColor: "bg-orange-100",
+      iconColor: "text-orange-600",
+      trend: `${campaigns.length - activeCampaigns.length}`,
+      trendColor: "text-gray-600",
+      description: "completed"
+    }
+  ];
+
   return (
-    <div className="grid lg:grid-cols-4 sm:grid-cols-2 gap-5 sm:gap-10">
-      <div className="flex flex-row border p-4 items-center bg-white">
-        <div className="bg-gray-100 p-2 mr-5">
-          <AccountBalanceWalletOutlinedIcon
-            fontSize="large"
-            className="text-slate-500"
-          />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-slate-500">Total Raised</p>
-          {userData?.role === "admin" ? (
-            <p className="text-2xl font-semibold">
-              <small className="mr-1">GHS</small>
-              {totalRaisedForAllServiceCodes.totalRaised.toLocaleString()}
-            </p>
-          ) : (
-            <p className="text-2xl font-semibold">
-              <small className="mr-1">GHS</small>
-              {totalRaisedForReferral?.toLocaleString()}
-            </p>
-          )}
-        </div>
-      </div>
-      {userData?.role === "admin" ? (
-        <div className="flex flex-row border p-4 items-center bg-white">
-          <div className="bg-gray-100 p-2 mr-5">
-            <PeopleOutlineOutlinedIcon
-              fontSize="large"
-              className="text-slate-500"
-            />
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {statsData.map((stat, index) => {
+        const IconComponent = stat.icon;
+        return (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <div className={`${stat.iconBgColor} p-3 rounded-lg`}>
+                <IconComponent className={`w-6 h-6 ${stat.iconColor}`} />
+              </div>
+              {stat.trend && (
+                <div className="flex items-center space-x-1">
+                  {stat.trendColor === "text-green-600" && (
+                    <TrendingUpIcon className="w-4 h-4 text-green-600" />
+                  )}
+                  <span className={`text-sm font-medium ${stat.trendColor}`}>
+                    {stat.trend}
+                  </span>
+                </div>
+              )}
+            </div>
+            
+            <div>
+              <p className="text-sm font-medium text-gray-600 mb-1">
+                {stat.title}
+              </p>
+              <p className="text-2xl font-semibold text-gray-900">
+                {stat.formatter(stat.value)}
+              </p>
+              {stat.description && (
+                <p className="text-xs text-gray-500 mt-1">
+                  {stat.description}
+                </p>
+              )}
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-medium text-slate-500">
-              Total Fundraisers
-            </p>
-            <p className="text-2xl font-semibold">
-              <small className="mr-1"></small>
-              {fundraiserCount}
-            </p>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-      <div className="flex flex-row border p-4 items-center bg-white">
-        <div className="bg-gray-100 p-2 mr-5">
-          <GroupsOutlinedIcon fontSize="large" className="text-slate-500" />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-slate-500">Total Donors</p>
-          {userData?.role === "admin" ? (
-            <p className="text-2xl font-semibold">
-              <small className="mr-1"></small>
-              {totalRaisedForAllServiceCodes.totalCount}
-            </p>
-          ) : (
-            <p className="text-2xl font-semibold">
-              <small className="mr-1"></small>
-              {donersCount?.toLocaleString()}
-            </p>
-          )}
-        </div>
-      </div>
-      <div className="flex flex-row border p-4 items-center bg-white">
-        <div className="bg-gray-100 p-2 mr-5">
-          <FavoriteBorderOutlinedIcon
-            fontSize="large"
-            className="text-slate-500"
-          />
-        </div>
-        <div>
-          <p className="text-sm font-medium text-slate-500">Campaigns</p>
-          <p className="text-2xl font-semibold">
-            <small className="mr-1"></small>
-            {campaignCount}
-          </p>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 };

@@ -2,15 +2,15 @@ import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { links, memberLinks, superAdminLinks } from "../utils/dummys";
 import { useStateContext } from "../contexts/ContextProvider";
-import { ToggleButton } from "@mui/material";
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
 import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import Agape from "../utils/images/Agape.png";
+import LogoutIcon from "@mui/icons-material/Logout";
+import HomeIcon from "@mui/icons-material/Home";
+import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 
-const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
-  const { currentColor, activeMenu, setActiveMenu, screenSize, userData } =
-    useStateContext();
+const Sidebar = ({ setDeferredPrompt, deferredPrompt }) => {
+  const { activeMenu, setActiveMenu, screenSize, userData } = useStateContext();
   const navigate = useNavigate();
 
   const handleCloseSideBar = () => {
@@ -18,7 +18,7 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
       setActiveMenu(false);
     }
   };
-  const handleActiveMenu = () => setActiveMenu(!activeMenu);
+
   const userSignOut = () => {
     signOut(auth)
       .then(() => {
@@ -28,104 +28,95 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
       .catch((error) => console.log(error));
   };
 
-  const activeLink =
-    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg  text-white  text-md m-2";
-  const normalLink =
-    "flex items-center gap-5 pl-4 pt-3 pb-2.5 rounded-lg text-md text-gray-700 dark:text-gray-200 dark:hover:text-black hover:bg-light-gray m-2";
+  // Format display name - convert "raise-funds" to "Raise Funds"
+  const formatDisplayName = (name) => {
+    return name.split('-').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1)
+    ).join(' ');
+  };
+
+  // Determine which links to show based on user role
+  const navigationLinks = userData?.role === "SuperAdmin" 
+    ? superAdminLinks 
+    : userData?.role === "admin" 
+    ? links 
+    : memberLinks;
 
   return (
-    <div className=" h-screen sm:overflow-hidden overflow-auto sm:hover:overflow-auto pb-10">
+    <div className="h-full flex flex-col bg-transparent">
       {activeMenu && (
         <>
-          <div
-            className="flex justify-between items-center w-72 bg-white shadow-sm"
-            style={{ height: "60px" }}
-          >
+          {/* Logo Section with subtle gradient */}
+          <div className="h-20 flex items-center px-6 mb-2">
             <Link
               to="/"
               onClick={handleCloseSideBar}
-              className="items-center gap-3 ml-3 mt-4 mb-4 flex text-xl font-extrabold tracking-tight text-white"
+              className="flex items-center"
             >
-              <img src={Agape} alt="logo" className="w-[200px]"/>
+              <img src={Agape} alt="logo" className="h-10 w-auto" />
             </Link>
-            <div className="md:hidden">
-              <ToggleButton
-                value="center"
-                aria-label="centered"
-                onClick={handleActiveMenu}
-                sx={{ border: "none" }}
-              >
-                <ReplyOutlinedIcon
-                  style={{ color: "purple", fontSize: "25px" }}
-                />
-              </ToggleButton>
+          </div>
+
+          {/* User Profile Section */}
+          <div className="px-4 mb-4">
+            <div className="bg-gray-50 rounded-lg p-3 border border-gray-200">
+              <div className="flex items-center space-x-3">
+                <div className="bg-white p-2 rounded-lg border border-gray-200">
+                  <PersonOutlineIcon className="w-5 h-5 text-gray-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-medium text-gray-900">
+                    {userData?.fullName || userData?.churchName || 'User'}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {userData?.role === "admin" && "Administrator"}
+                    {userData?.role === "SuperAdmin" && "Super Admin"}
+                    {userData?.role === "member" && "Member"}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="mt-10 hidden sm:block">
-            {userData?.role === "admin" ? (
-              <>
-                {links.map((item) => (
-                  <NavLink
-                    to={`/${item.name}`}
-                    key={item.name}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) =>
-                      isActive ? activeLink : normalLink
-                    }
-                  >
-                    {item.icon}
-                    <span className="capitalize p-2">{item.name}</span>
-                  </NavLink>
-                ))}
-              </>
-            ) : userData?.role === "SuperAdmin" ? (
-              <>
-                {superAdminLinks.map((item) => (
-                  <NavLink
-                    to={`/${item.name}`}
-                    key={item.name}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) =>
-                      isActive ? activeLink : normalLink
-                    }
-                  >
-                    {item.icon}
-                    <span className="capitalize p-2">{item.name}</span>
-                  </NavLink>
-                ))}
-              </>
-            ) : (
-              <>
-                {memberLinks.map((item) => (
-                  <NavLink
-                    to={`/${item.name}`}
-                    key={item.name}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) =>
-                      isActive ? activeLink : normalLink
-                    }
-                  >
-                    {item.icon}
-                    <span className="capitalize p-2">{item.name}</span>
-                  </NavLink>
-                ))}
-              </>
-            )}
-          </div>
-          <div className="mt-10 justify-center flex sm:hidden flex-col">
-            <button onClick={userSignOut} className="font-semibold mb-10">
-              Sign Out
-            </button>
+          {/* Navigation Links */}
+          <nav className="flex-1 px-3 py-2 overflow-y-auto">
+            {navigationLinks.map((item) => (
+              <NavLink
+                key={item.name}
+                to={`/${item.name}`}
+                onClick={handleCloseSideBar}
+                className={({ isActive }) =>
+                  `flex items-center px-3 py-2.5 mb-1 rounded-lg transition-all duration-200 ${
+                    isActive
+                      ? "bg-purple-600 text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    <span className={`flex items-center justify-center w-5 h-5 mr-3 ${
+                      isActive ? "text-white" : "text-gray-500"
+                    }`}>
+                      {React.cloneElement(item.icon, { 
+                        style: { fontSize: 18 },
+                        className: "w-5 h-5"
+                      })}
+                    </span>
+                    <span className={`text-sm font-medium ${
+                      isActive ? "text-white" : "text-gray-700"
+                    }`}>
+                      {formatDisplayName(item.name)}
+                    </span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </nav>
+
+          {/* Bottom Section */}
+          <div className="p-4 border-t border-gray-200">
+            {/* Install App Button */}
             {deferredPrompt && (
               <button
                 onClick={() => {
@@ -139,10 +130,26 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
                     setDeferredPrompt(null);
                   });
                 }}
+                className="w-full mb-3 flex items-center justify-center px-3 py-2.5 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors duration-200 text-sm font-medium"
               >
+                <HomeIcon className="w-4 h-4 mr-2" />
                 Install App
               </button>
             )}
+
+            {/* Mobile Sign Out Button */}
+            <button
+              onClick={userSignOut}
+              className="w-full flex items-center justify-center px-3 py-2.5 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200 sm:hidden text-sm font-medium"
+            >
+              <LogoutIcon className="w-4 h-4 mr-2" />
+              Sign Out
+            </button>
+
+            {/* Copyright */}
+            <p className="text-center text-xs text-gray-400 mt-4">
+              © 2025 CapRaise
+            </p>
           </div>
         </>
       )}
@@ -151,3 +158,4 @@ const Sidebar = ({setDeferredPrompt,deferredPrompt}) => {
 };
 
 export default Sidebar;
+

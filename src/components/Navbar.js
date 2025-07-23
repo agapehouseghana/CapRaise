@@ -1,24 +1,21 @@
-import React, { useEffect} from "react";
+import React, { useEffect } from "react";
 import { useStateContext } from "../contexts/ContextProvider";
 import {
-  Box,
   IconButton,
   ListItemIcon,
   Menu,
   MenuItem,
-  ToggleButton,
 } from "@mui/material";
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
-import WidgetsIcon from "@mui/icons-material/Widgets";
-import { signOut} from "firebase/auth";
+import MenuIcon from "@mui/icons-material/Menu";
+import CloseIcon from "@mui/icons-material/Close";
+import { signOut } from "firebase/auth";
 import { auth } from "../firebase/firebase";
 import { Link, useNavigate } from "react-router-dom";
-import { Logout } from "@mui/icons-material";
+import { Logout, AccountCircle } from "@mui/icons-material";
 import Agape from "../utils/images/Agape.png";
 
 const Navbar = () => {
-  
-  const { activeMenu, setActiveMenu, setScreenSize, screenSize,userData } =
+  const { activeMenu, setActiveMenu, setScreenSize, screenSize, userData } =
     useStateContext();
 
   const navigate = useNavigate();
@@ -47,6 +44,7 @@ const Navbar = () => {
       })
       .catch((error) => console.log(error));
   };
+  
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize <= 900) {
       setActiveMenu(false);
@@ -54,80 +52,156 @@ const Navbar = () => {
   };
 
   const [anchorEl, setAnchorEl] = React.useState(false);
-  const open = Boolean(anchorEl);
   const handleClick1 = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  
   return (
-    <div
-      className="flex justify-between  items-center relative bg-purple-500"
-      style={{ height: "60px" }}
-    >
-      <ToggleButton
-        value="center"
-        aria-label="centered"
-        onClick={handleActiveMenu}
-        sx={{ border: "none" }}
-      >
-        {activeMenu ? (
-          <ReplyOutlinedIcon style={{ color: "white", fontSize: "25px" }} />
-        ) : (
-          <WidgetsIcon style={{ color: "white", fontSize: "20px" }} />
-        )}
-      </ToggleButton>
-      <Link
-        to="/"
-        onClick={handleCloseSideBar}
-        className="items-center gap-3 ml-3 mt-4 mb-4 flex text-xl font-extrabold tracking-tight text-white sm:hidden"
-      >
-        <img src={Agape} alt="logo" className="w-[150px]"/>
-      </Link>
-      <div className="mr-[40px] hidden sm:flex">
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            textAlign: "center",
-            marginRight: "40px",
-          }}
-        >
-          <p>
-            <span className="text-white text-14">Hi,</span>
-            <span className="text-white font-bold ml-2 text-14">{userData?.fullName?userData?.fullName:userData?.churchName}</span>
-          </p>
-          <IconButton
-            onClick={handleClick1}
-            size="small"
-            sx={{ ml: 2, border: 1, color: "white" }}
-            aria-controls={open ? "account-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-          >
-            <Logout/>
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            id="account-menu"
-            open={anchorEl}
-            onClose={handleClose}
-            onClick={handleClose}
-            transformOrigin={{ horizontal: "left", vertical: "top" }}
-            anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-          >
-            <MenuItem onClick={userSignOut}>
-              <ListItemIcon>
-                <Logout fontSize="small" />
-              </ListItemIcon>
-              Sign Out
-            </MenuItem>
-          </Menu>
-        </Box>
+    <nav className="relative overflow-hidden">
+      {/* Modern gradient background with multiple layers */}
+      <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-purple-700 to-indigo-800"></div>
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/10"></div>
+      
+      {/* Animated gradient overlay */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute inset-0 bg-gradient-to-r from-pink-500 via-transparent to-blue-500 animate-gradient-x"></div>
       </div>
-      <div className="sm:hidden mr-[100px]"></div>
-    </div>
+      
+      {/* Glass effect overlay */}
+      <div className="absolute inset-0 backdrop-blur-[1px] bg-white/5"></div>
+      
+      {/* Content */}
+      <div className="relative flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+        {/* Left side - Menu toggle and Logo */}
+        <div className="flex items-center">
+          {/* Menu Toggle Button with glass effect */}
+          <button
+            onClick={handleActiveMenu}
+            className="p-2 rounded-lg bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-white/30 group"
+          >
+            {activeMenu ? (
+              <CloseIcon className="w-6 h-6 text-white group-hover:rotate-90 transition-transform duration-300" />
+            ) : (
+              <MenuIcon className="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300" />
+            )}
+          </button>
+
+          {/* Mobile Logo */}
+          <Link
+            to="/"
+            onClick={handleCloseSideBar}
+            className="ml-4 sm:hidden transform hover:scale-105 transition-transform duration-300"
+          >
+            <img src={Agape} alt="logo" className="h-8 w-auto drop-shadow-lg" />
+          </Link>
+        </div>
+
+        {/* Center - Optional tagline for desktop */}
+        <div className="hidden lg:block absolute left-1/2 transform -translate-x-1/2">
+          <p className="text-white/80 text-sm font-light tracking-wide">
+            Empowering Communities Through Faith
+          </p>
+        </div>
+
+        {/* Right side - User info */}
+        <div className="flex items-center">
+          {/* Desktop User Info */}
+          <div className="hidden sm:flex items-center space-x-4">
+            <div className="text-right">
+              <p className="text-xs text-white/70 font-light">Welcome back,</p>
+              <p className="text-sm font-semibold text-white drop-shadow-sm">
+                {userData?.fullName || userData?.churchName || 'User'}
+              </p>
+            </div>
+            
+            <div className="relative">
+              <IconButton
+                onClick={handleClick1}
+                className="bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300 shadow-lg"
+                size="small"
+              >
+                <AccountCircle className="w-8 h-8 text-white drop-shadow-md" />
+              </IconButton>
+              
+              <Menu
+                anchorEl={anchorEl}
+                id="account-menu"
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                onClick={handleClose}
+                transformOrigin={{ horizontal: "right", vertical: "top" }}
+                anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                PaperProps={{
+                  elevation: 8,
+                  sx: {
+                    mt: 1.5,
+                    minWidth: 220,
+                    borderRadius: 2,
+                    overflow: 'visible',
+                    '&:before': {
+                      content: '""',
+                      display: 'block',
+                      position: 'absolute',
+                      top: 0,
+                      right: 22,
+                      width: 10,
+                      height: 10,
+                      bgcolor: 'background.paper',
+                      transform: 'translateY(-50%) rotate(45deg)',
+                      zIndex: 0,
+                    },
+                    '& .MuiMenuItem-root': {
+                      px: 2,
+                      py: 1.5,
+                      borderRadius: 1,
+                      mx: 1,
+                      my: 0.5,
+                    },
+                  },
+                }}
+              >
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <p className="text-sm font-semibold text-gray-900">
+                    {userData?.fullName || userData?.churchName}
+                  </p>
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {userData?.email}
+                  </p>
+                  <p className="text-xs text-purple-600 font-medium mt-1">
+                    {userData?.role === "admin" && "Administrator"}
+                    {userData?.role === "SuperAdmin" && "Super Admin"}
+                    {userData?.role === "member" && "Member"}
+                  </p>
+                </div>
+                <MenuItem onClick={userSignOut} className="hover:bg-red-50 text-gray-700 hover:text-red-600 transition-colors">
+                  <ListItemIcon>
+                    <Logout fontSize="small" className="text-red-600" />
+                  </ListItemIcon>
+                  <span>Sign Out</span>
+                </MenuItem>
+              </Menu>
+            </div>
+          </div>
+
+          {/* Mobile User Menu - Glass button */}
+          <div className="sm:hidden">
+            <IconButton
+              onClick={userSignOut}
+              size="small"
+              className="bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all duration-300"
+            >
+              <Logout className="w-5 h-5 text-white" />
+            </IconButton>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom gradient line for depth */}
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+    </nav>
   );
 };
 

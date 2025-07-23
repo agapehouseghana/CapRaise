@@ -7,6 +7,7 @@ import ChurchOutlinedIcon from "@mui/icons-material/ChurchOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
 
 export const links = [
   {
@@ -53,6 +54,10 @@ export const memberLinks = [
   {
     name: "Dashboard",
     icon: <InventoryOutlinedIcon />,
+  },
+  {
+    name: "raise-funds",
+    icon: <MonetizationOnOutlinedIcon />,
   },
 ];
 

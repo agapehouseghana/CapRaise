@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "https://capraise.netlify.app",
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.19",
@@ -18,6 +19,7 @@
     "config": "^3.3.9",
     "dayjs": "^1.11.10",
     "firebase": "^10.7.0",
+    "framer-motion": "^12.23.6",
     "react": "^18.2.0",
     "react-countdown": "^2.3.5",
     "react-dom": "^18.2.0",
@@ -27,7 +29,7 @@
     "react-scripts": "5.0.1",
     "react-toastify": "^9.1.3",
     "recharts": "^2.10.3",
-    "tailwindcss": "^3.3.5",
+    "tailwindcss": "^3.4.17",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
