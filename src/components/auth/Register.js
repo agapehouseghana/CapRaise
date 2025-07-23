@@ -1,11 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useEffect, useState } from "react";
-import { auth, db } from "../../firebase/firebase";
+import { auth } from "../../firebase/firebase";
 import { useNavigate } from "react-router-dom";
-import { doc, setDoc } from "firebase/firestore";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, getFirestore } from "firebase/firestore";
 import fund from "../../utils/images/R.jpeg";
 import { CircularProgress } from "@mui/material";
+
+// Temporary Firestore instance for user registration
+const db = getFirestore();
 
 const Register = () => {
   const [loading, setLoading] = useState(false);

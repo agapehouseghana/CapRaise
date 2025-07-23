@@ -1,9 +1,7 @@
 import { initializeApp } from "firebase/app";
-import {getFirestore} from "firebase/firestore"
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage"; 
 const config = require('./config');
-
 
 const firebaseConfig = {
   apiKey: config.FIREBASE_API_KEY ,
@@ -14,8 +12,11 @@ const firebaseConfig = {
   appId: config.FIREBASE_APP_ID,
 };
 
-
 const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app)
+
+// Only export Auth and Storage - NO Firestore access from frontend
 export const auth = getAuth(app);
 export const storage = getStorage(app);
+
+// Remove db export to prevent direct Firestore access
+// All data operations should go through middleware API

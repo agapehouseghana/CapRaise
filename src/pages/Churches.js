@@ -10,11 +10,14 @@ import {
   TableRow,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, getFirestore } from "firebase/firestore";
 import ClearIcon from "@mui/icons-material/Clear";
 import SearchIcon from "@mui/icons-material/Search";
 import AddChurches from "../components/AddChurches";
-import { db } from "../firebase/firebase";
+import apiService from "../services/api";
+
+// Temporary Firestore instance for fallback operations only
+const db = getFirestore();
 
 const Churches = () => {
   const [page, setPage] = useState(0);
@@ -49,17 +52,26 @@ const Churches = () => {
   useEffect(() => {
     const fetchAdmins = async () => {
       setLoading(true);
-      const adminsCollectionRef = collection(db, 'admins');
       try {
-        const querySnapshot = await getDocs(adminsCollectionRef);
-        const adminsData = querySnapshot.docs.map((doc) => ({
-          adminId: doc.id,
-          ...doc.data()
-        }));
-      
-        setChurches(adminsData);
-      } catch (error) {
-        console.error('Error fetching admins: ', error);
+        // Try to get admins via middleware first
+        const response = await apiService.getUsers({ role: 'admin' });
+        setChurches(response.users || []);
+        console.log('✅ Churches/Admins fetched via middleware:', response.users?.length || 0);
+      } catch (middlewareError) {
+        console.warn('Middleware admin fetch failed, falling back to direct Firebase:', middlewareError.message);
+        
+        // Fallback to direct Firebase call
+        try {
+          const adminsCollectionRef = collection(db, 'admins');
+          const querySnapshot = await getDocs(adminsCollectionRef);
+          const adminsData = querySnapshot.docs.map((doc) => ({
+            adminId: doc.id,
+            ...doc.data()
+          }));
+          setChurches(adminsData);
+        } catch (error) {
+          console.error('Error fetching admins: ', error);
+        }
       }
       setLoading(false);
     };

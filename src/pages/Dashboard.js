@@ -2,24 +2,29 @@ import React, { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import MemberStatsBarChart from "../components/MemberStatsBarChart";
 import { useStateContext } from "../contexts/ContextProvider";
-import { collection, query, getDocs, where } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { collection, query, getDocs, where, getFirestore } from "firebase/firestore";
 import Statistics from "../components/Statistics";
 import TopFundraisers from "../components/TopFundraisers";
+import apiService from "../services/api";
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import PeopleIcon from '@mui/icons-material/People';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+
+// Temporary Firestore instance for fallback operations only
+const db = getFirestore();
 
 const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const { adminData, userData } = useStateContext();
   const [campaigns, setCampaigns] = useState([]);
   const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
   const adminId = adminData?.adminId || userData?.adminId;
 
-  const campaignCount = campaigns?.length;
-  const fundraiserCount = usersLinkedToAdmin?.length;
+  // Use analytics data if available, fallback to local counts
+  const campaignCount = analytics?.totalCampaigns || campaigns?.length;
+  const fundraiserCount = analytics?.totalFundraisers || usersLinkedToAdmin?.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -30,42 +35,40 @@ const Dashboard = () => {
 
       setLoading(true);
       
-      // Fetch campaigns
       try {
-        const campaignsCollectionRef = collection(db, "campaigns");
-        const campaignsQuery = query(
-          campaignsCollectionRef,
-          where("adminId", "==", adminId)
-        );
-        const campaignsSnapshot = await getDocs(campaignsQuery);
-        const campaignList = [];
+        // Fetch dashboard analytics via middleware (includes campaigns, users, donations stats)
+        const analyticsData = await apiService.getDashboardAnalytics();
+        setAnalytics(analyticsData);
+        console.log('✅ Dashboard analytics fetched via middleware:', analyticsData);
 
-        campaignsSnapshot?.forEach((doc) => {
-          const campaignData = doc?.data();
-          campaignList?.push(campaignData);
-        });
-        setCampaigns(campaignList);
-      } catch (error) {
-        console.error("Error fetching campaigns:", error);
-      }
-
-      // Fetch users linked to admin
-      try {
-        const usersCollectionRef = collection(db, "users");
-        const usersQuery = query(
-          usersCollectionRef, 
-          where("adminId", "==", adminId)
-        );
-        const usersSnapshot = await getDocs(usersQuery);
-        const users = [];
+        // Also fetch detailed campaigns data for other components that might need it
+        const campaignsResponse = await apiService.getCampaigns();
+        setCampaigns(campaignsResponse.campaigns || []);
         
-        usersSnapshot?.forEach((doc) => {
-          const userData = doc?.data();
-          users?.push(userData);
-        });
-        setUsersLinkedToAdmin(users);
+        // Fetch users via middleware
+        const usersResponse = await apiService.getUsers();
+        setUsersLinkedToAdmin(usersResponse.users || []);
+
       } catch (error) {
-        console.error("Error fetching users linked to admin:", error);
+        console.error("Error fetching dashboard data:", error);
+        // Fallback: still try to fetch users directly if analytics fails
+        try {
+          const usersCollectionRef = collection(db, "users");
+          const usersQuery = query(
+            usersCollectionRef, 
+            where("adminId", "==", adminId)
+          );
+          const usersSnapshot = await getDocs(usersQuery);
+          const users = [];
+          
+          usersSnapshot?.forEach((doc) => {
+            const userData = doc?.data();
+            users?.push(userData);
+          });
+          setUsersLinkedToAdmin(users);
+        } catch (fallbackError) {
+          console.error("Error in fallback user fetch:", fallbackError);
+        }
       }
       
       setLoading(false);
@@ -112,6 +115,7 @@ const Dashboard = () => {
                 campaignCount={campaignCount}
                 fundraiserCount={fundraiserCount}
                 campaigns={campaigns}
+                analytics={analytics}
               />
             </div>
 

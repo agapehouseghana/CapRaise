@@ -15,9 +15,13 @@ import {
   // FormHelperText,
 } from "@mui/material";
 import { purple } from '@mui/material/colors'
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase/firebase";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { auth } from "../firebase/firebase";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+
+// Temporary Firestore instance for admin creation
+// TODO: Move to middleware when admin creation API is implemented
+const db = getFirestore();
 
 
 

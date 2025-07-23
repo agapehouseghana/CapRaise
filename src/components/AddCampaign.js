@@ -12,10 +12,10 @@ import {
 import React, { useState } from "react";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import { purple } from "@mui/material/colors";
-import { db } from "../firebase/firebase";
-import { addDoc, collection } from "firebase/firestore";
+// Firebase db import removed - using middleware API instead
 import { useStateContext } from "../contexts/ContextProvider";
 import { ref, getDownloadURL, uploadBytes, getStorage } from "firebase/storage";
+import apiService from "../services/api";
 
 const AddCampaign = ({ setRefreshCampaigns }) => {
   const storage = getStorage();
@@ -115,7 +115,6 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
         const downloadURLs = await Promise.all(uploadPromises);
 
         const adminId = adminData?.adminId;
-        const campaignsCollectionRef = collection(db, "campaigns");
 
         const campaignData = {
           campaignName: campaignName,
@@ -128,7 +127,9 @@ const AddCampaign = ({ setRefreshCampaigns }) => {
           endDate: date,
         };
 
-        await addDoc(campaignsCollectionRef, campaignData);
+        // Use middleware API to create campaign
+        await apiService.createCampaign(campaignData);
+        console.log('✅ Campaign created via middleware:', campaignData.campaignName);
 
         setOpen(false);
         setCampaignName("");

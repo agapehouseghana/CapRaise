@@ -6,7 +6,7 @@ import PeopleOutlineOutlinedIcon from "@mui/icons-material/PeopleOutlineOutlined
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { useStateContext } from "../contexts/ContextProvider";
 
-const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
+const Statistics = ({ campaignCount, fundraiserCount, campaigns, analytics }) => {
   const { userData, externalData } = useStateContext();
 
   const findDonersCount = (referalCode, serviceCode) => {
@@ -29,7 +29,8 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
       totalDonersCount += donersCountForCampaign;
     });
   }
-  const donersCount = totalDonersCount;
+  // Use analytics data if available, fallback to calculated values
+  const donersCount = analytics?.totalDonors || totalDonersCount;
 
   const getTotalRaisedForServiceCode = (referalCode, serviceCode) => {
     const filteredData = externalData?.filter(
@@ -55,7 +56,8 @@ const Statistics = ({ campaignCount, fundraiserCount, campaigns }) => {
     });
   }
 
-  const totalRaisedForReferral = totalRaisedAmount;
+  // Use analytics data if available, fallback to calculated values
+  const totalRaisedForReferral = analytics?.totalRaised || totalRaisedAmount;
 
   const getTotalRaisedForAllServiceCodes = () => {
     if (

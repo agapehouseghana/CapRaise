@@ -24,9 +24,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import PhoneIcon from '@mui/icons-material/Phone';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useStateContext } from "../contexts/ContextProvider";
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { collection, query, where, getDocs, getFirestore } from "firebase/firestore";
+import apiService from "../services/api";
 import { toast } from "react-toastify";
+
+// Temporary Firestore instance for fallback operations only
+const db = getFirestore();
 
 const Fundraisers = () => {
   const { adminData, userData, externalData } = useStateContext();
@@ -48,18 +51,28 @@ const Fundraisers = () => {
 
       setLoading(true);
       try {
-        const usersCollectionRef = collection(db, "users");
-        const q = query(usersCollectionRef, where("adminId", "==", adminId));
-        const querySnapshot = await getDocs(q);
-        const users = [];
+        // Try to get users via middleware first
+        const response = await apiService.getUsers();
+        setUsersLinkedToAdmin(response.users || []);
+        console.log('✅ Fundraisers fetched via middleware:', response.users?.length || 0);
+      } catch (middlewareError) {
+        console.warn('Middleware users fetch failed, falling back to direct Firebase:', middlewareError.message);
         
-        querySnapshot.forEach((doc) => {
-          const userData = doc.data();
-          users.push({ ...userData, id: doc.id });
-        });
-        setUsersLinkedToAdmin(users);
-      } catch (error) {
-        console.error("Error fetching users linked to admin:", error);
+        // Fallback to direct Firebase call
+        try {
+          const usersCollectionRef = collection(db, "users");
+          const q = query(usersCollectionRef, where("adminId", "==", adminId));
+          const querySnapshot = await getDocs(q);
+          const users = [];
+          
+          querySnapshot.forEach((doc) => {
+            const userData = doc.data();
+            users.push({ ...userData, id: doc.id });
+          });
+          setUsersLinkedToAdmin(users);
+        } catch (error) {
+          console.error("Error fetching users linked to admin:", error);
+        }
       }
       setLoading(false);
     };
