@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { useStateContext } from "../contexts/ContextProvider";
-import { collection, query, getDocs, where } from "firebase/firestore";
-import { db } from "../firebase/firebase";
+import { collection, query, getDocs, where, getFirestore } from "firebase/firestore";
+import apiService from "../services/api";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -19,6 +19,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { toast } from "react-toastify";
 import Countdown from "react-countdown";
+
+// Temporary Firestore instance for fallback operations only
+const db = getFirestore();
 
 const RaiseFunds = () => {
   const { userData, externalData } = useStateContext();
@@ -47,22 +50,31 @@ const RaiseFunds = () => {
     const fetchCampaigns = async () => {
       setLoading(true);
       if (adminId) {
-        const campaignsCollectionRef = collection(db, "campaigns");
-        const q = query(
-          campaignsCollectionRef,
-          where("adminId", "==", adminId)
-        );
         try {
-          const querySnapshot = await getDocs(q);
-          const campaignList = [];
-
-          querySnapshot?.forEach((doc) => {
-            const campaignData = doc?.data();
-            campaignList?.push(campaignData);
-          });
-          setCampaigns(campaignList);
+          // Use middleware API to fetch campaigns
+          const response = await apiService.getCampaigns();
+          setCampaigns(response.campaigns || []);
+          console.log('✅ RaiseFunds campaigns fetched via middleware:', response.campaigns?.length || 0);
         } catch (error) {
-          console.log("Error fetching campaigns:", error);
+          console.log("Error fetching campaigns via middleware:", error);
+          // Fallback to direct Firebase if middleware fails
+          try {
+            const campaignsCollectionRef = collection(db, "campaigns");
+            const q = query(
+              campaignsCollectionRef,
+              where("adminId", "==", adminId)
+            );
+            const querySnapshot = await getDocs(q);
+            const campaignList = [];
+
+            querySnapshot?.forEach((doc) => {
+              const campaignData = doc?.data();
+              campaignList?.push(campaignData);
+            });
+            setCampaigns(campaignList);
+          } catch (fallbackError) {
+            console.log("Fallback Firebase fetch also failed:", fallbackError);
+          }
         }
         setLoading(false);
       } else {

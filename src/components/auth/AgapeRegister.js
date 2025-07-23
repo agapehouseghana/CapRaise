@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { churchList } from "../../utils/dummys";
 import { CircularProgress } from "@mui/material";
-import { doc, setDoc } from "firebase/firestore";
-import { auth, db } from "../../firebase/firebase";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { auth } from "../../firebase/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
@@ -15,6 +15,10 @@ import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import logo from "../../utils/images/logo.png";
+
+// Temporary Firestore instance for user registration
+// TODO: Move to middleware when user creation API is implemented  
+const db = getFirestore();
 
 const AgapeRegister = () => {
   const [loading, setLoading] = useState(false);

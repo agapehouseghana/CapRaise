@@ -19,9 +19,10 @@ import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db, storage } from '../firebase/firebase';
+
+import { storage } from '../firebase/firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import apiService from '../services/api';
 import { toast } from 'react-toastify';
 import { useStateContext } from '../contexts/ContextProvider';
 
@@ -109,7 +110,6 @@ const EditCampaign = ({ open, campaign, onClose, onUpdate }) => {
 
     setLoading(true);
     try {
-      const campaignRef = doc(db, 'campaigns', campaign.id);
       const updateData = {
         ...formData,
         fundraisingGoal: Number(formData.fundraisingGoal),
@@ -118,7 +118,9 @@ const EditCampaign = ({ open, campaign, onClose, onUpdate }) => {
         adminId: adminId
       };
 
-      await updateDoc(campaignRef, updateData);
+      // Use middleware API to update campaign
+      await apiService.updateCampaign(campaign.id, updateData);
+      console.log('✅ Campaign updated via middleware:', campaign.id);
       toast.success('Campaign updated successfully');
       onUpdate();
       onClose();

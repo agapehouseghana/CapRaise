@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../firebase/firebase";
+import { doc, getDoc, getFirestore } from "firebase/firestore";
+import { auth } from "../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import axios from "axios";
+import apiService from "../services/api";
+
+// Temporary Firestore instance for fallback operations only
+// TODO: Remove when all operations are fully migrated to middleware
+const db = getFirestore();
 
 const StateContext = createContext();
 
@@ -50,21 +55,37 @@ export const ContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (adminId) {
-      const adminDocRef = doc(db, "admins", adminId);
-      getDoc(adminDocRef)
-        .then((docSnapshot) => {
-          if (docSnapshot.exists()) {
-            const adminData = docSnapshot.data();
-            setAdminData(adminData);
-          } else {
-            console.log("Admin does not exist");
+    const fetchAdminData = async () => {
+      if (adminId) {
+        try {
+          // Try to get admin data via middleware first
+          const currentUser = await apiService.getCurrentUser();
+          if (currentUser && (currentUser.role === 'admin' || currentUser.adminId)) {
+            setAdminData(currentUser);
+            console.log('✅ Admin data fetched via middleware:', currentUser);
           }
-        })
-        .catch((error) => {
-          console.error("Error getting admin data:", error);
-        });
-    }
+        } catch (middlewareError) {
+          console.warn('Middleware admin fetch failed, falling back to direct Firebase:', middlewareError.message);
+          
+          // Fallback to direct Firebase call
+          const adminDocRef = doc(db, "admins", adminId);
+          getDoc(adminDocRef)
+            .then((docSnapshot) => {
+              if (docSnapshot.exists()) {
+                const adminData = docSnapshot.data();
+                setAdminData(adminData);
+              } else {
+                console.log("Admin does not exist");
+              }
+            })
+            .catch((error) => {
+              console.error("Error getting admin data:", error);
+            });
+        }
+      }
+    };
+
+    fetchAdminData();
   }, [adminId]);
 
   useEffect(() => {
@@ -72,27 +93,37 @@ export const ContextProvider = ({ children }) => {
       if (authUser) {
         setLoading(true);
         try {
-          const userDocRef = doc(db, "users", authUser.uid);
-          const userDocSnap = await getDoc(userDocRef);
+          // Try to get current user data via middleware first
+          const currentUser = await apiService.getCurrentUser();
+          setUserData(currentUser);
+          console.log('✅ User data fetched via middleware:', currentUser);
+        } catch (middlewareError) {
+          console.warn('Middleware user fetch failed, falling back to direct Firebase:', middlewareError.message);
+          
+          // Fallback to direct Firebase calls
+          try {
+            const userDocRef = doc(db, "users", authUser.uid);
+            const userDocSnap = await getDoc(userDocRef);
 
-          if (userDocSnap.exists()) {
-            setUserData(userDocSnap.data());
-          } else {
-            try {
-              const adminDocRef = doc(db, "admins", authUser.uid);
-              const adminDocSnap = await getDoc(adminDocRef);
+            if (userDocSnap.exists()) {
+              setUserData(userDocSnap.data());
+            } else {
+              try {
+                const adminDocRef = doc(db, "admins", authUser.uid);
+                const adminDocSnap = await getDoc(adminDocRef);
 
-              if (adminDocSnap.exists()) {
-                setUserData(adminDocSnap.data());
-              } else {
-                console.log("No admin document found!");
+                if (adminDocSnap.exists()) {
+                  setUserData(adminDocSnap.data());
+                } else {
+                  console.log("No admin document found!");
+                }
+              } catch (error) {
+                console.error("Error fetching admin document:", error);
               }
-            } catch (error) {
-              console.error("Error fetching admin document:", error);
             }
+          } catch (error) {
+            console.error("Error fetching user document:", error);
           }
-        } catch (error) {
-          console.error("Error fetching user document:", error);
         }
         setLoading(false);
       }

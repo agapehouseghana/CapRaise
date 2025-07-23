@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { CircularProgress, Chip, IconButton, Menu, MenuItem } from "@mui/material";
-import { db } from "../firebase/firebase";
-import { collection, query, getDocs, where, doc, deleteDoc } from "firebase/firestore";
+// Firebase db import removed - using middleware API instead
 import AddCampaign from "../components/AddCampaign";
 import EditCampaign from "../components/EditCampaign";
 import Campaign from "../components/Campaigns";
 import { useStateContext } from "../contexts/ContextProvider";
+import apiService from "../services/api";
 import CampaignIcon from '@mui/icons-material/Campaign';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
@@ -36,18 +36,14 @@ const Campaigns = () => {
 
       setLoading(true);
       try {
-        const campaignsCollectionRef = collection(db, "campaigns");
-        const q = query(campaignsCollectionRef, where("adminId", "==", adminId));
-        const querySnapshot = await getDocs(q);
-        const campaignList = [];
-        
-        querySnapshot?.forEach((doc) => {
-          const campaignsData = doc?.data();
-          campaignList?.push({ ...campaignsData, id: doc.id });
-        });
-        setCampaigns(campaignList);
+        // Use middleware API instead of direct Firebase calls
+        const response = await apiService.getCampaigns();
+        setCampaigns(response.campaigns || []);
+        console.log('✅ Campaigns fetched via middleware:', response.campaigns?.length || 0);
       } catch (error) {
         console.error("Error fetching campaigns:", error);
+        // Fallback to empty array on error
+        setCampaigns([]);
       }
       setLoading(false);
     };
@@ -70,9 +66,11 @@ const Campaigns = () => {
     
     if (window.confirm(`Are you sure you want to delete "${selectedCampaign.campaignName || selectedCampaign.title}"?`)) {
       try {
-        await deleteDoc(doc(db, "campaigns", selectedCampaign.id));
+        // Use middleware API for deletion
+        await apiService.deleteCampaign(selectedCampaign.id);
         toast.success("Campaign deleted successfully");
         setRefreshCampaigns(!refreshCampaigns);
+        console.log('✅ Campaign deleted via middleware:', selectedCampaign.id);
       } catch (error) {
         console.error("Error deleting campaign:", error);
         toast.error("Failed to delete campaign");
