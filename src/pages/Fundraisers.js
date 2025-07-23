@@ -37,6 +37,7 @@ const Fundraisers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [searchQuery, setSearchQuery] = useState("");
   const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -51,10 +52,31 @@ const Fundraisers = () => {
 
       setLoading(true);
       try {
-        // Try to get users via middleware first
-        const response = await apiService.getUsers();
-        setUsersLinkedToAdmin(response.users || []);
-        console.log('✅ Fundraisers fetched via middleware:', response.users?.length || 0);
+        // Fetch first page to get total count and pagination info
+        const firstResponse = await apiService.getUsers({ page: 1, limit: 50 });
+        let allUsers = firstResponse.users || [];
+        const totalCount = firstResponse.pagination?.total || 0;
+        const totalPages = firstResponse.pagination?.pages || 1;
+        
+        setTotalUsers(totalCount);
+        console.log(`✅ Found ${totalCount} total fundraisers, fetching ${totalPages} pages...`);
+
+        // If there are more pages, fetch them all
+        if (totalPages > 1) {
+          const additionalRequests = [];
+          for (let page = 2; page <= totalPages; page++) {
+            additionalRequests.push(apiService.getUsers({ page, limit: 50 }));
+          }
+          
+          const additionalResponses = await Promise.all(additionalRequests);
+          additionalResponses.forEach(response => {
+            allUsers = allUsers.concat(response.users || []);
+          });
+        }
+
+        setUsersLinkedToAdmin(allUsers);
+        console.log('✅ All fundraisers fetched via middleware:', allUsers.length);
+        
       } catch (middlewareError) {
         console.warn('Middleware users fetch failed, falling back to direct Firebase:', middlewareError.message);
         
@@ -70,6 +92,8 @@ const Fundraisers = () => {
             users.push({ ...userData, id: doc.id });
           });
           setUsersLinkedToAdmin(users);
+          setTotalUsers(users.length);
+          console.log('✅ Fallback: Fetched', users.length, 'fundraisers via Firebase');
         } catch (error) {
           console.error("Error fetching users linked to admin:", error);
         }
@@ -173,7 +197,7 @@ const Fundraisers = () => {
             </div>
             <div className="flex items-center space-x-3">
               <span className="hidden sm:inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
-                {fundraisers.length} fundraisers
+                {totalUsers} fundraisers
               </span>
               <Button
                 variant="contained"
