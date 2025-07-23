@@ -17,6 +17,7 @@ const campaignRoutes = require('./routes/campaigns');
 const userRoutes = require('./routes/users');
 const donationRoutes = require('./routes/donations');
 const analyticsRoutes = require('./routes/analytics');
+const webhookRoutes = require('./routes/webhooks');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -83,6 +84,7 @@ app.use('/api/campaigns', authMiddleware, campaignRoutes);
 app.use('/api/users', authMiddleware, userRoutes);
 app.use('/api/donations', authMiddleware, donationRoutes);
 app.use('/api/analytics', authMiddleware, analyticsRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 // Cache middleware for GET requests
 app.use('/api', cacheMiddleware);

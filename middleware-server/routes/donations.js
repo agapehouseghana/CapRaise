@@ -1,43 +1,103 @@
 const express = require('express');
+const admin = require('firebase-admin');
 const axios = require('axios');
 const router = express.Router();
 
-// GET /api/donations - Get donation data from external API
+const db = admin.firestore();
+
+// GET /api/donations - Get donation data from Firestore with external API fallback
 router.get('/', async (req, res) => {
   try {
     const { serviceCode, referalCode, page = 1, limit = 50 } = req.query;
     
-    // This integrates with your existing external API
-    const externalApiUrl = process.env.EXTERNAL_API_URL || 'https://capraise-backend.onrender.com/api/v1/fetchData';
+    // First, try to get donations from Firestore
+    let firestoreQuery = db.collection('donations');
     
-    const response = await axios.get(externalApiUrl, {
-      timeout: 10000, // 10 second timeout
-      headers: {
-        'Authorization': process.env.EXTERNAL_API_KEY ? `Bearer ${process.env.EXTERNAL_API_KEY}` : undefined,
-        'Content-Type': 'application/json'
-      }
+    // Apply filters
+    if (serviceCode) {
+      firestoreQuery = firestoreQuery.where('serviceCode', '==', serviceCode);
+    }
+    
+    if (referalCode) {
+      firestoreQuery = firestoreQuery.where('referralCode', '==', referalCode);
+    }
+    
+    // Get donations from Firestore
+    const firestoreSnapshot = await firestoreQuery
+      .orderBy('createdAt', 'desc')
+      .get();
+    
+    let donations = [];
+    firestoreSnapshot.forEach(doc => {
+      const data = doc.data();
+      // Transform to match external API format for compatibility
+      donations.push({
+        id: doc.id,
+        amount: data.amount,
+        serviceCode: data.serviceCode,
+        referalCode: data.referralCode,
+        payerPhoneNumber: data.donorPhone,
+        payerName: data.donorName,
+        payerEmail: data.donorEmail,
+        paymentMethod: data.paymentMethod,
+        paymentProvider: data.paymentProvider,
+        paymentReference: data.paymentReference,
+        transactionId: data.transactionId,
+        status: data.status,
+        createdAt: data.createdAt?.toDate() || data.webhookTimestamp,
+        // Additional fields from webhook
+        fundraiserId: data.fundraiserId,
+        fundraiserName: data.fundraiserName,
+        campaignId: data.campaignId,
+        campaignName: data.campaignName
+      });
     });
 
-    let donations = response.data || [];
+    console.log(`✅ Found ${donations.length} donations in Firestore`);
 
-    // Filter by serviceCode if provided
-    if (serviceCode) {
-      donations = donations.filter(donation => donation.serviceCode === serviceCode);
+    // If no donations in Firestore, fallback to external API
+    if (donations.length === 0) {
+      console.log('📡 Falling back to external API for donations...');
+      
+      try {
+        const externalApiUrl = process.env.EXTERNAL_API_URL || 'https://capraise-backend.onrender.com/api/v1/fetchData';
+        
+        const response = await axios.get(externalApiUrl, {
+          timeout: 10000,
+          headers: {
+            'Authorization': process.env.EXTERNAL_API_KEY ? `Bearer ${process.env.EXTERNAL_API_KEY}` : undefined,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        let externalDonations = response.data || [];
+
+        // Apply filters to external data
+        if (serviceCode) {
+          externalDonations = externalDonations.filter(donation => donation.serviceCode === serviceCode);
+        }
+
+        if (referalCode) {
+          externalDonations = externalDonations.filter(donation => donation.referalCode === referalCode);
+        }
+
+        donations = externalDonations;
+        console.log(`✅ Fallback: Found ${donations.length} donations from external API`);
+
+      } catch (externalError) {
+        console.warn('External API fallback failed:', externalError.message);
+        // Continue with empty donations array
+      }
     }
 
-    // Filter by referalCode if provided
-    if (referalCode) {
-      donations = donations.filter(donation => donation.referalCode === referalCode);
-    }
-
-    // Calculate pagination
+    // Apply pagination
     const startIndex = (parseInt(page) - 1) * parseInt(limit);
     const endIndex = startIndex + parseInt(limit);
     const paginatedDonations = donations.slice(startIndex, endIndex);
 
     // Calculate summary statistics
     const totalAmount = donations.reduce((sum, donation) => sum + (donation.amount || 0), 0);
-    const uniqueDonors = new Set(donations.map(d => d.payerPhoneNumber)).size;
+    const uniqueDonors = new Set(donations.map(d => d.payerPhoneNumber || d.donorPhone)).size;
 
     res.json({
       donations: paginatedDonations,
@@ -52,7 +112,8 @@ router.get('/', async (req, res) => {
         limit: parseInt(limit),
         total: donations.length,
         pages: Math.ceil(donations.length / parseInt(limit))
-      }
+      },
+      source: donations.length > 0 && donations[0].id ? 'firestore' : 'external_api'
     });
 
   } catch (error) {
