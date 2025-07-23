@@ -13,6 +13,7 @@ import BottomNavbar from "./components/BottomNavbar";
 import Fundraisers from "./pages/Fundraisers";
 import Churches from "./pages/Churches";
 import Campaigns from "./pages/Campaigns";
+import WebhookManagement from "./pages/WebhookManagement";
 import AgapeSignIn from "./components/auth/AgapeSignIn";
 import AgapeRegister from "./components/auth/AgapeRegister";
 import ForgotPassword from "./components/auth/ForgotPassword";
@@ -105,6 +106,7 @@ function App() {
                         <Route path="/churches" element={<Churches />} /> 
                       )}
                       <Route path="/campaigns" element={<Campaigns />} />
+                      <Route path="/webhook-management" element={<WebhookManagement />} />
                     </Routes>
                   ) : (
                     <Routes>

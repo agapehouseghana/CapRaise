@@ -115,17 +115,32 @@ class ApiService {
   }
 
   // Analytics methods
-  async getDashboardAnalytics() {
-    return this.request('/analytics/dashboard');
+  async getAnalytics(type = 'dashboard') {
+    return this.request(`/analytics/${type}`);
   }
 
-  async getAllCampaignsAnalytics() {
-    return this.request('/analytics/campaigns');
+  async getCampaignAnalytics(campaignId) {
+    return this.request(`/analytics/campaign/${campaignId}`);
   }
 
-  async getFundraiserAnalytics(params = {}) {
+  // Webhook management methods
+  async getWebhookSecret() {
+    return this.request('/webhooks/secret');
+  }
+
+  async generateWebhookSecret() {
+    return this.request('/webhooks/secret/generate', {
+      method: 'POST'
+    });
+  }
+
+  async getWebhookLogs(params = {}) {
     const query = new URLSearchParams(params);
-    return this.request(`/analytics/fundraisers?${query}`);
+    return this.request(`/webhooks/logs?${query}`);
+  }
+
+  async testWebhook() {
+    return this.request('/webhooks/test');
   }
 }
 

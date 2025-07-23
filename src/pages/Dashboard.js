@@ -19,12 +19,13 @@ const Dashboard = () => {
   const { adminData, userData } = useStateContext();
   const [campaigns, setCampaigns] = useState([]);
   const [usersLinkedToAdmin, setUsersLinkedToAdmin] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [analytics, setAnalytics] = useState(null);
   const adminId = adminData?.adminId || userData?.adminId;
 
   // Use analytics data if available, fallback to local counts
-  const campaignCount = analytics?.totalCampaigns || campaigns?.length;
-  const fundraiserCount = analytics?.totalFundraisers || usersLinkedToAdmin?.length;
+  const campaignCount = analytics?.summary?.totalCampaigns || campaigns?.length;
+  const fundraiserCount = analytics?.summary?.totalFundraisers || totalUsers;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,9 +46,30 @@ const Dashboard = () => {
         const campaignsResponse = await apiService.getCampaigns();
         setCampaigns(campaignsResponse.campaigns || []);
         
-        // Fetch users via middleware
-        const usersResponse = await apiService.getUsers();
-        setUsersLinkedToAdmin(usersResponse.users || []);
+        // Fetch users via middleware with pagination to get all users
+        const firstResponse = await apiService.getUsers({ page: 1, limit: 50 });
+        let allUsers = firstResponse.users || [];
+        const totalCount = firstResponse.pagination?.total || 0;
+        const totalPages = firstResponse.pagination?.pages || 1;
+        
+        setTotalUsers(totalCount);
+        console.log(`✅ Dashboard: Found ${totalCount} total fundraisers, fetching ${totalPages} pages...`);
+
+        // If there are more pages, fetch them all
+        if (totalPages > 1) {
+          const additionalRequests = [];
+          for (let page = 2; page <= totalPages; page++) {
+            additionalRequests.push(apiService.getUsers({ page, limit: 50 }));
+          }
+          
+          const additionalResponses = await Promise.all(additionalRequests);
+          additionalResponses.forEach(response => {
+            allUsers = allUsers.concat(response.users || []);
+          });
+        }
+
+        setUsersLinkedToAdmin(allUsers);
+        console.log('✅ Dashboard: All fundraisers fetched via middleware:', allUsers.length);
 
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
@@ -66,6 +88,8 @@ const Dashboard = () => {
             users?.push(userData);
           });
           setUsersLinkedToAdmin(users);
+          setTotalUsers(users.length);
+          console.log('✅ Dashboard Fallback: Fetched', users.length, 'fundraisers via Firebase');
         } catch (fallbackError) {
           console.error("Error in fallback user fetch:", fallbackError);
         }
@@ -156,6 +180,7 @@ const Dashboard = () => {
               <TopFundraisers
                 usersLinkedToAdmin={usersLinkedToAdmin}
                 campaigns={campaigns}
+                totalFundraisers={fundraiserCount}
               />
             </div>
 

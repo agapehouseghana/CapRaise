@@ -8,15 +8,19 @@ const db = admin.firestore();
 // GET /api/users - Get users linked to admin (paginated)
 router.get('/', async (req, res) => {
   try {
-    const { page = 1, limit = 10, search, role } = req.query;
+    const { page = 1, limit = 50, search, role } = req.query;
     const adminId = req.user.adminId || req.user.uid;
 
     // If role=admin is requested, fetch from admins collection
     if (role === 'admin') {
-      const snapshot = await db.collection('admins')
+      // Get total count first
+      const totalSnapshot = await db.collection('admins').get();
+      
+      let query = db.collection('admins')
         .limit(parseInt(limit))
-        .offset((parseInt(page) - 1) * parseInt(limit))
-        .get();
+        .offset((parseInt(page) - 1) * parseInt(limit));
+      
+      const snapshot = await query.get();
 
       let users = [];
       snapshot.forEach(doc => {
@@ -39,14 +43,20 @@ router.get('/', async (req, res) => {
         pagination: {
           page: parseInt(page),
           limit: parseInt(limit),
-          total: users.length,
-          pages: Math.ceil(users.length / parseInt(limit))
+          total: totalSnapshot.size,
+          pages: Math.ceil(totalSnapshot.size / parseInt(limit))
         }
       });
     }
 
-    let query = db.collection('users').where('adminId', '==', adminId);
+    // Get total count for regular users
+    const totalSnapshot = await db.collection('users')
+      .where('adminId', '==', adminId)
+      .get();
 
+    // Get paginated results
+    let query = db.collection('users').where('adminId', '==', adminId);
+    
     const snapshot = await query
       .limit(parseInt(limit))
       .offset((parseInt(page) - 1) * parseInt(limit))
@@ -66,11 +76,6 @@ router.get('/', async (req, res) => {
         });
       }
     });
-
-    // Get total count
-    const totalSnapshot = await db.collection('users')
-      .where('adminId', '==', adminId)
-      .get();
 
     res.json({
       users,

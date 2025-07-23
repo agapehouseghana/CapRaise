@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { useNavigate } from 'react-router-dom';
 
-const TopFundraisers = ({ usersLinkedToAdmin, campaigns }) => {
+const TopFundraisers = ({ usersLinkedToAdmin, campaigns, totalFundraisers }) => {
   const { externalData } = useStateContext();
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
@@ -203,7 +203,7 @@ const TopFundraisers = ({ usersLinkedToAdmin, campaigns }) => {
               View All Fundraisers
             </h3>
             <p className="text-sm text-gray-500">
-              {usersLinkedToAdmin.length} total fundraisers
+              {totalFundraisers} total fundraisers
             </p>
           </div>
         )}

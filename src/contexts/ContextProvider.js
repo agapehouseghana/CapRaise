@@ -147,17 +147,35 @@ export const ContextProvider = ({ children }) => {
 
 
     const fetchDataFromExternalAPI = async () => {
+      // Only fetch donations if user is authenticated
+      if (!authUser) {
+        console.log("Waiting for user authentication before fetching donations...");
+        return;
+      }
+
       try {
-        const response = await axios.get("https://capraise-backend.onrender.com/api/v1/fetchData");
-        setExternalData(response.data);
-      } catch (error) {
-        console.log("Error fetching data:", error);
+        // Try to get donation data via middleware first
+        const response = await apiService.getDonations();
+        setExternalData(response.donations || []);
+        console.log('✅ Donation data fetched via middleware:', response.donations?.length || 0);
+      } catch (middlewareError) {
+        console.warn('Middleware donation fetch failed, falling back to direct external API:', middlewareError.message);
+        
+        // Fallback to direct external API call
+        try {
+          const response = await axios.get("https://capraise-backend.onrender.com/api/v1/fetchData");
+          setExternalData(response.data);
+          console.log('✅ Fallback: Donation data fetched via external API:', response.data?.length || 0);
+        } catch (error) {
+          console.error("Error fetching donation data:", error.message);
+          setExternalData([]); // Set empty array on complete failure
+        }
       }
     };
   
     useEffect(() => {
       fetchDataFromExternalAPI();
-    }, []); 
+    }, [authUser]); // Add authUser as dependency
 
   return (
     // eslint-disable-next-line react/jsx-no-constructed-context-values

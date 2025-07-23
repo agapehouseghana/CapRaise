@@ -8,6 +8,7 @@ import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalance
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 
 export const links = [
   {
@@ -21,6 +22,10 @@ export const links = [
   {
     name: "Campaigns",
     icon: <CampaignOutlinedIcon />,
+  },
+  {
+    name: "webhook-management",
+    icon: <SecurityOutlinedIcon />,
   }
 ];
 export const superAdminLinks = [
@@ -39,6 +44,10 @@ export const superAdminLinks = [
   {
     name: "Churches",
     icon: <ChurchOutlinedIcon />,
+  },
+  {
+    name: "webhook-management",
+    icon: <SecurityOutlinedIcon />,
   },
   {
     name: "Community",
